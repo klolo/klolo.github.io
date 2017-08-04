@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://yoursite.com/atom.xml" rel="self"/>
-  <link href="http://yoursite.com/"/>
-  <updated>2017-08-04T20:43:05+02:00</updated>
-  <id>http://yoursite.com/</id>
+  <link href="http://klolo.github.io/atom.xml" rel="self"/>
+  <link href="http://klolo.github.io/"/>
+  <updated>2017-08-04T20:44:17+02:00</updated>
+  <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Czy Warto Się Przejmować Konkatenacją Stringów W Java?]]></title>
-    <link href="http://yoursite.com/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/"/>
+    <link href="http://klolo.github.io/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/"/>
     <updated>2017-08-04T20:37:42+02:00</updated>
-    <id>http://yoursite.com/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java</id>
+    <id>http://klolo.github.io/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java</id>
     <content type="html"><![CDATA[<p>Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera bezpiecznego wielowątkowo. Co nam to daje? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
@@ -118,9 +118,9 @@ Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzi�
   
   <entry>
     <title type="html"><![CDATA[Wstęp Do Programowania Funkcyjnego]]></title>
-    <link href="http://yoursite.com/blog/2017/08/04/wstep-do-programowania-funkcyjnego/"/>
+    <link href="http://klolo.github.io/blog/2017/08/04/wstep-do-programowania-funkcyjnego/"/>
     <updated>2017-08-04T20:25:49+02:00</updated>
-    <id>http://yoursite.com/blog/2017/08/04/wstep-do-programowania-funkcyjnego</id>
+    <id>http://klolo.github.io/blog/2017/08/04/wstep-do-programowania-funkcyjnego</id>
     <content type="html"><![CDATA[<p>Artykuł ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.</p>
 
 <p>Programowanie deklaratywne vs imperatywne</p>
