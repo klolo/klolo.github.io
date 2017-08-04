@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My Octopress Blog</title>
-  <meta name="author" content="Your Name">
+  <title>Łódzki programista</title>
+  <meta name="author" content="Kamil Lolo">
 
   
-  <meta name="description" content="Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów &hellip;">
+  <meta name="description" content="Czy Warto Się Przejmować Konkatenacją Stringów W Java? Aug 4th, 2017 8:37 pm Wstęp Do Programowania Funkcyjnego Aug 4th, 2017 8:25 pm Blog Archives &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +21,7 @@
   <link rel="canonical" href="http://klolo.github.io/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <link href="/atom.xml" rel="alternate" title="Łódzki programista" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
@@ -36,10 +36,11 @@
 
 <body   >
   <header role="banner"><hgroup>
-  <h1><a href="/">My Octopress Blog</a></h1>
-  
-    <h2>A blogging framework for hackers.</h2>
-  
+  <img style="width:100%;margin-left:0" src="/images/logo.png" />
+  <!--<h1><a href="/">Łódzki programista</a></h1>-->
+  <!--
+    <h2>Dla każdego developera z Łodzi i nie tylko.</h2>
+  -->
 </hgroup>
 
 </header>
@@ -87,7 +88,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera bezpiecznego wielowątkowo. Co nam to daje? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:</p>
+  <!--<div class="entry-content"><p>Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera bezpiecznego wielowątkowo. Co nam to daje? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
@@ -99,7 +100,8 @@
     <span class="o">}</span></code></pre></div>
 
 
-<p>to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych. Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej więcej tak:</p>
+<p>to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
+Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej więcej tak:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="o">();</span>
@@ -119,72 +121,72 @@ To increase the performance of repeated string concatenation, a Java compiler ma
 String objects that are created by evaluation of an expression. For primitive types, an implementation may also optimize away the creation of a wrapper object by converting
 directly from a primitive type to a string.</p></blockquote>
 
-<p>Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuildera w miejsce konkatenacji stringów. Sprawdźmy! Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:
-[Auto StringBuilder
-  public static void main(java.lang.String&hellip;);
-    Code:
-       0: ldc           #2                  // String
-       2: astore_1
-       3: iconst_0
-       4: istore_2
-       5: iload_2
-       6: bipush        100
-       8: if_icmpge     41
-      11: new           #3                  // class java/lang/StringBuilder
-      14: dup
-      15: invokespecial #4                  // Method java/lang/StringBuilder.&ldquo;<init>&rdquo;:()V
-      18: aload_1
-      19: invokevirtual #5                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
-      22: iload_2
-      23: invokevirtual #6                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
-      26: ldc           #7                  // String
-      28: invokevirtual #5                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
-      31: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
-      34: astore_1
-      35: iinc          2, 1
-      38: goto          5
-      41: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;
-      44: aload_1
-      45: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-      48: return
-}
-view rawgistfile1.txt hosted with ❤ by GitHub
-]
-Faktycznie w wygenerowanym byte code pojawił się magicznie string builder. A jak w takim razie wygląda kod z listingu 2 gdzie jawnie użyłem StringBuildera?
-[StringBuilder form compiler
-  public static void main(java.lang.String&hellip;);
-    Code:
-       0: new           #2                  // class java/lang/StringBuilder
-       3: dup
-       4: invokespecial #3                  // Method java/lang/StringBuilder.&ldquo;<init>&rdquo;:()V
-       7: astore_1
-       8: iconst_0
-       9: istore_2
-      10: iload_2
-      11: bipush        100
-      13: if_icmpge     33
-      16: aload_1
-      17: iload_2
-      18: invokevirtual #4                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
-      21: ldc           #5                  // String
-      23: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
-      26: pop
-      27: iinc          2, 1
-      30: goto          10
-      33: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
-      36: aload_1
-      37: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
-      40: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-      43: return
-}
-view rawgistfile1.txt hosted with ❤ by GitHub
-]
-Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyna znacząco na wydajność, ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi.</p>
+<p>Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuildera w miejsce konkatenacji stringów. Sprawdźmy!
+Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 
-<p>UDOSTĘPNIJ</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">...);</span>
+    <span class="nl">Code:</span>
+       <span class="mi">0</span><span class="o">:</span> <span class="n">ldc</span>           <span class="err">#</span><span class="mi">2</span> <span class="c1">// String</span>
+       <span class="mi">2</span><span class="o">:</span> <span class="n">astore_1</span>
+       <span class="mi">3</span><span class="o">:</span> <span class="n">iconst_0</span>
+       <span class="mi">4</span><span class="o">:</span> <span class="n">istore_2</span>
+       <span class="mi">5</span><span class="o">:</span> <span class="n">iload_2</span>
+       <span class="mi">6</span><span class="o">:</span> <span class="n">bipush</span>        <span class="mi">100</span>
+       <span class="mi">8</span><span class="o">:</span> <span class="n">if_icmpge</span>     <span class="mi">41</span>
+      <span class="mi">11</span><span class="o">:</span> <span class="k">new</span>           <span class="err">#</span><span class="mi">3</span> <span class="c1">// class java/lang/StringBuilder</span>
+      <span class="mi">14</span><span class="o">:</span> <span class="n">dup</span>
+      <span class="mi">15</span><span class="o">:</span> <span class="n">invokespecial</span> <span class="err">#</span><span class="mi">4</span> <span class="c1">// Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span>
+      <span class="mi">18</span><span class="o">:</span> <span class="n">aload_1</span>
+      <span class="mi">19</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">5</span> <span class="c1">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+      <span class="mi">22</span><span class="o">:</span> <span class="n">iload_2</span>
+      <span class="mi">23</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">6</span> <span class="c1">// Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span>
+      <span class="mi">26</span><span class="o">:</span> <span class="n">ldc</span>           <span class="err">#</span><span class="mi">7</span> <span class="c1">// String</span>
+      <span class="mi">28</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">5</span> <span class="c1">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+      <span class="mi">31</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">8</span> <span class="c1">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
+      <span class="mi">34</span><span class="o">:</span> <span class="n">astore_1</span>
+      <span class="mi">35</span><span class="o">:</span> <span class="n">iinc</span>          <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span>
+      <span class="mi">38</span><span class="o">:</span> <span class="k">goto</span>          <span class="mi">5</span>
+      <span class="mi">41</span><span class="o">:</span> <span class="n">getstatic</span>     <span class="err">#</span><span class="mi">9</span> <span class="c1">// Field java/lang/System.out:Ljava/io/PrintStream;</span>
+      <span class="mi">44</span><span class="o">:</span> <span class="n">aload_1</span>
+      <span class="mi">45</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">10</span> <span class="c1">// Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+      <span class="mi">48</span><span class="o">:</span> <span class="k">return</span>
+<span class="o">}</span></code></pre></div>
+
+
+<p>Faktycznie w wygenerowanym byte code pojawił się magicznie string builder. A jak w takim razie wygląda kod z listingu 2 gdzie jawnie użyłem StringBuildera?</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">...);</span>
+    <span class="nl">Code:</span>
+       <span class="mi">0</span><span class="o">:</span> <span class="k">new</span>           <span class="err">#</span><span class="mi">2</span> <span class="c1">// class java/lang/StringBuilder</span>
+       <span class="mi">3</span><span class="o">:</span> <span class="n">dup</span>
+       <span class="mi">4</span><span class="o">:</span> <span class="n">invokespecial</span> <span class="err">#</span><span class="mi">3</span> <span class="c1">// Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span>
+       <span class="mi">7</span><span class="o">:</span> <span class="n">astore_1</span>
+       <span class="mi">8</span><span class="o">:</span> <span class="n">iconst_0</span>
+       <span class="mi">9</span><span class="o">:</span> <span class="n">istore_2</span>
+      <span class="mi">10</span><span class="o">:</span> <span class="n">iload_2</span>
+      <span class="mi">11</span><span class="o">:</span> <span class="n">bipush</span>        <span class="mi">100</span>
+      <span class="mi">13</span><span class="o">:</span> <span class="n">if_icmpge</span>     <span class="mi">33</span>
+      <span class="mi">16</span><span class="o">:</span> <span class="n">aload_1</span>
+      <span class="mi">17</span><span class="o">:</span> <span class="n">iload_2</span>
+      <span class="mi">18</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">4</span> <span class="c1">// Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span>
+      <span class="mi">21</span><span class="o">:</span> <span class="n">ldc</span>           <span class="err">#</span><span class="mi">5</span> <span class="c1">// String</span>
+      <span class="mi">23</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">6</span> <span class="c1">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+      <span class="mi">26</span><span class="o">:</span> <span class="n">pop</span>
+      <span class="mi">27</span><span class="o">:</span> <span class="n">iinc</span>          <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span>
+      <span class="mi">30</span><span class="o">:</span> <span class="k">goto</span>          <span class="mi">10</span>
+      <span class="mi">33</span><span class="o">:</span> <span class="n">getstatic</span>     <span class="err">#</span><span class="mi">7</span> <span class="c1">// Field java/lang/System.out:Ljava/io/PrintStream;</span>
+      <span class="mi">36</span><span class="o">:</span> <span class="n">aload_1</span>
+      <span class="mi">37</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">8</span> <span class="c1">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
+      <span class="mi">40</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">9</span> <span class="c1">// Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+      <span class="mi">43</span><span class="o">:</span> <span class="k">return</span>
+<span class="o">}</span></code></pre></div>
+
+
+<p>Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyna znacząco na wydajność,
+ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi.</p>
 </div>
   
-  
+  -->
 
 
     </article>
@@ -210,7 +212,7 @@ Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzi�
   </header>
 
 
-  <div class="entry-content"><p>Artykuł ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.</p>
+  <!--<div class="entry-content"><p>Artykuł ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.</p>
 
 <p>Programowanie deklaratywne vs imperatywne</p>
 
@@ -265,7 +267,7 @@ implementować np. pętle lub warunek. Łatwiej jest nam również reużywać na
 przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej się diagnozuje oraz poprawia.</p>
 </div>
   
-  
+  -->
 
 
     </article>
@@ -293,6 +295,35 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
   </ul>
 </section>
 
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/klolo">@klolo</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'klolo',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
 
 
 
@@ -303,7 +334,7 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2017 - Your Name -
+  Copyright &copy; 2017 - Kamil Lolo -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
