@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[My Octopress Blog]]></title>
+  <link href="http://yoursite.com/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2017-08-04T20:23:46+02:00</updated>
+  <id>http://yoursite.com/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Wstęp Do Programowania Funkcyjnego]]></title>
+    <link href="http://yoursite.com/blog/2017/08/04/wstep-do-programowania-funkcyjnego/"/>
+    <updated>2017-08-04T20:25:49+02:00</updated>
+    <id>http://yoursite.com/blog/2017/08/04/wstep-do-programowania-funkcyjnego</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+</feed>
