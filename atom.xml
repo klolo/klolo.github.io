@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-08-05T12:19:34+02:00</updated>
+  <updated>2017-08-05T13:43:37+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -26,6 +26,13 @@
 <!--more-->
 
 
+
+
+<div style="text-align:center">
+    <img src="http://totalcombat.net/wp-content/uploads/2012/12/shotokan-kata-1.jpg" />
+</div>
+
+
 <p>Kata jest to nazwa zestawu technik ze sztuk walki, które wykonuje się setki razy, żeby osiągnąć perfekcję w każdej z tej technik. Każde kolejne
 kata jest inne niż poprzednie. Za każdym razem dochodzi jakaś nowe kopnięcie, cios, którego wcześniej adept sztuk walki nie znał. Tak samo sprawa ma się
 z kata programistycznym. Jest to proste ćwiczenie, którego realizacja powinna zając od kilkunastu minut do kilku godzin. Ma ono na celu pozwolić
@@ -34,7 +41,24 @@ rozwiązywania takiego zadania zależy od niego. Jednak ciągłe wykonywanie kat
 jak ciągłe eksperymentowanie. Tak więc, jeżeli jesteś programistą pracującym na codzień z kodem obiektowym, spróbuj wykonywać kata w języku funkcyjnym.</p>
 
 <p>Gdzie można znaleźć kata? Polecam odwiedzić <a href="https://www.codewars.com.">https://www.codewars.com.</a> Po założeniu konta mamy dostęp do kilku tysięcy kata, które możemy rozwiązywać w kilku językach.
-Po rozwiązaniu problemu możemy porównać nasze rozwiązanie z rozwiązaniami innych użytkowników.</p>
+Po rozwiązaniu problemu możemy porównać nasze rozwiązanie z rozwiązaniami innych użytkowników. Jak wygląda przykładowe kata z codewars? no tak:</p>
+
+<blockquote><p>Write a function that takes an (unsigned) integer as input, and returns the number of bits that are equal to one in the binary representation of that number.
+  Example: The binary representation of 1234 is 10011010010, so the function should return 5 in this case.</p></blockquote>
+
+<p>Do tak zdefiniowanego kata należy napisać kod który przechodzi takie testy jednostkowe:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testGame</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">BitCount</span><span class="o">.</span><span class="na">countBits</span><span class="o">(</span><span class="mi">4</span><span class="o">));</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="n">BitCount</span><span class="o">.</span><span class="na">countBits</span><span class="o">(</span><span class="mi">1234</span><span class="o">));</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">BitCount</span><span class="o">.</span><span class="na">countBits</span><span class="o">(</span><span class="mi">7</span><span class="o">));</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">BitCount</span><span class="o">.</span><span class="na">countBits</span><span class="o">(</span><span class="mi">9</span><span class="o">));</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">BitCount</span><span class="o">.</span><span class="na">countBits</span><span class="o">(</span><span class="mi">10</span><span class="o">));</span>
+<span class="o">}</span></code></pre></div>
+
+
+<p>PS. Nie korzystaj z metody bitCount ;)</p>
 ]]></content>
     
   </entry>
@@ -166,7 +190,7 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 <!--more-->
 
 
-<h1>Programowanie deklaratywne vs imperatywne</h1>
+<h2>Programowanie deklaratywne vs imperatywne</h2>
 
 <p>Wprowadzenie do programowanie funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście w którym tworząc
  kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób
@@ -188,30 +212,90 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 <span class="n">users</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">print</span><span class="o">);</span></code></pre></div>
 
 
-<h1>Co to jest programowanie funkcyjne?</h1>
+<h2>Co to jest programowanie funkcyjne?</h2>
 
 <p>Programowanie funkcyjne to programowanie w którym najważniejszą rolę pełnią funkcje. Pewnie zapytasz: Zaraz, zaraz&hellip;Czy czasami mój obiektowy kod nie składa się
 również z funkcji? Ależ tak! Jednak zasadnicza równica jest taka że w FP (ang. Functional programming) funkcje służą do opisu przepływu sterowania i operacji, a nie
  tak jak to ma miejsce w przypadku programowania obiektowego do zmiany stanu obiektów. Z tego założenia wynika również jedna z cech programowania obiektowego - nie
-  zmienność obiektów. Czy jeszcze się charakteryzuje FP? O tym w dalszej części.
-Czyste funkcje</p>
+  zmienność obiektów. Czy jeszcze się charakteryzuje FP? O tym w dalszej części.</p>
+
+<h2>Czyste funkcje</h2>
 
 <p>Czyste funkcje są to funkcje bez efektów ubocznych. Są one elementem bez którego nie da się pisać funkcyjnie. Nie zależą one od żadnych zmienny zewnętrznych np. pól w
 klasie, a wszystkie dane są przekazywane jako parametr/y. Dlatego też dla podanego zestawu danych czysta funkcja zawsze zwróci taki sam wynik. Zaburzeniem tego może być
 również wykorzystanie w funkcji instrukcji? random, gdzie wynik operacji nie jest stały dla danych parametrów. Czyste funkcje również nie modyfikują stanów zewnętrznych
-np. pól w klasie, lecz każdy wynik jest zwracany jako wynik funkcji.
-Funkcje jako obywatele pierwszej klasy</p>
+np. pól w klasie, lecz każdy wynik jest zwracany jako wynik funkcji.</p>
+
+<h2>Funkcje jako obywatele pierwszej klasy</h2>
 
 <p>Pod tym pojęciem kryje się możliwość języka do traktowania funkcji na równi z obiektami klas tzn. funkcje można przekazywać jako parametry do metod, można je przypisywać
-do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy które na to pozwalały.</p>
+do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy które na to pozwalały. Jak to zrealizować w Java 8 pokazuje poniższy przykład.</p>
 
-<h1>Niezmienność obiektów</h1>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">final</span> <span class="kt">double</span> <span class="n">PI</span> <span class="o">=</span> <span class="mf">3.14</span><span class="o">;</span>
+
+<span class="c1">// Przypisanie funkcji do zmiennej</span>
+<span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">circleArea</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-&gt;</span> <span class="n">r</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">PI</span><span class="o">;</span>
+
+<span class="c1">// Przekazanie funkcji do metody</span>
+<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">algorithm</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">r</span><span class="o">));</span>
+<span class="o">}</span></code></pre></div>
+
+
+<h2>Niezmienność obiektów</h2>
 
 <p>Ta cecha FP jest związana z czystymi funkcjami. W językach czysto funkcyjnych często nie istnieje pojęcie zmiennej, wszystkie tworzone obiekty są niezmienne. Dzięki
 takiemu podejściu nie ma możliwości zmieniać stanów ani przekazanych do funkcji parametrów jak i pól w klasie, trudniej jest w funkcji wykonać efekt uboczny. Tak więc
 final jest zawsze mile widziany. Jak ułatwić sobie życie w takim kodzie? Polecam bardzo buildery, czy to te implementowane przez was, czy też te generowane automatycznie
-np. za pomocą Lombok-a.
-Zalety programowania funkcyjnego</p>
+np. za pomocą Lombok-a. Builder ma dwie zasadnicze zalety. Pierwsza to to że nie musimy używać kontruktorów z wieloma parametrami gdzie oraz to że mimo użycia tylko
+stałych pól w klasie możemy utworzyć obiekt w kilku krokach. Jak wygląda najprostrzy builder?</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="nf">User</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="n">UserBuilder</span> <span class="nf">builder</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">UserBuilder</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">UserBuilder</span> <span class="o">{</span>
+            <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+            <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+            <span class="kd">public</span> <span class="n">UserBuilder</span> <span class="nf">age</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kd">public</span> <span class="n">UserBuilder</span> <span class="nf">name</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kd">public</span> <span class="n">User</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="nf">User</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></div>
+
+
+<p>Jak widać wszystkie pola w klasie User są stałe, i nie mamy potrzeby eksponować na zewnątrz <em>brzydkiego</em> konstruktora z wszystkimi polami. Dodatkowo w metodzie build możemy
+umieścić logikę walidującą stan danych przed utworzeniem obiektu. Przykładowe użycie buildera wygląda następująco:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">final</span> <span class="n">UserBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="na">builder</span><span class="o">();</span>
+    <span class="n">builder</span>
+            <span class="o">.</span><span class="na">age</span><span class="o">(</span><span class="mi">18</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">&quot;Frank&quot;</span><span class="o">);</span></code></pre></div>
+
+
+<p>Dzięki wykorzystaniu wzorca fluent interface mamy możliwość łączenia metod w ciąg wywołań.</p>
+
+<h2>Podsumowanie</h2>
 
 <p>Dzięki temu że funkcje nie mają efektów ubocznych, wynik działania jest łatwiejszy do przewidzenia jak i przetestowania. Dodatkowo czysta funkcja dla podanych parametrów
 zawsze zwróci ten sam wynik, dlatego można z łatwością wykorzystać cache w celu optymalizacji aplikacji. Dzięki używaniu czystych funkcji znikną również największe problemy

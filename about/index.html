@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>about - Łódzki programista</title>
+  <title>O mnie - Łódzki programista</title>
   <meta name="author" content="Kamil Lolo">
 
   
-  <meta name="description" content="about Tweet Recent Posts Programistyczne kata Czy warto się przejmować konkatenacją stringów w Java? Wstęp do programowania funkcyjnego GitHub Repos &hellip;">
+  <meta name="description" content="O mnie Jestem programistą z pasją, który lubi dzielić się swoją wiedzą. W życiu zawodowym wysoko stawiam sobie zasady manifestu oprogramowania &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -43,13 +43,6 @@
   
 </ul>
   
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:klolo.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archiwum</a></li>
@@ -63,7 +56,7 @@
 <article role="article">
   
   <header>
-    <h1 class="entry-title">about</h1>
+    <h1 class="entry-title">O mnie</h1>
     <p class="meta">
 
 
@@ -79,7 +72,59 @@
 <time datetime="2017-08-05T12:11:00+02:00" pubdate data-updated="true"></time></p>
   </header>
   
-  
+  <table>
+    <tr>
+        <td><img style=" border-radius: 50%;" src="/images/avatar.jpg" /></td>
+        <td style="padding-left:15px;">Jestem programistą z pasją, który lubi dzielić się swoją wiedzą. W życiu zawodowym wysoko stawiam sobie zasady manifestu oprogramowania rzemieślniczego,
+            którego uważam za uzupełnienie maniestu oprogramowania zwinnego.</td>
+
+    </tr>
+</table>
+
+
+
+
+<div style="text-align:center;font-style: italic;">
+    Not only working software, but also well-crafted software<br/>
+    Not only responding to change, but also <b>steadily adding value<br/>
+    Not only individuals and interactions, but also a community of professionals<br/>
+    Not only customer collaboration, but also productive partnerships<br/>
+</div>
+
+
+<p><section>
+  <h2><br/>
+    <a href="https://github.com/klolo">@klolo</a> on GitHub</p>
+
+<p>  </h2>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&hellip;</li>
+  </ul></p>
+
+<p>  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement(&lsquo;script&rsquo;);
+            jxhr.type = &lsquo;text/javascript&rsquo;;
+            jxhr.src = &lsquo;/javascripts/libs/jXHR.js&rsquo;;
+            var s = document.getElementsByTagName(&lsquo;script&rsquo;)[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }</p>
+
+<pre><code>    github.showRepos({
+        user: 'klolo',
+        count: 3,
+        skip_forks: true,
+        target: '#gh_repos'
+    });
+});
+</code></pre>
+
+<p>  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section></p>
+
+<p><section></p>
 
   
     <footer>
@@ -100,15 +145,6 @@
 <time datetime="2017-08-05T12:11:00+02:00" pubdate data-updated="true"></time>
         
       </p>
-      
-        <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://klolo.github.io/about/index.html" data-via="" data-counturl="http://klolo.github.io/about/index.html" >Tweet</a>
-  
-  
-  
-</div>
-
       
     </footer>
   
@@ -138,13 +174,14 @@
 </section>
 
 <section>
-  <h1>GitHub Repos</h1>
+  <h2>  
+    <a href="https://github.com/klolo">@klolo</a> on GitHub
+    
+  </h2>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
-  
-  <a href="https://github.com/klolo">@klolo</a> on GitHub
-  
+
   <script type="text/javascript">
     $(document).ready(function(){
         if (!window.jXHR){
@@ -157,7 +194,7 @@
 
         github.showRepos({
             user: 'klolo',
-            count: 0,
+            count: 3,
             skip_forks: true,
             target: '#gh_repos'
         });
@@ -186,7 +223,24 @@
 
 
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 

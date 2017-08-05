@@ -43,13 +43,6 @@
   
 </ul>
   
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:klolo.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archiwum</a></li>
@@ -94,7 +87,7 @@
 <!--more-->
 
 
-<h1>Programowanie deklaratywne vs imperatywne</h1>
+<h2>Programowanie deklaratywne vs imperatywne</h2>
 
 <p>Wprowadzenie do programowanie funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście w którym tworząc
  kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób
@@ -116,30 +109,90 @@
 <span class="n">users</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">print</span><span class="o">);</span></code></pre></div>
 
 
-<h1>Co to jest programowanie funkcyjne?</h1>
+<h2>Co to jest programowanie funkcyjne?</h2>
 
 <p>Programowanie funkcyjne to programowanie w którym najważniejszą rolę pełnią funkcje. Pewnie zapytasz: Zaraz, zaraz&hellip;Czy czasami mój obiektowy kod nie składa się
 również z funkcji? Ależ tak! Jednak zasadnicza równica jest taka że w FP (ang. Functional programming) funkcje służą do opisu przepływu sterowania i operacji, a nie
  tak jak to ma miejsce w przypadku programowania obiektowego do zmiany stanu obiektów. Z tego założenia wynika również jedna z cech programowania obiektowego - nie
-  zmienność obiektów. Czy jeszcze się charakteryzuje FP? O tym w dalszej części.
-Czyste funkcje</p>
+  zmienność obiektów. Czy jeszcze się charakteryzuje FP? O tym w dalszej części.</p>
+
+<h2>Czyste funkcje</h2>
 
 <p>Czyste funkcje są to funkcje bez efektów ubocznych. Są one elementem bez którego nie da się pisać funkcyjnie. Nie zależą one od żadnych zmienny zewnętrznych np. pól w
 klasie, a wszystkie dane są przekazywane jako parametr/y. Dlatego też dla podanego zestawu danych czysta funkcja zawsze zwróci taki sam wynik. Zaburzeniem tego może być
 również wykorzystanie w funkcji instrukcji? random, gdzie wynik operacji nie jest stały dla danych parametrów. Czyste funkcje również nie modyfikują stanów zewnętrznych
-np. pól w klasie, lecz każdy wynik jest zwracany jako wynik funkcji.
-Funkcje jako obywatele pierwszej klasy</p>
+np. pól w klasie, lecz każdy wynik jest zwracany jako wynik funkcji.</p>
+
+<h2>Funkcje jako obywatele pierwszej klasy</h2>
 
 <p>Pod tym pojęciem kryje się możliwość języka do traktowania funkcji na równi z obiektami klas tzn. funkcje można przekazywać jako parametry do metod, można je przypisywać
-do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy które na to pozwalały.</p>
+do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy które na to pozwalały. Jak to zrealizować w Java 8 pokazuje poniższy przykład.</p>
 
-<h1>Niezmienność obiektów</h1>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">final</span> <span class="kt">double</span> <span class="n">PI</span> <span class="o">=</span> <span class="mf">3.14</span><span class="o">;</span>
+
+<span class="c1">// Przypisanie funkcji do zmiennej</span>
+<span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">circleArea</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-&gt;</span> <span class="n">r</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">PI</span><span class="o">;</span>
+
+<span class="c1">// Przekazanie funkcji do metody</span>
+<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">algorithm</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">r</span><span class="o">));</span>
+<span class="o">}</span></code></pre></div>
+
+
+<h2>Niezmienność obiektów</h2>
 
 <p>Ta cecha FP jest związana z czystymi funkcjami. W językach czysto funkcyjnych często nie istnieje pojęcie zmiennej, wszystkie tworzone obiekty są niezmienne. Dzięki
 takiemu podejściu nie ma możliwości zmieniać stanów ani przekazanych do funkcji parametrów jak i pól w klasie, trudniej jest w funkcji wykonać efekt uboczny. Tak więc
 final jest zawsze mile widziany. Jak ułatwić sobie życie w takim kodzie? Polecam bardzo buildery, czy to te implementowane przez was, czy też te generowane automatycznie
-np. za pomocą Lombok-a.
-Zalety programowania funkcyjnego</p>
+np. za pomocą Lombok-a. Builder ma dwie zasadnicze zalety. Pierwsza to to że nie musimy używać kontruktorów z wieloma parametrami gdzie oraz to że mimo użycia tylko
+stałych pól w klasie możemy utworzyć obiekt w kilku krokach. Jak wygląda najprostrzy builder?</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="nf">User</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="n">UserBuilder</span> <span class="nf">builder</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">UserBuilder</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">UserBuilder</span> <span class="o">{</span>
+            <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+            <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+            <span class="kd">public</span> <span class="n">UserBuilder</span> <span class="nf">age</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kd">public</span> <span class="n">UserBuilder</span> <span class="nf">name</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kd">public</span> <span class="n">User</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="nf">User</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></div>
+
+
+<p>Jak widać wszystkie pola w klasie User są stałe, i nie mamy potrzeby eksponować na zewnątrz <em>brzydkiego</em> konstruktora z wszystkimi polami. Dodatkowo w metodzie build możemy
+umieścić logikę walidującą stan danych przed utworzeniem obiektu. Przykładowe użycie buildera wygląda następująco:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">final</span> <span class="n">UserBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="na">builder</span><span class="o">();</span>
+    <span class="n">builder</span>
+            <span class="o">.</span><span class="na">age</span><span class="o">(</span><span class="mi">18</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">&quot;Frank&quot;</span><span class="o">);</span></code></pre></div>
+
+
+<p>Dzięki wykorzystaniu wzorca fluent interface mamy możliwość łączenia metod w ciąg wywołań.</p>
+
+<h2>Podsumowanie</h2>
 
 <p>Dzięki temu że funkcje nie mają efektów ubocznych, wynik działania jest łatwiejszy do przewidzenia jak i przetestowania. Dodatkowo czysta funkcja dla podanych parametrów
 zawsze zwróci ten sam wynik, dlatego można z łatwością wykorzystać cache w celu optymalizacji aplikacji. Dzięki używaniu czystych funkcji znikną również największe problemy
@@ -169,7 +222,15 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
 
 
 <time datetime="2017-08-04T20:25:49+02:00" pubdate data-updated="true"></time>
-      
+    </p>
+    <p class="meta">
+      Kategoria: 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/metodyki/'>metodyki</a>
+  
+</span>
 
 
     </p>
@@ -179,6 +240,10 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://klolo.github.io/blog/2017/08/04/wstep-do-programowania-funkcyjnego/" data-via="" data-counturl="http://klolo.github.io/blog/2017/08/04/wstep-do-programowania-funkcyjnego/" >Tweet</a>
   
   
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
@@ -216,13 +281,14 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
 </section>
 
 <section>
-  <h1>GitHub Repos</h1>
+  <h2>  
+    <a href="https://github.com/klolo">@klolo</a> on GitHub
+    
+  </h2>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
-  
-  <a href="https://github.com/klolo">@klolo</a> on GitHub
-  
+
   <script type="text/javascript">
     $(document).ready(function(){
         if (!window.jXHR){
@@ -235,7 +301,7 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
 
         github.showRepos({
             user: 'klolo',
-            count: 0,
+            count: 3,
             skip_forks: true,
             target: '#gh_repos'
         });
@@ -264,7 +330,24 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
 
 
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 

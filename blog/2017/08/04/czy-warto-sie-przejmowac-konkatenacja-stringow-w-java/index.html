@@ -43,13 +43,6 @@
   
 </ul>
   
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:klolo.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archiwum</a></li>
@@ -214,7 +207,15 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 
 
 <time datetime="2017-08-04T20:37:42+02:00" pubdate data-updated="true"></time>
-      
+    </p>
+    <p class="meta">
+      Kategoria: 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>
+  
+</span>
 
 
     </p>
@@ -224,6 +225,10 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://klolo.github.io/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/" data-via="" data-counturl="http://klolo.github.io/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/" >Tweet</a>
   
   
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
@@ -263,13 +268,14 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 </section>
 
 <section>
-  <h1>GitHub Repos</h1>
+  <h2>  
+    <a href="https://github.com/klolo">@klolo</a> on GitHub
+    
+  </h2>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
-  
-  <a href="https://github.com/klolo">@klolo</a> on GitHub
-  
+
   <script type="text/javascript">
     $(document).ready(function(){
         if (!window.jXHR){
@@ -282,7 +288,7 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 
         github.showRepos({
             user: 'klolo',
-            count: 0,
+            count: 3,
             skip_forks: true,
             target: '#gh_repos'
         });
@@ -311,7 +317,24 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 
 
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 
