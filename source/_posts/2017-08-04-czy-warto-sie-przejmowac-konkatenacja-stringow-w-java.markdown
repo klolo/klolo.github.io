@@ -3,9 +3,13 @@ layout: post
 title: "Czy warto się przejmować konkatenacją stringów w Java?"
 date: 2017-08-04 20:37:42 +0200
 comments: true
-categories: 
+categories: java
 ---
-Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera bezpiecznego wielowątkowo. Co nam to daje? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:
+Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera
+bezpiecznego wielowątkowo. Czy napewno słusznie?
+<!--more-->
+
+Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:
 {% highlight java %}
   public static void main(final String... args) {
         String result = "";
