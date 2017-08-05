@@ -13,4 +13,5 @@ programiście przećwiczyć nowy język, nową technikę i rozbudować umiejętn
 rozwiązywania takiego zadania zależy od niego. Jednak ciągłe wykonywanie kata korzystając z tych samych metod nie przyniesie tak dobrych wyników
 jak ciągłe eksperymentowanie. Tak więc, jeżeli jesteś programistą pracującym na codzień z kodem obiektowym, spróbuj wykonywać kata w języku funkcyjnym.
 
-Gdzie można znaleźć kata? Polecam odwiedzić https://www.codewars.com. Po założeniu konta mamy dostęp do kilku tysięcy kata, które możemy rozwiązywać w kilku językach. Po rozwiązaniu problemu możemy porównać nasze rozwiązanie z rozwiązaniami innych użytkowników.
+Gdzie można znaleźć kata? Polecam odwiedzić https://www.codewars.com. Po założeniu konta mamy dostęp do kilku tysięcy kata, które możemy rozwiązywać w kilku językach.
+Po rozwiązaniu problemu możemy porównać nasze rozwiązanie z rozwiązaniami innych użytkowników.
