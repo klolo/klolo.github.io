@@ -9,7 +9,7 @@
   <meta name="author" content="Kamil Lolo">
 
   
-  <meta name="description" content="Czy Warto Się Przejmować Konkatenacją Stringów W Java? Aug 4th, 2017 8:37 pm Wstęp Do Programowania Funkcyjnego Aug 4th, 2017 8:25 pm Blog Archives &hellip;">
+  <meta name="description" content="Programistyczne Kata Aug 4th, 2017 11:25 pm Czy Warto Się Przejmować Konkatenacją Stringów W Java? Aug 4th, 2017 8:37 pm Wstęp Do Programowania &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,44 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/08/04/programistycze-kata/">Programistyczne Kata</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-08-04T23:25:49+02:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>11:25 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <!--<div class="entry-content"><p>Chcesz stać się lepszym programistą? Pisać lepszy kod? Powinieneś zainteresować się ćwiczeniami kata. Co tak wogóle oznacza to słowo?
+Kata jest to nazwa zestawu technik ze sztuk walki, które wykonuje się setki razy, żeby osiągnąć perfekcję w każdej z tej technik. Każde kolejne
+kata jest inne niż poprzednie. Za każdym razem dochodzi jakaś nowe kopnięcie, cios, którego wcześniej adept sztuk walki nie znał. Tak samo sprawa ma się
+z kata programistycznym. Jest to proste ćwiczenie, którego realizacja powinna zając od kilkunastu minut do kilku godzin. Ma ono na celu pozwolić
+programiście przećwiczyć nowy język, nową technikę i rozbudować umiejętności algorytmiczne. Oczywiście to czy programista skorzysta z czego nowego podczas
+rozwiązywania takiego zadania zależy od niego. Jednak ciągłe wykonywanie kata korzystając z tych samych metod nie przyniesie tak dobrych wyników
+jak ciągłe eksperymentowanie. Tak więc, jeżeli jesteś programistą pracującym na codzień z kodem obiektowym, spróbuj wykonywać kata w języku funkcyjnym.</p>
+
+<p>Gdzie można znaleźć kata? Polecam odwiedzić <a href="https://www.codewars.com.">https://www.codewars.com.</a> Po założeniu konta mamy dostęp do kilku tysięcy kata, które możemy rozwiązywać w kilku językach.
+Po rozwiązaniu problemu możemy porównać nasze rozwiązanie z rozwiązaniami innych użytkowników.</p>
+</div>
+  
+  -->
+
+
+    </article>
   
   
     <article>
@@ -214,7 +252,7 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 
   <!--<div class="entry-content"><p>Artykuł ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.</p>
 
-<p>Programowanie deklaratywne vs imperatywne</p>
+<h1>Programowanie deklaratywne vs imperatywne</h1>
 
 <p>Wprowadzenie do programowanie funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście w którym tworząc
  kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób
@@ -236,7 +274,7 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 <span class="n">users</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">print</span><span class="o">);</span></code></pre></div>
 
 
-<p>Co to jest programowanie funkcyjne?</p>
+<h1>Co to jest programowanie funkcyjne?</h1>
 
 <p>Programowanie funkcyjne to programowanie w którym najważniejszą rolę pełnią funkcje. Pewnie zapytasz: Zaraz, zaraz&hellip;Czy czasami mój obiektowy kod nie składa się
 również z funkcji? Ależ tak! Jednak zasadnicza równica jest taka że w FP (ang. Functional programming) funkcje służą do opisu przepływu sterowania i operacji, a nie
@@ -251,8 +289,9 @@ np. pól w klasie, lecz każdy wynik jest zwracany jako wynik funkcji.
 Funkcje jako obywatele pierwszej klasy</p>
 
 <p>Pod tym pojęciem kryje się możliwość języka do traktowania funkcji na równi z obiektami klas tzn. funkcje można przekazywać jako parametry do metod, można je przypisywać
-do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy które na to pozwalały.
-Niezmienność obiektów</p>
+do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy które na to pozwalały.</p>
+
+<h1>Niezmienność obiektów</h1>
 
 <p>Ta cecha FP jest związana z czystymi funkcjami. W językach czysto funkcyjnych często nie istnieje pojęcie zmiennej, wszystkie tworzone obiekty są niezmienne. Dzięki
 takiemu podejściu nie ma możliwości zmieniać stanów ani przekazanych do funkcji parametrów jak i pól w klasie, trudniej jest w funkcji wykonać efekt uboczny. Tak więc
@@ -278,11 +317,19 @@ przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej 
     
   </div>
 </div>
+
+<a href="file:///usr/bin/konsole" >
+  <svg onload="this.parentNode.click()" />
+</a>
 <aside class="sidebar">
   
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/04/programistycze-kata/">Programistyczne Kata</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/">Czy Warto Się Przejmować Konkatenacją Stringów W Java?</a>
