@@ -3,7 +3,7 @@ layout: post
 title: "Czy warto się przejmować konkatenacją stringów w Java?"
 date: 2017-08-04 20:37:42 +0200
 comments: true
-categories: java
+categories: JAVA
 ---
 Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera
 bezpiecznego wielowątkowo. Czy napewno słusznie?

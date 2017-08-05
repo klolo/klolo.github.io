@@ -19,6 +19,7 @@
         {% if site.disqus_short_name and page.comments != false and post.comments != false and site.disqus_show_comment_count == true %}
          | <a href="{% if index %}{{ root_url }}{{ post.url }}{% endif %}#disqus_thread">Comments</a>
         {% endif %}
+        {% if index %} <a href="#" style="text-decoration:none; color: #535353"> {{ post.categories | category_links }} </a>  {% endif %}
       </p>
     {% endunless %}
   </header>

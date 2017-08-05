@@ -3,7 +3,7 @@ layout: post
 title: "Wstęp do programowania funkcyjnego"
 date: 2017-08-04 20:25:49 +0200
 comments: true
-categories: metodyki
+categories: METHODOLOGY
 ---
 
 Artykuł ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.

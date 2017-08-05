@@ -20,7 +20,7 @@ subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
 email:
-
+lang: pl
 # ----------------------- #
 #    Jekyll & Plugins     #
 # ----------------------- #
