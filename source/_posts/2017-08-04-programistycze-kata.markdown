@@ -5,7 +5,7 @@ date: 2017-08-04 23:25:49 +0200
 comments: true
 categories: METHODOLOGY
 ---
-Chcesz stać się lepszym programistą? Pisać lepszy kod? Powinieneś zainteresować się ćwiczeniami kata. Co tak wogóle oznacza to słowo?
+Chcesz stać się lepszym programistą? Pisać lepszy kod? Powinieneś zainteresować się ćwiczeniami kata. Co tak w ogóle oznacza to słowo?
 <!--more-->
 
 <div style="text-align:center">

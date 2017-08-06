@@ -13,7 +13,7 @@ Artykuł ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedsta
 
 Wprowadzenie do programowanie funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście w którym tworząc
  kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób
-  kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły iczytelniejszy z powodu
+  kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły i czytelniejszy z powodu
   mniejszej ilości zbędnego szumu. Ile to razy zdarzyło Ci się napisać: for(int i=0; i<..., pewnie setki razy. Czyż nie uważasz że w większości przypadku
   tak napisany kod jest złem koniecznym , niezbędnym do osiągnięcia określonego działania aplikacji? Podejście w którym wykorzystywane są instrukcje sterujące
    naszym kodem nazywane jest programowaniem imperatywnym. Jest to przeciwieństwo programowania deklaratywnego, gdzie nie tylko musimy martwić się co ma robić nasz kod,

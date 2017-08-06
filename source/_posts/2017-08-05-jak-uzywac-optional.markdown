@@ -8,8 +8,8 @@ categories: JAVA
 Programujesz w Java 8? Używasz klasy Optional w swoim kodzie? A czy robisz to w sposób właściwy?
 <!--more-->
 
-Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException. Tym tworem
-jest klasa Optional. Dla nie wtajemniczonych jest to generyczny pojemnik a zmienną dowolnego typu, która może mieć wartość null. Poprzez szereg metod dostępnych w klasie powinniśmy być w stanie
+Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException.
+Tym tworem jest klasa Optional. Dla nie wtajemniczonych jest to generyczny pojemnik a zmienną dowolnego typu, która może mieć wartość null. Poprzez szereg metod dostępnych w klasie powinniśmy być w stanie
 zabezpieczyć się przed przypadkowym odwołaniem do null referencji. Przyjrzyjmy się jakie błędy można popełnić używając Optional.
 
 ## Błędne użycie isPresent/get
@@ -20,7 +20,7 @@ jeden z metod:
   * _empty()_ - tworzy pusty Optional z wartością null w środku.
   * _of(T value)_ - tworzy Optional z podaną wartością. W przypadku przekazania null dostaniemy nullPointerException.
   * _ofNullable(T value)_ - również tworzy Optional z podaną wartością, ale w przypadku przekazania null nie zostanie zgłoszony wyjątek.
-  * _Optional(T value)_ - kontruktor rzucający błąd w przypadku przekazania wartości null.
+  * _Optional(T value)_ - konstruktor rzucający błąd w przypadku przekazania wartości null.
 
 Dobrze, wiemy już jak utworzyć Optional to teraz pytanie jak go użyć? Zacznijmy od dwóch najczęściej używanych metod, często również nie poprawnie. Są to:
 
@@ -105,14 +105,14 @@ Sam pomysłodawca i współ autor rozwiązania jakim jest Optional [żałuje](ht
 tej metody np. _getOrElseThrowNoSuchElementException_, tak żeby każdy zawsze miał świadomość że może ona wyrzucić wyjątek i nie powinna być używana bez uprzedniego sprawdzenia w czy Optional
 jest jakaś wartość.
 
-## Gdzie nie używac Optional?
+## Gdzie nie używać Optional?
 Kolejnym problemem jaki pojawia się tam gdzie używamy Optional jest nadużywanie go. W szczególności pola w klasach DTO nie powinny być deklarowane jako Optional, ponieważ może to doprowadzić do takich
 dziwnych zapisów:
 {% highlight java%}
 // private HashMap<String, Integer> data;
    private Optional<HashMap<String, Integer>> data;
 {% endhighlight %}
-Jest to bardzo nie czytelne i nie potrzebne. Co w takim razie zrobić kiedy chcemu użyć Optional do zabezpieczenia naszego kodu? Możemy go utworzyć w getterze:
+Jest to bardzo nie czytelne i nie potrzebne. Co w takim razie zrobić kiedy chcemy użyć Optional do zabezpieczenia naszego kodu? Możemy go utworzyć w getterze:
 {% highlight java%}
 private Optional<HashMap<String, Integer>> getData() {
     return Optional.ofNullable(data);
@@ -120,5 +120,6 @@ private Optional<HashMap<String, Integer>> getData() {
 {% endhighlight %}
 Ta sama zasada dotyczy również przekazywania Optionali do kontruktorów i do metod. Nic nam nie dają oprócz zaciemniania kodu. Lepszym rozwiązaniem jest przekazywać zwykły obiekt
 i w środku metody zamieniać go na Optional. A! No i należy pamiętać o tym że Optional nie jest serializowany i nie powinien być używany w obiektach domenowych...No jest troszkę tych zapaszków
- (ang. code smells) związanych z kontrowersyjnym Optional. Na koniec przytoczę wyjasnienie twórcy Optional-a do czego powstał Optional.
-> Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”, and using null for such was overwhelmingly likely to cause errors.
+ (ang. code smells) związanych z kontrowersyjnym Optional. Na koniec przytoczę wyjaśnienie twórcy Optional-a do czego powstał Optional.
+> Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”,
+and using null for such was overwhelmingly likely to cause errors.

@@ -5,11 +5,13 @@ date: 2017-08-04 20:37:42 +0200
 comments: true
 categories: JAVA
 ---
-Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera
-bezpiecznego wielowątkowo. Czy napewno słusznie?
+Używacie StringBuilder do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer
+bezpiecznego wielowątkowo. Czy na pewno słusznie?
 <!--more-->
 
-Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:
+Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony
+jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje
+utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli, jak tutaj:
 {% highlight java %}
   public static void main(final String... args) {
         String result = "";
@@ -21,7 +23,7 @@ Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, n
     }
 {% endhighlight %}
 
-to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych. 
+to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
 Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej więcej tak:
 {% highlight java %}
   public static void main(final String... args) {
@@ -34,14 +36,14 @@ Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej wię
     }
 {% endhighlight %}
 
-Dzięki użyciu StringBuildera optymalizujemy nasz kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy napewno musimy taki kod pisać? 
+Dzięki użyciu StringBuilder optymalizujemy nasz kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy na pewno musimy taki kod pisać?
 Otóż nie!. Dokumentacja mówi:
 >An implementation (of compiler) may choose to perform conversion and concatenation in one step to avoid creating and then discarding an intermediate String object. 
 To increase the performance of repeated string concatenation, a Java compiler may use the StringBuffer class or a similar technique to reduce the number of intermediate 
 String objects that are created by evaluation of an expression. For primitive types, an implementation may also optimize away the creation of a wrapper object by converting
 directly from a primitive type to a string.
 
-Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuildera w miejsce konkatenacji stringów. Sprawdźmy! 
+Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuilder w miejsce konkatenacji stringów. Sprawdźmy!
 Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:
 {% highlight java %}
   public static void main(java.lang.String...);
@@ -103,5 +105,5 @@ Faktycznie w wygenerowanym byte code pojawił się magicznie string builder. A j
 }
 {% endhighlight %}
 
-Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyna znacząco na wydajność, 
+Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność,
 ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi.
