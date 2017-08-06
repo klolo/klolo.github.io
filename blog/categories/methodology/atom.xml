@@ -4,7 +4,7 @@
   <title><![CDATA[Category: methodology | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/methodology/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-08-05T21:52:31+02:00</updated>
+  <updated>2017-08-06T22:26:26+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -18,7 +18,7 @@
     <link href="http://klolo.github.io/blog/2017/08/04/programistycze-kata/"/>
     <updated>2017-08-04T23:25:49+02:00</updated>
     <id>http://klolo.github.io/blog/2017/08/04/programistycze-kata</id>
-    <content type="html"><![CDATA[<p>Chcesz stać się lepszym programistą? Pisać lepszy kod? Powinieneś zainteresować się ćwiczeniami kata. Co tak wogóle oznacza to słowo?</p>
+    <content type="html"><![CDATA[<p>Chcesz stać się lepszym programistą? Pisać lepszy kod? Powinieneś zainteresować się ćwiczeniami kata. Co tak w ogóle oznacza to słowo?</p>
 
 <!--more-->
 
@@ -71,7 +71,7 @@ Po rozwiązaniu problemu możemy porównać nasze rozwiązanie z rozwiązaniami 
 
 <p>Wprowadzenie do programowanie funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście w którym tworząc
  kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób
-  kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły iczytelniejszy z powodu
+  kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły i czytelniejszy z powodu
   mniejszej ilości zbędnego szumu. Ile to razy zdarzyło Ci się napisać: for(int i=0; i&lt;&hellip;, pewnie setki razy. Czyż nie uważasz że w większości przypadku
   tak napisany kod jest złem koniecznym , niezbędnym do osiągnięcia określonego działania aplikacji? Podejście w którym wykorzystywane są instrukcje sterujące
    naszym kodem nazywane jest programowaniem imperatywnym. Jest to przeciwieństwo programowania deklaratywnego, gdzie nie tylko musimy martwić się co ma robić nasz kod,

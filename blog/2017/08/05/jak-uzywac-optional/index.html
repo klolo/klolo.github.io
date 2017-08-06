@@ -32,17 +32,15 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-104079933-1']);
-    _gaq.push(['_trackPageview']);
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    ga('create', 'UA-104079933-1', 'auto');
+    ga('send', 'pageview');
+</script>
 
 </head>
 
@@ -92,8 +90,8 @@
 <!--more-->
 
 
-<p>Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException. Tym tworem
-jest klasa Optional. Dla nie wtajemniczonych jest to generyczny pojemnik a zmienną dowolnego typu, która może mieć wartość null. Poprzez szereg metod dostępnych w klasie powinniśmy być w stanie
+<p>Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException.
+Tym tworem jest klasa Optional. Dla nie wtajemniczonych jest to generyczny pojemnik a zmienną dowolnego typu, która może mieć wartość null. Poprzez szereg metod dostępnych w klasie powinniśmy być w stanie
 zabezpieczyć się przed przypadkowym odwołaniem do null referencji. Przyjrzyjmy się jakie błędy można popełnić używając Optional.</p>
 
 <h2>Błędne użycie isPresent/get</h2>
@@ -105,7 +103,7 @@ jeden z metod:</p>
 <li><em>empty()</em> - tworzy pusty Optional z wartością null w środku.</li>
 <li><em>of(T value)</em> - tworzy Optional z podaną wartością. W przypadku przekazania null dostaniemy nullPointerException.</li>
 <li><em>ofNullable(T value)</em> - również tworzy Optional z podaną wartością, ale w przypadku przekazania null nie zostanie zgłoszony wyjątek.</li>
-<li><em>Optional(T value)</em> - kontruktor rzucający błąd w przypadku przekazania wartości null.</li>
+<li><em>Optional(T value)</em> - konstruktor rzucający błąd w przypadku przekazania wartości null.</li>
 </ul>
 
 
@@ -193,7 +191,7 @@ stosownie i zwróci pusty Optional. No i na końcu mamy metodę orElse która zw
 tej metody np. <em>getOrElseThrowNoSuchElementException</em>, tak żeby każdy zawsze miał świadomość że może ona wyrzucić wyjątek i nie powinna być używana bez uprzedniego sprawdzenia w czy Optional
 jest jakaś wartość.</p>
 
-<h2>Gdzie nie używac Optional?</h2>
+<h2>Gdzie nie używać Optional?</h2>
 
 <p>Kolejnym problemem jaki pojawia się tam gdzie używamy Optional jest nadużywanie go. W szczególności pola w klasach DTO nie powinny być deklarowane jako Optional, ponieważ może to doprowadzić do takich
 dziwnych zapisów:</p>
@@ -202,7 +200,7 @@ dziwnych zapisów:</p>
    <span class="kd">private</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">data</span><span class="o">;</span></code></pre></div>
 
 
-<p>Jest to bardzo nie czytelne i nie potrzebne. Co w takim razie zrobić kiedy chcemu użyć Optional do zabezpieczenia naszego kodu? Możemy go utworzyć w getterze:</p>
+<p>Jest to bardzo nie czytelne i nie potrzebne. Co w takim razie zrobić kiedy chcemy użyć Optional do zabezpieczenia naszego kodu? Możemy go utworzyć w getterze:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">getData</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">ofNullable</span><span class="o">(</span><span class="n">data</span><span class="o">);</span>
@@ -211,9 +209,10 @@ dziwnych zapisów:</p>
 
 <p>Ta sama zasada dotyczy również przekazywania Optionali do kontruktorów i do metod. Nic nam nie dają oprócz zaciemniania kodu. Lepszym rozwiązaniem jest przekazywać zwykły obiekt
 i w środku metody zamieniać go na Optional. A! No i należy pamiętać o tym że Optional nie jest serializowany i nie powinien być używany w obiektach domenowych&hellip;No jest troszkę tych zapaszków
- (ang. code smells) związanych z kontrowersyjnym Optional. Na koniec przytoczę wyjasnienie twórcy Optional-a do czego powstał Optional.</p>
+ (ang. code smells) związanych z kontrowersyjnym Optional. Na koniec przytoczę wyjaśnienie twórcy Optional-a do czego powstał Optional.</p>
 
-<blockquote><p>Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”, and using null for such was overwhelmingly likely to cause errors.</p></blockquote>
+<blockquote><p>Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”,
+and using null for such was overwhelmingly likely to cause errors.</p></blockquote>
 </div>
 
 

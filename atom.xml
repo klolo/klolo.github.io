@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-08-05T21:52:31+02:00</updated>
+  <updated>2017-08-06T22:26:26+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -26,8 +26,8 @@
 <!--more-->
 
 
-<p>Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException. Tym tworem
-jest klasa Optional. Dla nie wtajemniczonych jest to generyczny pojemnik a zmienną dowolnego typu, która może mieć wartość null. Poprzez szereg metod dostępnych w klasie powinniśmy być w stanie
+<p>Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException.
+Tym tworem jest klasa Optional. Dla nie wtajemniczonych jest to generyczny pojemnik a zmienną dowolnego typu, która może mieć wartość null. Poprzez szereg metod dostępnych w klasie powinniśmy być w stanie
 zabezpieczyć się przed przypadkowym odwołaniem do null referencji. Przyjrzyjmy się jakie błędy można popełnić używając Optional.</p>
 
 <h2>Błędne użycie isPresent/get</h2>
@@ -39,7 +39,7 @@ jeden z metod:</p>
 <li><em>empty()</em> - tworzy pusty Optional z wartością null w środku.</li>
 <li><em>of(T value)</em> - tworzy Optional z podaną wartością. W przypadku przekazania null dostaniemy nullPointerException.</li>
 <li><em>ofNullable(T value)</em> - również tworzy Optional z podaną wartością, ale w przypadku przekazania null nie zostanie zgłoszony wyjątek.</li>
-<li><em>Optional(T value)</em> - kontruktor rzucający błąd w przypadku przekazania wartości null.</li>
+<li><em>Optional(T value)</em> - konstruktor rzucający błąd w przypadku przekazania wartości null.</li>
 </ul>
 
 
@@ -127,7 +127,7 @@ stosownie i zwróci pusty Optional. No i na końcu mamy metodę orElse która zw
 tej metody np. <em>getOrElseThrowNoSuchElementException</em>, tak żeby każdy zawsze miał świadomość że może ona wyrzucić wyjątek i nie powinna być używana bez uprzedniego sprawdzenia w czy Optional
 jest jakaś wartość.</p>
 
-<h2>Gdzie nie używac Optional?</h2>
+<h2>Gdzie nie używać Optional?</h2>
 
 <p>Kolejnym problemem jaki pojawia się tam gdzie używamy Optional jest nadużywanie go. W szczególności pola w klasach DTO nie powinny być deklarowane jako Optional, ponieważ może to doprowadzić do takich
 dziwnych zapisów:</p>
@@ -136,7 +136,7 @@ dziwnych zapisów:</p>
    <span class="kd">private</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">data</span><span class="o">;</span></code></pre></div>
 
 
-<p>Jest to bardzo nie czytelne i nie potrzebne. Co w takim razie zrobić kiedy chcemu użyć Optional do zabezpieczenia naszego kodu? Możemy go utworzyć w getterze:</p>
+<p>Jest to bardzo nie czytelne i nie potrzebne. Co w takim razie zrobić kiedy chcemy użyć Optional do zabezpieczenia naszego kodu? Możemy go utworzyć w getterze:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">getData</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">ofNullable</span><span class="o">(</span><span class="n">data</span><span class="o">);</span>
@@ -145,9 +145,10 @@ dziwnych zapisów:</p>
 
 <p>Ta sama zasada dotyczy również przekazywania Optionali do kontruktorów i do metod. Nic nam nie dają oprócz zaciemniania kodu. Lepszym rozwiązaniem jest przekazywać zwykły obiekt
 i w środku metody zamieniać go na Optional. A! No i należy pamiętać o tym że Optional nie jest serializowany i nie powinien być używany w obiektach domenowych&hellip;No jest troszkę tych zapaszków
- (ang. code smells) związanych z kontrowersyjnym Optional. Na koniec przytoczę wyjasnienie twórcy Optional-a do czego powstał Optional.</p>
+ (ang. code smells) związanych z kontrowersyjnym Optional. Na koniec przytoczę wyjaśnienie twórcy Optional-a do czego powstał Optional.</p>
 
-<blockquote><p>Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”, and using null for such was overwhelmingly likely to cause errors.</p></blockquote>
+<blockquote><p>Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”,
+and using null for such was overwhelmingly likely to cause errors.</p></blockquote>
 ]]></content>
     
   </entry>
@@ -160,7 +161,7 @@ i w środku metody zamieniać go na Optional. A! No i należy pamiętać o tym �
     <updated>2017-08-04T23:25:49+02:00</updated>
     <id>http://klolo.github.io/blog/2017/08/04/programistycze-kata</id>
     
-    <content type="html"><![CDATA[<p>Chcesz stać się lepszym programistą? Pisać lepszy kod? Powinieneś zainteresować się ćwiczeniami kata. Co tak wogóle oznacza to słowo?</p>
+    <content type="html"><![CDATA[<p>Chcesz stać się lepszym programistą? Pisać lepszy kod? Powinieneś zainteresować się ćwiczeniami kata. Co tak w ogóle oznacza to słowo?</p>
 
 <!--more-->
 
@@ -210,13 +211,15 @@ Po rozwiązaniu problemu możemy porównać nasze rozwiązanie z rozwiązaniami 
     <updated>2017-08-04T20:37:42+02:00</updated>
     <id>http://klolo.github.io/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java</id>
     
-    <content type="html"><![CDATA[<p>Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera
-bezpiecznego wielowątkowo. Czy napewno słusznie?</p>
+    <content type="html"><![CDATA[<p>Używacie StringBuilder do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer
+bezpiecznego wielowątkowo. Czy na pewno słusznie?</p>
 
 <!--more-->
 
 
-<p>Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:</p>
+<p>Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony
+jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje
+utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli, jak tutaj:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
@@ -228,7 +231,7 @@ bezpiecznego wielowątkowo. Czy napewno słusznie?</p>
     <span class="o">}</span></code></pre></div>
 
 
-<p>to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
+<p>to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
 Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej więcej tak:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
@@ -241,7 +244,7 @@ Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej wię
     <span class="o">}</span></code></pre></div>
 
 
-<p>Dzięki użyciu StringBuildera optymalizujemy nasz kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy napewno musimy taki kod pisać?
+<p>Dzięki użyciu StringBuilder optymalizujemy nasz kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy na pewno musimy taki kod pisać?
 Otóż nie!. Dokumentacja mówi:</p>
 
 <blockquote><p>An implementation (of compiler) may choose to perform conversion and concatenation in one step to avoid creating and then discarding an intermediate String object.
@@ -249,7 +252,7 @@ To increase the performance of repeated string concatenation, a Java compiler ma
 String objects that are created by evaluation of an expression. For primitive types, an implementation may also optimize away the creation of a wrapper object by converting
 directly from a primitive type to a string.</p></blockquote>
 
-<p>Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuildera w miejsce konkatenacji stringów. Sprawdźmy!
+<p>Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuilder w miejsce konkatenacji stringów. Sprawdźmy!
 Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">...);</span>
@@ -310,7 +313,7 @@ Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 <span class="o">}</span></code></pre></div>
 
 
-<p>Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyna znacząco na wydajność,
+<p>Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność,
 ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi.</p>
 ]]></content>
     
@@ -333,7 +336,7 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
 
 <p>Wprowadzenie do programowanie funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście w którym tworząc
  kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób
-  kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły iczytelniejszy z powodu
+  kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły i czytelniejszy z powodu
   mniejszej ilości zbędnego szumu. Ile to razy zdarzyło Ci się napisać: for(int i=0; i&lt;&hellip;, pewnie setki razy. Czyż nie uważasz że w większości przypadku
   tak napisany kod jest złem koniecznym , niezbędnym do osiągnięcia określonego działania aplikacji? Podejście w którym wykorzystywane są instrukcje sterujące
    naszym kodem nazywane jest programowaniem imperatywnym. Jest to przeciwieństwo programowania deklaratywnego, gdzie nie tylko musimy martwić się co ma robić nasz kod,

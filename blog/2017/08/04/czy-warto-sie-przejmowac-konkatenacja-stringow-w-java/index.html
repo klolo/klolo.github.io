@@ -9,7 +9,7 @@
   <meta name="author" content="Kamil Lolo">
 
   
-  <meta name="description" content="Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów &hellip;">
+  <meta name="description" content="Używacie StringBuilder do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -32,17 +32,15 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-104079933-1']);
-    _gaq.push(['_trackPageview']);
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    ga('create', 'UA-104079933-1', 'auto');
+    ga('send', 'pageview');
+</script>
 
 </head>
 
@@ -87,13 +85,15 @@
   </header>
 
 
-<div class="entry-content"><p>Używacie StringBuildera do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuildera bądź też StringBuffera
-bezpiecznego wielowątkowo. Czy napewno słusznie?</p>
+<div class="entry-content"><p>Używacie StringBuilder do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer
+bezpiecznego wielowątkowo. Czy na pewno słusznie?</p>
 
 <!--more-->
 
 
-<p>Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konketenacja wykonywana jest w pętli, jak tutaj:</p>
+<p>Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony
+jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje
+utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli, jak tutaj:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
@@ -105,7 +105,7 @@ bezpiecznego wielowątkowo. Czy napewno słusznie?</p>
     <span class="o">}</span></code></pre></div>
 
 
-<p>to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
+<p>to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
 Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej więcej tak:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
@@ -118,7 +118,7 @@ Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej wię
     <span class="o">}</span></code></pre></div>
 
 
-<p>Dzięki użyciu StringBuildera optymalizujemy nasz kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy napewno musimy taki kod pisać?
+<p>Dzięki użyciu StringBuilder optymalizujemy nasz kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy na pewno musimy taki kod pisać?
 Otóż nie!. Dokumentacja mówi:</p>
 
 <blockquote><p>An implementation (of compiler) may choose to perform conversion and concatenation in one step to avoid creating and then discarding an intermediate String object.
@@ -126,7 +126,7 @@ To increase the performance of repeated string concatenation, a Java compiler ma
 String objects that are created by evaluation of an expression. For primitive types, an implementation may also optimize away the creation of a wrapper object by converting
 directly from a primitive type to a string.</p></blockquote>
 
-<p>Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuildera w miejsce konkatenacji stringów. Sprawdźmy!
+<p>Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuilder w miejsce konkatenacji stringów. Sprawdźmy!
 Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">...);</span>
@@ -187,7 +187,7 @@ Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 <span class="o">}</span></code></pre></div>
 
 
-<p>Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyna znacząco na wydajność,
+<p>Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność,
 ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi.</p>
 </div>
 
