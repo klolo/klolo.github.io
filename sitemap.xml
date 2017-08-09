@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://klolo.github.io/blog/2017/08/08/mantra-architektoniczna/</loc>
+<lastmod>2017-08-08T20:54:53+02:00</lastmod>
+</url>
+<url>
 <loc>http://klolo.github.io/blog/2017/08/05/jak-uzywac-optional/</loc>
 <lastmod>2017-08-05T19:57:49+02:00</lastmod>
 </url>
