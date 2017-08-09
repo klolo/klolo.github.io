@@ -22,5 +22,11 @@ footer: true
     Not only customer collaboration, but also productive partnerships<br/>
 </div>
 
+
+## Kontakt
+<div style="text-align:center;font-style: italic;">
+    <a href="#" mailto="kamil.lolo@mail.com">kamil.lolo@mail.com</a>
+</div>
+
 {% include asides/github.html %}
 <section>
