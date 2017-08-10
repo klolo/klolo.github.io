@@ -106,4 +106,5 @@ Faktycznie w wygenerowanym byte code pojawił się magicznie string builder. A j
 {% endhighlight %}
 
 Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność,
-ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi.
+ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi. Problem może być w Javie starszej niż 1.5, bo tam tego mechanizmu
+nie ma ;)
