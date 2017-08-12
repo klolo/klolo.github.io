@@ -188,7 +188,8 @@ Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 
 
 <p>Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność,
-ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi.</p>
+ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi. Problem może być w Javie starszej niż 1.5, bo tam tego mechanizmu
+nie ma ;)</p>
 </div>
 
 
@@ -255,6 +256,10 @@ ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na si
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/09/stream-reduce-vs-collect/">Java stream reduce vs collect</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/08/08/mantra-architektoniczna/">Mantra architektoniczna</a>
