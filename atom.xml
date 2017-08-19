@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-08-19T15:22:21+02:00</updated>
+  <updated>2017-08-19T15:29:20+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -15,11 +15,11 @@
   
   <entry>
     
-    <title type="html"><![CDATA[Intelij live templates - szybsze programowanie]]></title>
-    <link href="http://klolo.github.io/blog/2017/08/15/programuj-szybciej-dzieki-live-teplates-w-intellij/"/>
+    <title type="html"><![CDATA[Intellij live templates - szybsze programowanie]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/15/intellij-live-templates-szybsze-programowanie/"/>
     
     <updated>2017-08-15T17:01:03+02:00</updated>
-    <id>http://klolo.github.io/blog/2017/08/15/programuj-szybciej-dzieki-live-teplates-w-intellij</id>
+    <id>http://klolo.github.io/blog/2017/08/15/intellij-live-templates-szybsze-programowanie</id>
     
     <content type="html"><![CDATA[<p>Niezależnie od tego czy programujesz metodą Copiego i Pejsty, czy też wstukujesz kod niczym sekretarka pisząca notatkę ze spotkania szefa, czasem możesz odnieść wrażenie,
 że zaczynasz od identycznego fragmentu kodu. Ile razu w życiu na początku było <code>System.out.println</code> lub <code>public static void main(final String[] args)</code>? O ile nie jesteś programistą
