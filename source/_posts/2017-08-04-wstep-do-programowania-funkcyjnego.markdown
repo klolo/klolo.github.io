@@ -6,18 +6,18 @@ comments: true
 categories: METHODOLOGY
 ---
 
-Artykuł ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.
+Ten wpis ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.
 <!--more-->
 
 ## Programowanie deklaratywne vs imperatywne
 
-Wprowadzenie do programowanie funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście w którym tworząc
+Wprowadzenie do programowania funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście, w którym tworząc
  kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób
   kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły i czytelniejszy z powodu
-  mniejszej ilości zbędnego szumu. Ile to razy zdarzyło Ci się napisać: for(int i=0; i<..., pewnie setki razy. Czyż nie uważasz że w większości przypadku
-  tak napisany kod jest złem koniecznym , niezbędnym do osiągnięcia określonego działania aplikacji? Podejście w którym wykorzystywane są instrukcje sterujące
-   naszym kodem nazywane jest programowaniem imperatywnym. Jest to przeciwieństwo programowania deklaratywnego, gdzie nie tylko musimy martwić się co ma robić nasz kod,
-    ale również w jaki sposób to osiągnąć. Programowanie funkcyjne idzie w parze z programowanie deklaratywnym, dzięki czemu nasz kod będzie krótszy niż ten klasyczny
+  mniejszej ilości zbędnego szumu. Pewnie setki razy zdarzyło Ci się napisać: for(int i=0; i<... Czy nie uważasz, że w większości przypadków
+  tak napisany kod jest złem koniecznym, niezbędnym do osiągnięcia określonego działania aplikacji? Podejście, w którym wykorzystywane są instrukcje sterujące
+   kodem nazywane jest programowaniem imperatywnym. Jest to przeciwieństwo programowania deklaratywnego, gdzie nie tylko trzeba martwić się co ma robić kod,
+    ale również w jaki sposób to osiągnąć. Programowanie funkcyjne idzie w parze z programowaniem deklaratywnym, dzięki czemu kod będzie krótszy niż ten klasyczny
     obiektowo imperatywny.
 {% highlight java %}
 final List<String> users = Arrays.asList("Ewa", "Bartek", "Adam");
@@ -34,20 +34,20 @@ users.forEach(System.out::print);
 ## Co to jest programowanie funkcyjne?
 
 
-Programowanie funkcyjne to programowanie w którym najważniejszą rolę pełnią funkcje. Pewnie zapytasz: Zaraz, zaraz...Czy czasami mój obiektowy kod nie składa się
-również z funkcji? Ależ tak! Jednak zasadnicza równica jest taka że w FP (ang. Functional programming) funkcje służą do opisu przepływu sterowania i operacji, a nie
- tak jak to ma miejsce w przypadku programowania obiektowego do zmiany stanu obiektów. Z tego założenia wynika również jedna z cech programowania obiektowego - nie
-  zmienność obiektów. Czy jeszcze się charakteryzuje FP? O tym w dalszej części.
+Programowanie funkcyjne to programowanie, w którym najważniejszą rolę pełnią funkcje. Możesz śmiało zaprotestować: Zaraz, zaraz...Czy czasami mój obiektowy kod nie składa się
+również z funkcji? Ależ tak! Jednak zasadnicza równica jest taka, że w FP (ang. Functional programming) funkcje służą do opisu przepływu sterowania i operacji - a nie
+ tak jak to ma miejsce w przypadku programowania obiektowego - do zmiany stanu obiektów. Z tego założenia wynika również jedna z cech programowania obiektowego - niezmienność obiektów.
+ Czym jeszcze charakteryzuje się FP? O tym w dalszej części.
 
 ## Czyste funkcje
-Czyste funkcje są to funkcje bez efektów ubocznych. Są one elementem bez którego nie da się pisać funkcyjnie. Nie zależą one od żadnych zmienny zewnętrznych np. pól w
-klasie, a wszystkie dane są przekazywane jako parametr/y. Dlatego też dla podanego zestawu danych czysta funkcja zawsze zwróci taki sam wynik. Zaburzeniem tego może być
-również wykorzystanie w funkcji instrukcji? random, gdzie wynik operacji nie jest stały dla danych parametrów. Czyste funkcje również nie modyfikują stanów zewnętrznych
+Czyste funkcje to funkcje bez efektów ubocznych. Są one elementem, bez którego nie da się pisać funkcyjnie. Nie zależą one od żadnych zmienny zewnętrznych np. pól w
+klasie, a wszystkie dane są przekazywane jako parametry. Dlatego też dla podanego zestawu danych czysta funkcja zawsze zwróci taki sam wynik. Zaburzeniem tego może być
+również wykorzystanie w funkcji instrukcji random, w której wynik operacji nie jest stały dla danych parametrów. Czyste funkcje również nie modyfikują stanów zewnętrznych
 np. pól w klasie, lecz każdy wynik jest zwracany jako wynik funkcji.
 
 ## Funkcje jako obywatele pierwszej klasy
-Pod tym pojęciem kryje się możliwość języka do traktowania funkcji na równi z obiektami klas tzn. funkcje można przekazywać jako parametry do metod, można je przypisywać
-do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy które na to pozwalały. Jak to zrealizować w Java 8 pokazuje poniższy przykład.
+Pod tym pojęciem kryje się zdolność języka do traktowania funkcji na równi z obiektami klas tzn. funkcje można przekazywać jako parametry do metod, można je przypisywać
+do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy, które na to pozwalały. Jak to zrealizować w Java 8 pokazuje poniższy przykład.
 
 {% highlight java %}
 final double PI = 3.14;
@@ -63,11 +63,11 @@ void showCalculatedArea(final Function<Double, Double> algorithm, final double r
 
 ## Niezmienność obiektów
 
-Ta cecha FP jest związana z czystymi funkcjami. W językach czysto funkcyjnych często nie istnieje pojęcie zmiennej, wszystkie tworzone obiekty są niezmienne. Dzięki
-takiemu podejściu nie ma możliwości zmieniać stanów ani przekazanych do funkcji parametrów jak i pól w klasie, trudniej jest w funkcji wykonać efekt uboczny. Tak więc
-final jest zawsze mile widziany. Jak ułatwić sobie życie w takim kodzie? Polecam bardzo buildery, czy to te implementowane przez was, czy też te generowane automatycznie
-np. za pomocą Lombok-a. Builder ma dwie zasadnicze zalety. Pierwsza to to że nie musimy używać kontruktorów z wieloma parametrami gdzie oraz to że mimo użycia tylko
-stałych pól w klasie możemy utworzyć obiekt w kilku krokach. Jak wygląda najprostrzy builder?
+Jest to cecha FP związana z czystymi funkcjami. W językach czysto funkcyjnych często nie istnieje pojęcie zmiennej, tak więc wszystkie tworzone obiekty są niezmienne. Dzięki
+takiemu podejściu nie ma możliwości zmiany stanów ani przekazanych do funkcji parametrów, jak i pól w klasie, trudniej jest w funkcji wykonać efekt uboczny. W związku z czym
+final jest zawsze mile widziany. Jak ułatwić sobie życie w takim kodzie? Polecam bardzo buildery, czy to te implementowane przez Ciebie, czy też te generowane automatycznie
+np. za pomocą Lombok-a. Builder ma dwie zasadnicze zalety. Pierwsza to to że nie musimy używać konstruktorów z wieloma parametrami gdzie oraz to, że mimo użycia tylko
+stałych pól w klasie możemy utworzyć obiekt w kilku krokach. Jak wygląda najprostszy builder?
 
 {% highlight java %}
     public class User {
@@ -104,7 +104,7 @@ stałych pól w klasie możemy utworzyć obiekt w kilku krokach. Jak wygląda na
     }
 {% endhighlight %}
 
-Jak widać wszystkie pola w klasie User są stałe, i nie mamy potrzeby eksponować na zewnątrz _brzydkiego_ konstruktora z wszystkimi polami. Dodatkowo w metodzie build możemy
+Jak widać wszystkie pola w klasie User są stałe i nie mamy potrzeby eksponować na zewnątrz _brzydkiego_ konstruktora z wszystkimi polami. Dodatkowo w metodzie build możemy
 umieścić logikę walidującą stan danych przed utworzeniem obiektu. Przykładowe użycie buildera wygląda następująco:
 
 {% highlight java %}
@@ -118,8 +118,8 @@ Dzięki wykorzystaniu wzorca fluent interface mamy możliwość łączenia metod
 
 ## Podsumowanie
 
-Dzięki temu że funkcje nie mają efektów ubocznych, wynik działania jest łatwiejszy do przewidzenia jak i przetestowania. Dodatkowo czysta funkcja dla podanych parametrów
+Dzięki temu, że funkcje nie mają efektów ubocznych, wynik działania jest łatwiejszy zarówno do przewidzenia jak i do przetestowania. Dodatkowo czysta funkcja dla podanych parametrów
 zawsze zwróci ten sam wynik, dlatego można z łatwością wykorzystać cache w celu optymalizacji aplikacji. Dzięki używaniu czystych funkcji znikną również największe problemy
 z wielowątkowością, takie jak jednoczesna modyfikacja wspólnych danych przez kilka wątków. Możemy skupić się również na tym co mają robić nasze funkcje, a nie w jaki sposób
-implementować np. pętle lub warunek. Łatwiej jest nam również reużywać napisany wcześniej kod. Jakie są natomiast zalety tego że  nasze obiekty są niezmienne? Łatwiej
-przewidzieć co się w nich znajduje, dzięki czemu ewentualne błędy szybciej się diagnozuje oraz poprawia.
+implementować np. pętle lub warunek. Łatwiej jest nam również reużywać napisany wcześniej kod. Jakie są natomiast zalety tego, że obiekty są niezmienne? Łatwiej
+przewidzieć co się w nich znajduje, dzięki czemu można szybciej zdiagnozować i poprawić ewentualne błędy.

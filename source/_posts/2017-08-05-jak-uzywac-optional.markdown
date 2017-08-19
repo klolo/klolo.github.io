@@ -5,7 +5,7 @@ date: 2017-08-05 19:57:49 +0200
 comments: true
 categories: JAVA
 ---
-Programujesz w Java 8? Używasz klasy Optional w swoim kodzie? A czy robisz to w sposób właściwy?
+Jeśli programujesz w Java 8, to pewnie zdarzyło Ci sie użyć klasy Optional. Czy zrobiłeś to we właściwy sposób?
 <!--more-->
 
 Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException.
