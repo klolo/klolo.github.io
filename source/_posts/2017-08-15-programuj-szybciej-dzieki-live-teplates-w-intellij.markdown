@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Programuj szybciej dzięki live teplates w Intellij"
+title: "Programuj szybciej dzięki live templates w Intellij"
 date: 2017-08-15 17:01:03 +0200
 comments: true
 categories: JAVA
