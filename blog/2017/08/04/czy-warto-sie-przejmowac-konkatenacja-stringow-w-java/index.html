@@ -9,7 +9,7 @@
   <meta name="author" content="Kamil Lolo">
 
   
-  <meta name="description" content="Używacie StringBuilder do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów &hellip;">
+  <meta name="description" content="Używasz StringBuilder do łączenia Stringów? Pewnie większość z Was spotkała się ze stwierdzeniem mówiącym, że w celu optymalizacji operacji łączenia &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,13 +85,13 @@
   </header>
 
 
-<div class="entry-content"><p>Używacie StringBuilder do łączenia Stringów? Każdy z nas spotkał się z stwierdzeniem mówiącym że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer
+<div class="entry-content"><p>Używasz StringBuilder do łączenia Stringów? Pewnie większość z Was spotkała się ze stwierdzeniem mówiącym, że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer
 bezpiecznego wielowątkowo. Czy na pewno słusznie?</p>
 
 <!--more-->
 
 
-<p>Co nam daje StringBuilder? A no jak wiadomo string jest obiektem nie zmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy chcemy utworzyć dłuższy ciąg znaków tworzony
+<p>Co daje StringBuilder? Jak wiadomo string jest obiektem niezmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy trzeba napisać dłuższy ciąg znaków tworzony
 jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje
 utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli, jak tutaj:</p>
 
@@ -105,8 +105,8 @@ utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Je�
     <span class="o">}</span></code></pre></div>
 
 
-<p>to za każdym obiegiem pętli tworzymy w pamięci nie potrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
-Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej więcej tak:</p>
+<p>to za każdym obiegiem pętli tworzymy w pamięci niepotrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
+Dlatego pewnie doskonale wiecie, że taka pętla powinna wyglądać mniej więcej tak:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="o">();</span>
@@ -118,15 +118,15 @@ Dlatego każdy z nas doskonale wie że taka pętla powinna wyglądać mniej wię
     <span class="o">}</span></code></pre></div>
 
 
-<p>Dzięki użyciu StringBuilder optymalizujemy nasz kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy na pewno musimy taki kod pisać?
-Otóż nie!. Dokumentacja mówi:</p>
+<p>Dzięki użyciu StringBuilder optymalizujemy kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy na pewno musimy taki kod pisać?
+Otóż nie! Dokumentacja mówi:</p>
 
 <blockquote><p>An implementation (of compiler) may choose to perform conversion and concatenation in one step to avoid creating and then discarding an intermediate String object.
 To increase the performance of repeated string concatenation, a Java compiler may use the StringBuffer class or a similar technique to reduce the number of intermediate
 String objects that are created by evaluation of an expression. For primitive types, an implementation may also optimize away the creation of a wrapper object by converting
 directly from a primitive type to a string.</p></blockquote>
 
-<p>Swoją drogą nie wiem dlaczego ten zapis jest mały literami :P Wynika z tego że kompilator potrafi sam wstawić StringBuilder w miejsce konkatenacji stringów. Sprawdźmy!
+<p>Ciekawe tylko dlaczego ten zapis jest mały literami..? :P Wynika z tego, że kompilator potrafi sam wstawić StringBuilder w miejsce konkatenacji stringów. Sprawdźmy!
 Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">...);</span>
@@ -187,8 +187,8 @@ Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
 <span class="o">}</span></code></pre></div>
 
 
-<p>Wygląda niemal identycznie. Nie znam się na tyle na byte code żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność,
-ale uważam że kompilator robi tutaj za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi. Problem może być w Javie starszej niż 1.5, bo tam tego mechanizmu
+<p>Wygląda niemal identycznie. Brakuje mi aż tak rozległej wiedzy o byte code, żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność.
+Uważam jednak, że kompilator w tym przypadku wykonuje za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi. Problem może pojawiać się w Javie starszej niż 1.5, bo tam tego mechanizmu
 nie ma ;)</p>
 </div>
 
@@ -258,7 +258,7 @@ nie ma ;)</p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2017/08/15/programuj-szybciej-dzieki-live-teplates-w-intellij/">Programuj szybciej dzięki live teplates w Intellij</a>
+        <a href="/blog/2017/08/15/programuj-szybciej-dzieki-live-teplates-w-intellij/">Intelij live templates - szybsze programowanie</a>
       </li>
     
       <li class="post">
