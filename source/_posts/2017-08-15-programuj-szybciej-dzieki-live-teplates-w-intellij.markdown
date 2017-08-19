@@ -39,83 +39,20 @@ jest _sout_, który wstawia instrukcje wypisania na konsoli: _System.out.println
 
 Innymi dostępnymi domyślnie szablonami dla Javy są:
 
- * `psvm` - wstawia pustą metodę main
-
-{% highlight java %}
-public static void main() {
-
-}
-{% endhighlight %}
-
- * `geti`- tworzy metodę do pobierania instancji singletona
-
-{% highlight java %}
-public static $CLASS_NAME$ getInstance() {
-  return $VALUE$;
-}
-{% endhighlight %}
-
-`ifn` - warunek sprawdzający czy zmienna nie nullem, przeciwieństwo `inn`
-
-{% highlight java %}
-if ($VAR$ == null) {
-    $END$
-}
-{% endhighlight %}
-
-`inst` - warunek sprawdzający czy zmienna jest instancją klasy
-
-{% highlight java %}
-if ($EXPR$ instanceof $TYPE$) {
-  $TYPE$ $VAR1$ = ($TYPE$)$EXPR$;
-  $END$
-}
-{% endhighlight %}
-
-`lazy` - sprawdza czy zmienna jest nullem i jeżeli jest to tworzy jej instancję.
-
-{% highlight java %}
- if ($VAR$ == null) {
-  $VAR$ = new $TYPE$($END$);
-}
-{% endhighlight %}
-
-`lst` - wyciąga ostatni element tablicy
-
-{% highlight java %}
-$ARRAY$[$ARRAY$.length - 1]
-{% endhighlight %}
-
-`mn` - wywołuję funkcję _Math.min_, przeciwieństwo `mx`
-
-{% highlight java %}
- $VAR$ = Math.min($VAR$, $END$);
-{% endhighlight %}
-
-`psvm` - wstawia pusta funkcję main
-
-{% highlight java %}
-public static void main(String[] args){
-  $END$
-}
-{% endhighlight %}
-
-
-`toar` - zamienia elementy kolekcji na tablice
-
-{% highlight java %}
-$COLLECTION$.toArray(new $COMPONENT_TYPE$[$COLLECTION$.size()])$END$
-{% endhighlight %}
-
-`sout` - omawiana wcześnia funkcja wypisująca na ekranie. Dostępne są również inne szablony które wykorzystują np. strumień błędów (_serr_ = _System.err_). Nie będę ich
-wszystkich tutaj opisywał, możesz sam je przetestować: soutm, soutp, soutv
-
-  * `prsf` - `private static final`
-  * `psf` - `public static final`
-  * `psfi` - `public static final int`
-  * `psfs` - `public static final String`
-  * `St` - `String`
-  * `thr` - `throw new`
+ * `psvm` - wstawia pustą metodę main.
+ * `geti`- tworzy metodę do pobierania instancji singletona getInstance
+ * `ifn` - warunek sprawdzający czy zmienna nie nullem, przeciwieństwo `inn`
+ * `inst` - warunek sprawdzający czy zmienna jest instancją klasy za pomocą instanceof
+ * `lazy` - sprawdza czy zmienna jest nullem i jeżeli jest to tworzy jej instancję.
+ * `lst` - wyciąga ostatni element tablicy
+ * `mn` - wywołuję funkcję _Math.min_, przeciwieństwo `mx`
+ * `toar` - zamienia kolekcję na tablicę
+ * `prsf` - _private static final_
+ * `psf` - _public static final_
+ * `psfi` - _public static final int_
+ * `psfs` - _public static final String_
+ * `St` - _String_
+ * `thr` - _throw new_
 
 Oczywiście każdy szablon związany jest również z miejscem w którym może występować. Przykładowo dla Javy do wyboru możliwe jest kilka zakresów:
 
@@ -138,7 +75,7 @@ _Ctrl-Alt-J_ oraz _Ctrl-Alt-T_, gdzie ten drugi skrót wyświetli również kilk
 ![GitHub Logo](/images/templatesMenu.png)
 
 ## Tworzenie własnych szablonów
-Szablon można utworzyć wchodząć w ustawieniach IDE w zakładkę Live templates i wybierając przycisk plusika z prawej strony. Jest tam również opcja dodania grupy szablonów, w przypadku kiedy chcemy
+Szablon można utworzyć wchodząc w ustawieniach IDE w zakładkę Live templates i wybierając przycisk plusika z prawej strony. Jest tam również opcja dodania grupy szablonów, w przypadku kiedy chcemy
 je w jakiś logiczny sposób zgrupować. Podczas tworzenia szablonu należy podać jego alias, poprzez który będziemy się do niego odwoływać, opis, kod szablonu oraz kontekst w którym ma być dostępny. Proste, prawda?
 Nie do końca jeżeli spojrzy się na przykłady wbudowanych w Intellij szablonów. Występują tam różnego rodzaju zmienne, dzięki którym nasz kod nie jest tylko wpisanym na sztywno tekstem, ale faktycznie
 szablonem na podstawie którego utworzy się fragment przydatnego kodu. Oprócz zmienny, mamy nawet dostęp do kilku predefiniowanych funkcji, które możemy wywoływać w szablonie. Lista zmiennych i metod
@@ -159,7 +96,6 @@ później przypisać wywołanie funkcji w okienku dostępnym po wybraniu _Edit v
 ten można podać po wstawieniu loggera, z racji tego że użyłem zmiennej _$END$_.
 
 ![GitHub Logo](/images/newLiveTemplate.png)
-
 
 ## Podsumowanie
 Kod można pisać w bardzo szybki sposób, nie korzystając przy tym z kopiowania i wklejania. Myślę że jest to podejście, które sprawi że nasz kod będzie miał miał błędów. Ile razy zdarzyło
