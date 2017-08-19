@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-08-12T20:19:42+02:00</updated>
+  <updated>2017-08-19T14:08:29+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -12,6 +12,131 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Programuj szybciej dzięki live teplates w Intellij]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/15/programuj-szybciej-dzieki-live-teplates-w-intellij/"/>
+    <updated>2017-08-15T17:01:03+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/08/15/programuj-szybciej-dzieki-live-teplates-w-intellij</id>
+    <content type="html"><![CDATA[<p>Obojętnie czy programujesz metodą Copiego i Pejsty, czy też wstukujesz swój kod niczym sekretarka pisząca notatkę ze spotkania szefa, możesz mieć wrażenie
+że czasami zaczynasz od identycznego fragmentu kodu. Ile razu w życiu napisałeś <code>System.out.println</code> lub <code>public static void main(final String[] args)</code>? O ile nie jesteś programistą
+utrzymującym przy życiu produkcyjnego dinozaura, czytając godzinami logi to pewnie zdarzyło Ci się kilka razy. Opowiem Ci jak intellij ułatwił moje życie
+z takim powtarzającym się kodem.</p>
+
+<!--more-->
+
+
+<p>Pisząc kod zgodnie z regułami TDD, zaczynamy implementacje od napisania testu. Po otwarciu klasy z testami tworzymy zatem pusty test jednostkowy który za chwilę się zapełni kodem.
+Pusty test jednostkowy zazwyczaj wygląda tak podobnie jak setki innych w projekcie. U góry mamy adnotacje test, jakąś metodę <code>public void</code> z odpowiednią nazwę, w środku metody podział
+na sekcje give/when/then (o ile oczywiście taką mamy konwencje), no i jakaś assercja.</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">shouldDoSomething</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// given&lt;/p&gt;</span>
+
+<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// when</span>
+
+<span class="c1">// then</span>
+<span class="n">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span></code></pre></div></p>
+
+<p>Czy naprawdę za każdym razem muszę wpisywać taką funkcję ręcznie? Ewentualnie, czy muszę kopiować istniejący test i go czyścić z tego czego nie potrzebuje? O tóż nie!
+Intellij oferuje bardzo wygodne narzędzie o nazwie live template, dzięki któremu możemy tworzyć szablony kodu, które będą dostępne po wpisaniu odpowiedniego aliasu.</p>
+
+<h2>Wbudowane szablony</h2>
+
+<p>Zanim opowiem w jaki sposób tworzyć własne szablony, zobaczmy jakie wbudowane szablony mamy do dyspozycji oraz jak z nich korzystać. Jak już wspomniałem każdy szablon ma swój alias, po wpisaniu którego
+w menu automatycznego wypełniania pojawia się szablon o podanej nazwie. Po wybraniu szablonu, w miejscu w którym znajduje się kursor pojawi się wybrany szablon. Jednym z wbudowanych szablonów
+jest <em>sout</em>, który wstawia instrukcje wypisania na konsoli: <em>System.out.println</em>.</p>
+
+<p><img src="/images/sout.png" alt="GitHub Logo" /></p>
+
+<p>Innymi dostępnymi domyślnie szablonami dla Javy są:</p>
+
+<ul>
+<li><code>psvm</code> - wstawia pustą metodę main.</li>
+<li><code>geti</code>- tworzy metodę do pobierania instancji singletona getInstance</li>
+<li><code>ifn</code> - warunek sprawdzający czy zmienna nie nullem, przeciwieństwo <code>inn</code></li>
+<li><code>inst</code> - warunek sprawdzający czy zmienna jest instancją klasy za pomocą instanceof</li>
+<li><code>lazy</code> - sprawdza czy zmienna jest nullem i jeżeli jest to tworzy jej instancję.</li>
+<li><code>lst</code> - wyciąga ostatni element tablicy</li>
+<li><code>mn</code> - wywołuję funkcję <em>Math.min</em>, przeciwieństwo <code>mx</code></li>
+<li><code>toar</code> - zamienia kolekcję na tablicę</li>
+<li><code>prsf</code> - <em>private static final</em></li>
+<li><code>psf</code> - <em>public static final</em></li>
+<li><code>psfi</code> - <em>public static final int</em></li>
+<li><code>psfs</code> - <em>public static final String</em></li>
+<li><code>St</code> - <em>String</em></li>
+<li><code>thr</code> - <em>throw new</em></li>
+</ul>
+
+
+<p>Oczywiście każdy szablon związany jest również z miejscem w którym może występować. Przykładowo dla Javy do wyboru możliwe jest kilka zakresów:</p>
+
+<ul>
+<li>Statement</li>
+<li>Expression</li>
+<li>Declaration</li>
+<li>Comment</li>
+<li>String</li>
+<li>Smart type completion</li>
+<li>Other</li>
+</ul>
+
+
+<p>  Myślę że nie ma potrzeby tłumaczenia co znaczą. Intellij na podstawie fragmentu kodu w którym aktualnie znajduje się kursom określi z jakiego zakresu zaproponować szablony. Zakresy różnią się w zależności
+  od języka oraz od frameworka w którym chcemy wykorzystać szablon.</p>
+
+<h2>Surround templates</h2>
+
+<p>Oprócz szablonów wstawianych w danym miejscu kodu, mamy do dyspozycji szablony otaczające kod. Szablony takie działają na zasadzie otaczania zaznaczonego kodu jakimś predefiniowanym szablonem, przykładowo
+blokiem synchronized. Z takiego szablonu można skorzystać po zaznaczeniu jakiegoś fragmentu kodu i wybraniu skrótu klawiszowego
+<em>Ctrl-Alt-J</em> oraz <em>Ctrl-Alt-T</em>, gdzie ten drugi skrót wyświetli również kilka przydatnych szablonów wbudowanych w IDE, takie jak np. otoczenie kodu w blok try-catch.</p>
+
+<p><img src="/images/templatesMenu.png" alt="GitHub Logo" /></p>
+
+<h2>Tworzenie własnych szablonów</h2>
+
+<p>Szablon można utworzyć wchodząc w ustawieniach IDE w zakładkę Live templates i wybierając przycisk plusika z prawej strony. Jest tam również opcja dodania grupy szablonów, w przypadku kiedy chcemy
+je w jakiś logiczny sposób zgrupować. Podczas tworzenia szablonu należy podać jego alias, poprzez który będziemy się do niego odwoływać, opis, kod szablonu oraz kontekst w którym ma być dostępny. Proste, prawda?
+Nie do końca jeżeli spojrzy się na przykłady wbudowanych w Intellij szablonów. Występują tam różnego rodzaju zmienne, dzięki którym nasz kod nie jest tylko wpisanym na sztywno tekstem, ale faktycznie
+szablonem na podstawie którego utworzy się fragment przydatnego kodu. Oprócz zmienny, mamy nawet dostęp do kilku predefiniowanych funkcji, które możemy wywoływać w szablonie. Lista zmiennych i metod
+dostepnych w Live templates różni się w zależności od zainstalowanych pluginów. Spójrzmy na te najbardziej podstawowe:</p>
+
+<ul>
+<li>$END$ - określa miejsce w którym ma znaleźć się kursor po wstawieniu szablonu</li>
+<li>$SELECTION$ - w przypadku szablonu otaczającego kodu zmienna zawiera zaznaczony przez użytkownika tekst.</li>
+</ul>
+
+
+<p>Jak wspomniałem mamy również do dyspozycji funkcję które pozwolą nam jeszcze bardziej rozbudować nasz szablon. Kilka, moim zdaniem najbardziej przydatnych:</p>
+
+<ul>
+<li><code>camelCase(String)</code> - zwraca podany tekst jako camel case.</li>
+<li><code>methodName()</code> - nazwa metody w której się znajdujemy</li>
+<li><code>date(sDate)</code> - zwraca date w podanym formacie</li>
+<li><code>currentPackage()</code> - aktualny pakiet</li>
+</ul>
+
+
+<p>Funkcji nie możemy jednak wywoływać bezpośrednio w szablonie. W szablonie odwołujemy się do zmiennych które przechowują wartość wywołań funkcji. Zmienne mogą mieć dowolną nazwę, jednak trzeba im
+później przypisać wywołanie funkcji w okienku dostępnym po wybraniu <em>Edit variables</em>. Przykład szablonu tworzącego zmienną przechowującą nazwę funkcji oraz logującego jakiś komunikat do logów. Komunikat
+ten można podać po wstawieniu loggera, z racji tego że użyłem zmiennej <em>$END$</em>.</p>
+
+<p><img src="/images/newLiveTemplate.png" alt="GitHub Logo" /></p>
+
+<h2>Podsumowanie</h2>
+
+<p>Kod można pisać w bardzo szybki sposób, nie korzystając przy tym z kopiowania i wklejania. Myślę że jest to podejście, które sprawi że nasz kod będzie miał miał błędów. Ile razy zdarzyło
+nam sie przenieść jakiś fragment kodu z innego miejsca systemu i naciąć się na to że nie działa, a wystarczyłoby go napisać ręcznie i wyłapać błędy. Niech więc zatem nasza praca będzie wydajniejsza
+i lepsza. Tak na marginesie, Eclipse również udostępnia podobną opcję, nazywa się to Templates, na ile to się różni z Live Templates dostępnymi w Intellij, nie wiem. Oprócz Live templates Intellij posiada również
+mechanizm szablonów kodu, który w menu znajdziecie jako File and code templates. Szablony te są dostępne w menu pojawiającym się po wciśnięciu alt+insert. Mamy tam nawet pusty szablon metody testowej JUnit ;)</p>
+
+<p>Wszystkie informacje na temat Live templates znajdziecie <a href="https://www.jetbrains.com/help/idea/live-templates.html">tutaj</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Java stream reduce vs collect]]></title>
