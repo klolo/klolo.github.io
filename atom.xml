@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-08-19T15:29:20+02:00</updated>
+  <updated>2017-08-28T22:55:27+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -12,6 +12,231 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Java stream API - darmowy kurs]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/28/java-stream-api-darmowy-kurs/"/>
+    
+    <updated>2017-08-28T22:52:50+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/08/28/java-stream-api-darmowy-kurs</id>
+    
+    <content type="html"><![CDATA[<p>Jesteś programistą Javy i nie miałeś jeszcze okazji zapoznać się z nowościami Javy 8? Nie umiesz używać <em>stream api</em>? Mam dla Ciebie darmowe
+materiały, dzięki którym możesz poznać nowości w języku oraz nauczyć się biegle używać strumieni.</p>
+
+<!--more-->
+
+
+<h2>Prezentacja</h2>
+
+<p>Prezentacje znajdziesz <a href="https://slides.com/kamillolo/java-7-8-9">tutaj</a>. Oprócz wprowadzenia w najważniejsze nowości Javy 8 zawiera ona również omówienie kilku ciekawych
+mechanizmów Javy 7, które są często zapominane lub mniej znane. Dodatkowo prezentacja zawiera również informację o tym czego możemy się spodziewać w nadchodzącej Javie 9.
+Meteriały te zostały wykorzystane podczas całodniowego szkolenia, doczytanie o wszystkich poruszanych tematach może zająć równie dużo czasu.</p>
+
+<h2>Ćwiczenia</h2>
+
+<p>Po zapoznaniu się z prezentacją możesz <a href="https://github.com/klolo/java8-stream-free-exercises">sklonować</a> projekt z ćwiczeniami. Ćwiczenia polegają na implementacji metod w klasie WorkShop
+zgodnie z komentarzami, tak żeby testy w klasie testowej WorkShopTest wykonywały się prawidłowo. Wszystkie informacje znajdziesz w pliku README.md w projekcie.</p>
+
+<h2>Podsumowanie</h2>
+
+<p>Prawdziwa siła Javy 8 tkwi nie w wyrażeniach lambda, ale w strumieniach które potrafią bardzo zmniejszyć ilość kodu jaki musi zostać napisany w celu
+zaimplementowania jakiejś nowej funkcjonalności. Możemy uniknąć pisania kodu <em>boilerplate</em> i skupić się na tym co ma robić kod a nie w jaki sposób.</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Typescript wprowadzenie - część 1]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/28/typescript-wprowadzenie-czesc-1/"/>
+    
+    <updated>2017-08-28T22:11:51+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/08/28/typescript-wprowadzenie-czesc-1</id>
+    
+    <content type="html"><![CDATA[<p>Jesteś programistą javascript chcącym pisać aplikację z wykorzystaniem Typescript? Chcesz nauczyć się Angular 2/4? Jesteś programistą Javy, który próbuje tworzyć frontend?
+Doskonale trafiłeś. W serii kilku wpisów postaram się przybliżyć Ci ten język. Dzisiaj opowiem o tym czym jest ts, jak zacząć z nim pracę oraz jakie podstawowe typy
+są dostępne w tym języku.</p>
+
+<!--more-->
+
+
+<h2>Co to jest typescript?</h2>
+
+<p>Krótko mówiąc Typescript jest nadzbiorem języka javascript stworzonym prze Microsoft w celu dodania do js takich elementów jak statyczne typowanie. Jest to rozszerzenie języka
+javascript, stąd też każdy prawidłowy kod języka js jest również prawidłowym kodem ts. Nie działa to jednak w drugą stronę, ponieważ ts jest nie obsługiwany przez silnik js wbudowany
+np. w przeglądarkę. Ts przed uruchomieniem musi zostać zamieniony na js przez specjalny kompilator o nazwie <em>tsc</em>. Proces przepisywania kodu napisanego w jednym języku na inny nosi nazwę transpilacji.</p>
+
+<h2>Hello World</h2>
+
+<p>W celu rozpoczęcia zabawy z ts należy zainstalować Node.js i za pomocą managera pakietów npm zainstlować kompilator:</p>
+
+<blockquote><p>npm install -g typescript</p></blockquote>
+
+<p>Po wykonaniu polecenie będziemy mogli uruchomić hello world zapisane w pliku demo.ts:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">getHello</span><span class="p">(</span><span class="nx">userName</span><span class="o">:</span> <span class="nx">string</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="err">`</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">userName</span><span class="p">}</span><span class="err">`</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">hello</span><span class="o">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">getHello</span><span class="p">(</span><span class="s1">&#39;Kamil&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">hello</span><span class="p">);</span></code></pre></div>
+
+
+<p>W celu skompilowania kodu ts do js uruchamiamy polecenia:</p>
+
+<blockquote><p>tsc ./demo.ts &amp;&amp; node ./demo.js</p></blockquote>
+
+<p>Jak widać w powyższym poleceniu, zostanie wygenerowany plik js który będzie zawierał wygenerowany kod js:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">getHello</span><span class="p">(</span><span class="nx">userName</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s2">&quot;Hello &quot;</span> <span class="o">+</span> <span class="nx">userName</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">hello</span> <span class="o">=</span> <span class="nx">getHello</span><span class="p">(</span><span class="s1">&#39;Kamil&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">hello</span><span class="p">);</span></code></pre></div>
+
+
+<p>Wszystkie fragmentu kodu związane z ts, nie będące poprawnym js znikły. Środowisko w którym będziemy uruchamiać taki kod nie będzie miało żadnej informacji
+o tym że kod był tworzony w ts.</p>
+
+<h2>Statyczne typowanie</h2>
+
+<p>Jak wiadomo js jest językiem dynamicznie typowanym, co oznacza że informacja o tym jakiego typu obiekt jest przechowywany w zmiennej określany jest w trakcie działania
+aplikacji. Do zmiennej możemy w jednej linijce przypisać jakiś string, a w następnej obiekt całkowicie innego typu:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="s1">&#39;Karol&#39;</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+
+<span class="nx">user</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Karol&#39;</span><span class="p">,</span>
+    <span class="nx">age</span><span class="o">:</span> <span class="mi">18</span>
+<span class="p">};</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span></code></pre></div>
+
+
+<p>Nie ma tutaj żadnego mechanizmu który sprawdzi czy w zmiennej jest obiekt prawidłowego typu, jaki jest wymagany w danej funkcji. Jest to mechanizm który sprawia że js jest
+bardzo elastyczny, ekspresyjny ale zarazem jest to przyczyna wielu błędów, często trudnych do wychwycenia. Typescript daje programiście możliwość definiowania typów zmiennych, parametrów funkcji
+dzięki czemu kompilator w czasie transpilacji kodu ma możliwość weryfikacji czy nie popełniliśmy błędu i nie próbujemy użyć błędnego typu w danym miejscu aplikacji. Sposób wykorzystania typów
+w ts przedstawia również przykład z <em>hello world</em>. Składnia ts wymaga od nas jedynie podania po nazwie zmiennej dwukropka
+po którym będzie stać typ zmiennej. W celu określenia typu zwracanego z metody należy dwukropek i typ zwracany podać miedzy nawiasem zamykającym listę argumentów a klamrą
+otwierającą ciało funkcji.</p>
+
+<h2>Typy proste</h2>
+
+<p>Do dyspozycji mamy podstawowe typu danych znane z js:</p>
+
+<ul>
+<li>boolean - true/false</li>
+<li>number - liczba zmiennoprzecinkowa</li>
+<li>string - ciąg znaków</li>
+<li>null - brak wartości zmiennej, która została zainicjalizowana</li>
+<li>undefined - wartość domyślna zmiennych, mówiąca o tym że zmienna nie została zainicjalizowana</li>
+</ul>
+
+
+<p>Przy korzystaniu z typów prostych takich jak np. string należy jednak zwracać uwagę czy nie piszemy nazwy typu z dużej litery. Obiekty do których byśmy się wtedy odwoływali są
+wrapperami na typy proste. Jest to mechanizm podobny do tego w Java. Używanie wrapperów zamiast typów prostych sprawi że nasz kod będzie mniej wydajny.</p>
+
+<p>Dodatkowo typescript dodaje możliwość korzystania z kilku dodatkowych typów, które warto wyjaśnić.</p>
+
+<h2>any</h2>
+
+<p>Przechodząc z js na ts możemy robić to stopniowo, nie musimy przepisywać od razu całej aplikacji. Może się jednak pojawić problem z tym że istniejący kod zwraca obiekty
+jakiegoś typu i ts nie może zweryfikować co to za typ. W takich przypadkach przydatny jest specjalny typ <em>any</em> pozwalający przypisać do zmiennej obiekt dowolnego typu, bez walidowania tego typu.
+Możecie zapytać dlaczego nie możemy wykorzystać <em>Object</em> jako typu dla danych które przechodzą z jakiejś np. biblioteki? Świetnie to wyjaśnia przykład kodu wprost z dokumentacji ts:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">notSure</span><span class="o">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nx">notSure</span><span class="p">.</span><span class="nx">ifItExists</span><span class="p">();</span> <span class="c1">// okay, ifItExists might exist at runtime</span>
+<span class="nx">notSure</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">();</span> <span class="c1">// okay, toFixed exists (but the compiler doesn&#39;t check)</span>
+ 
+<span class="kd">let</span> <span class="nx">prettySure</span><span class="o">:</span> <span class="nb">Object</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nx">prettySure</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">();</span> <span class="c1">// Error: Property &#39;toFixed&#39; doesn&#39;t exist on type &#39;Object&#39;.</span></code></pre></div>
+
+
+<p>Oczywiście należy pamiętać o tym żeby zmiennych typu <em>any</em> w kodzie było jak najmniej, a nawet żeby ich nie było w ogóle. Ponieważ korzystając z <em>any</em> tracimy dobrodziejstwa statycznego
+typowania jakie daje nam ts. Kompilator można uruchomić z flagą, która sprawi że kod który zawiera <em>any</em> nie skompiluje się.</p>
+
+<h2>void</h2>
+
+<p>Typ ten jest wykorzystywany do informowania kompilatora o tym że funkcja nie będzie nic zwracać. Zachowanie analogiczne do tego znanego z np. Javy. Możemy użyć instrukcji
+return, ale tylko gdy nie będzie ona zawierać żadnych danych które mają zostać zwrócone. Funkcja może zwracać jedynie null, undefined bądź nic. Używanie void w ts zabezpiecza nas przed
+przypadkowym zwróceniem jakiejś wartości z funkcji, bądź próbą przypisania wyniku takiej funkcji do zmiennej typu innego niż void.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">voidFun</span><span class="p">()</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// ewentualnie undefined</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">x</span><span class="o">:</span> <span class="k">void</span> <span class="o">=</span> <span class="nx">voidFun</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span></code></pre></div>
+
+
+<h2>never</h2>
+
+<p>Never jest bardzo ciekawym typem prostym wbudowanym w ts. Oznacza się nim funkcje które nic nie mogą zwrócić. Jednak w przeciwieństwie do void, taka funkcja nie może
+ani posiadać instrukcji return ani się kończy w prawidłowy sposób. Metody oznaczone jako never mogą w środku zawierać jedynie nieskończone pętle, bądź też wyrzucać wyjątek,
+zamiast normalnego wyjścia z metody.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">neverFun</span><span class="p">()</span><span class="o">:</span> <span class="nx">never</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">neverFunWithThrow</span><span class="p">()</span><span class="o">:</span> <span class="nx">never</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;neverFunWithThrow&#39;</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;this is never enging function&#39;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+
+
+<h2>tuples</h2>
+
+<p>Jest to konstrukcja pozwalająca w tablicy umieścić pewną ilość zmiennych, których typ jest znany podczas definiowania tablicy. Semantycznie wygląda to tak że deklarujemy
+tablice podając typ każdego z elementów tej tablicy. Kompilator sprawdzi za nas czy w poszczególne komórki tablicy przypisujemy prawidłowe typy oraz czy wyciągnięte dane
+z tablicy są prawidłowo użyte.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">tupleUser</span><span class="o">:</span> <span class="p">[</span><span class="nx">string</span><span class="p">,</span> <span class="nx">number</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Kamil&#39;</span><span class="p">,</span> <span class="mi">18</span><span class="p">];</span>
+<span class="nx">tupleUser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// error</span>
+<span class="nx">tupleUser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Bartek&#39;</span><span class="p">;</span> <span class="c1">// ok</span>
+
+<span class="kr">const</span> <span class="nx">userName</span><span class="o">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">tupleUser</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">toLowerCase</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">tupleUser</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="c1">// error</span></code></pre></div>
+
+
+<h2>enum</h2>
+
+<p>Często zdarza się że w aplikacji mamy kilka stałych, które mają pewien wspólny kontekst. W czystym js można było je zgrupować za pomocą np. odpowiednich nazw, bądź
+jako statyczne pola użyte razem z konstruktorem:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Color</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+
+<span class="nx">Color</span><span class="p">.</span><span class="nx">RED</span> <span class="o">=</span> <span class="s1">&#39;RED&#39;</span><span class="p">;</span>
+<span class="nx">Color</span><span class="p">.</span><span class="nx">GREEN</span> <span class="o">=</span> <span class="s1">&#39;GREEN&#39;</span><span class="p">;</span>
+<span class="nx">Color</span><span class="p">.</span><span class="nx">BLUE</span> <span class="o">=</span> <span class="s1">&#39;BLUE&#39;</span><span class="p">;</span></code></pre></div>
+
+
+<p>Wadą takiego rozwiązania jest to że wartości tych stałych mogą się zmienić dynamicznie w trakcie działania aplikacji. Oczywiście js pozwala nam obejść ten problem za pomocą
+bardziej zaawansowanych technik, jednak rozwiązania takie będą już skomplikowane. Ts pozwala używać enumów, dzięki którym możemy zgrupować zmienne bez obawy przed tym że ich wartość zmieni się w trakcie działania aplikacji. Dodatkowo kompilator sprawdzi czy w miejsce gdzie ma być przekazana stała z enuma przekazujemy poprawną wartość. Wartościom stałych można ustawiać dowolne wartości. Jeżeli pominiemy ustawianie wartości to stałe w enum będą miały wartości kolejno: 0, 1, 2 itd.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">enum</span> <span class="nx">ColorRGB</span> <span class="p">{</span>
+    <span class="nx">RED</span> <span class="o">=</span>  <span class="s1">&#39;red&#39;</span><span class="p">,</span>
+    <span class="nx">GREEN</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span>
+    <span class="nx">BLUE</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span>
+<span class="p">}</span>
+
+<span class="nx">ColorRGB</span><span class="p">.</span><span class="nx">RED</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">;</span> <span class="c1">// error</span>
+
+<span class="kr">const</span> <span class="nx">red</span><span class="o">:</span> <span class="nx">ColorRGB</span> <span class="o">=</span> <span class="nx">ColorRGB</span><span class="p">.</span><span class="nx">RED</span><span class="p">;</span></code></pre></div>
+
+
+<h2>Podsumowanie</h2>
+
+<p>Typescript jest językiem programowania bazującym na javascript, który pozwala nam w bardziej bezpieczny sposób implementować aplikację. Statyczne typowanie, zapewni że
+to właśnie kompilator znajdzie błędne użycie typów w momencie kompilacji a nie klient na środowisku produkcyjnym. Ts jest językiem obiektowym, pozwalającym używać wbudowanych
+typów oraz definiować nowe. Jak to robić, opowiem w kolejnym wpisie.</p>
+]]></content>
+    
+  </entry>
   
   <entry>
     

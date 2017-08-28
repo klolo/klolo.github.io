@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-08-19T15:29:20+02:00</updated>
+  <updated>2017-08-28T22:55:27+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Java stream API - darmowy kurs]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/28/java-stream-api-darmowy-kurs/"/>
+    <updated>2017-08-28T22:52:50+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/08/28/java-stream-api-darmowy-kurs</id>
+    <content type="html"><![CDATA[<p>Jesteś programistą Javy i nie miałeś jeszcze okazji zapoznać się z nowościami Javy 8? Nie umiesz używać <em>stream api</em>? Mam dla Ciebie darmowe
+materiały, dzięki którym możesz poznać nowości w języku oraz nauczyć się biegle używać strumieni.</p>
+
+<!--more-->
+
+
+<h2>Prezentacja</h2>
+
+<p>Prezentacje znajdziesz <a href="https://slides.com/kamillolo/java-7-8-9">tutaj</a>. Oprócz wprowadzenia w najważniejsze nowości Javy 8 zawiera ona również omówienie kilku ciekawych
+mechanizmów Javy 7, które są często zapominane lub mniej znane. Dodatkowo prezentacja zawiera również informację o tym czego możemy się spodziewać w nadchodzącej Javie 9.
+Meteriały te zostały wykorzystane podczas całodniowego szkolenia, doczytanie o wszystkich poruszanych tematach może zająć równie dużo czasu.</p>
+
+<h2>Ćwiczenia</h2>
+
+<p>Po zapoznaniu się z prezentacją możesz <a href="https://github.com/klolo/java8-stream-free-exercises">sklonować</a> projekt z ćwiczeniami. Ćwiczenia polegają na implementacji metod w klasie WorkShop
+zgodnie z komentarzami, tak żeby testy w klasie testowej WorkShopTest wykonywały się prawidłowo. Wszystkie informacje znajdziesz w pliku README.md w projekcie.</p>
+
+<h2>Podsumowanie</h2>
+
+<p>Prawdziwa siła Javy 8 tkwi nie w wyrażeniach lambda, ale w strumieniach które potrafią bardzo zmniejszyć ilość kodu jaki musi zostać napisany w celu
+zaimplementowania jakiejś nowej funkcjonalności. Możemy uniknąć pisania kodu <em>boilerplate</em> i skupić się na tym co ma robić kod a nie w jaki sposób.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Intellij live templates - szybsze programowanie]]></title>
