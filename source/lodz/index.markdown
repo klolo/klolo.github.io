@@ -6,4 +6,8 @@ comments: false
 sharing: true
 footer: false
 ---
-Na stronie będą się pojawiać ciekawe informacje z Łodzi dotyczące świata IT i nie tylko. Zapraszam!
+Na stronie będą się pojawiać ciekawe informacje z Łodzi. Zapraszam!
+
+## Zachód słońca nad fabryczną (2017-08-23)
+![GitHub Logo](/images/lodz/fabryczny1.jpg)
+
