@@ -300,11 +300,11 @@ znać każdy, a niekoniecznie tak jest.</p>
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -350,6 +350,7 @@ znać każdy, a niekoniecznie tak jest.</p>
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");

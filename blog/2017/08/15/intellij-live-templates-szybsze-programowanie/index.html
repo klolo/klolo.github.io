@@ -353,11 +353,11 @@ mechanizm szablonów kodu, który w menu znajdziecie jako File and code template
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -403,6 +403,7 @@ mechanizm szablonów kodu, który w menu znajdziecie jako File and code template
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");

@@ -278,11 +278,11 @@ Po rozwiązaniu problemu jest także opcja porównania rozwiązań z innymi uży
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -328,6 +328,7 @@ Po rozwiązaniu problemu jest także opcja porównania rozwiązań z innymi uży
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");

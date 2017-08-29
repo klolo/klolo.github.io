@@ -353,11 +353,11 @@ przewidzieć co się w nich znajduje, dzięki czemu można szybciej zdiagnozowa�
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -403,6 +403,7 @@ przewidzieć co się w nich znajduje, dzięki czemu można szybciej zdiagnozowa�
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");

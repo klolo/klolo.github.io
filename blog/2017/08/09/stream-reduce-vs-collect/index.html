@@ -544,11 +544,11 @@ klasy <em>Collector</em>, które rozwiązują najczęściej występujące proble
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -594,6 +594,7 @@ klasy <em>Collector</em>, które rozwiązują najczęściej występujące proble
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");

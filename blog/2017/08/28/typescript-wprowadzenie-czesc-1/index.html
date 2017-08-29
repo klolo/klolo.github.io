@@ -418,11 +418,11 @@ typów oraz definiować nowe. Jak to robić, opowiem w kolejnym wpisie.</p>
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -468,6 +468,7 @@ typów oraz definiować nowe. Jak to robić, opowiem w kolejnym wpisie.</p>
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");

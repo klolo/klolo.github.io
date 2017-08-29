@@ -366,11 +366,11 @@ and using null for such was overwhelmingly likely to cause errors.</p></blockquo
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -416,6 +416,7 @@ and using null for such was overwhelmingly likely to cause errors.</p></blockquo
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");

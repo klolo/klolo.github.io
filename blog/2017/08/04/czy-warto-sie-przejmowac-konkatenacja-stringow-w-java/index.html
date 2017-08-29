@@ -343,11 +343,11 @@ nie ma ;)</p>
 <!-- Pasek postepu podczas czytania -->
 <script>
     $(document).ready(function(){
-        function getMax(){
+        var getMax = function(){
             return $(document).height() - $(window).height();
         }
 
-        function getValue(){
+        var getValue = function(){
             return $(window).scrollTop();
         }
 
@@ -393,6 +393,7 @@ nie ma ;)</p>
             });
         }
     });
+
 
     $(document).ready(function(){
         $('#flat').addClass("active");
