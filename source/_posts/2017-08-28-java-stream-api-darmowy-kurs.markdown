@@ -11,13 +11,13 @@ materiały, dzięki którym możesz poznać nowości w języku oraz nauczyć si�
 
 ## Prezentacja
 Prezentacje znajdziesz [tutaj](https://slides.com/kamillolo/java-7-8-9). Oprócz wprowadzenia w najważniejsze nowości Javy 8 zawiera ona również omówienie kilku ciekawych
-mechanizmów Javy 7, które są często zapominane lub mniej znane. Dodatkowo prezentacja zawiera również informację o tym czego możemy się spodziewać w nadchodzącej Javie 9.
-Meteriały te zostały wykorzystane podczas całodniowego szkolenia, doczytanie o wszystkich poruszanych tematach może zająć równie dużo czasu.
+mechanizmów Javy 7, o których często się zapomina lub są mniej znane. Dodatkowo, prezentacja zawiera również informację o tym, czego można się spodziewać w nadchodzącej Javie 9.
+Materiały te zostały wykorzystane podczas całodniowego szkolenia, doczytanie o wszystkich poruszanych tematach może zająć równie dużo czasu.
 
 ## Ćwiczenia
 Po zapoznaniu się z prezentacją możesz [sklonować](https://github.com/klolo/java8-stream-free-exercises) projekt z ćwiczeniami. Ćwiczenia polegają na implementacji metod w klasie WorkShop
 zgodnie z komentarzami, tak żeby testy w klasie testowej WorkShopTest wykonywały się prawidłowo. Wszystkie informacje znajdziesz w pliku README.md w projekcie.
 
 ## Podsumowanie
-Prawdziwa siła Javy 8 tkwi nie w wyrażeniach lambda, ale w strumieniach które potrafią bardzo zmniejszyć ilość kodu jaki musi zostać napisany w celu
-zaimplementowania jakiejś nowej funkcjonalności. Możemy uniknąć pisania kodu _boilerplate_ i skupić się na tym co ma robić kod a nie w jaki sposób.
+Prawdziwa siła Javy 8 tkwi nie w wyrażeniach lambda, ale w strumieniach, które potrafią bardzo zmniejszyć ilość kodu jaki musi zostać napisany w celu
+zaimplementowania jakiejś nowej funkcjonalności. Możemy uniknąć pisania kodu _boilerplate_ i skupić się na tym, co ma robić kod, a nie w jaki sposób.
