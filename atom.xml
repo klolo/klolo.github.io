@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-09-10T17:06:27+02:00</updated>
+  <updated>2017-09-10T17:07:32+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -25,6 +25,9 @@
 dostępne w ES5. Dzięki wykorzystaniu dekoratorów język ten miejscami przypomina bardzo Javę, w której możemy używać adnotacji. Patrząc jednak na wygenerowany przez kompilator kod, podobieństwa do Javy
 już nie znajdziemy. Znajdziemy za to zwykły Javascript wykorzystujący prototypy. Pokażę dziś jak zaimplementować mechanizm, który będzie pozwalał na wstrzykiwanie zależności w podobny do Springa sposób.
 Będzie to znakomita okazja, żeby poznać praktyczne zastosowanie dekoratorów Typescriptu.</p>
+
+<!--more-->
+
 
 <h2>Czym są dekoratory?</h2>
 
