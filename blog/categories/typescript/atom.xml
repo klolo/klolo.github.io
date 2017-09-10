@@ -4,7 +4,7 @@
   <title><![CDATA[Category: typescript | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/typescript/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-09-10T17:04:49+02:00</updated>
+  <updated>2017-09-10T17:06:27+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Zaimplementuj dependency injection w Typescript]]></title>
-    <link href="http://klolo.github.io/blog/2017/09/03/zaimplementuj-springa-w-typescript/"/>
+    <link href="http://klolo.github.io/blog/2017/09/03/zaimplementuj-dependency-injection-w-typescript/"/>
     <updated>2017-09-03T15:39:30+02:00</updated>
-    <id>http://klolo.github.io/blog/2017/09/03/zaimplementuj-springa-w-typescript</id>
+    <id>http://klolo.github.io/blog/2017/09/03/zaimplementuj-dependency-injection-w-typescript</id>
     <content type="html"><![CDATA[<p>Typescript jest nadzbiorem javascriptu oferującym statyczne typowanie oraz możliwość programowania obiektowego w dużo bardziej wygodnej formie niż prototypy
 dostępne w ES5. Dzięki wykorzystaniu dekoratorów język ten miejscami przypomina bardzo Javę, w której możemy używać adnotacji. Patrząc jednak na wygenerowany przez kompilator kod, podobieństwa do Javy
 już nie znajdziemy. Znajdziemy za to zwykły Javascript wykorzystujący prototypy. Pokażę dziś jak zaimplementować mechanizm, który będzie pozwalał na wstrzykiwanie zależności w podobny do Springa sposób.
