@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-09-10T17:08:47+02:00</updated>
+  <updated>2017-09-17T16:44:26+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Typescript wprowadzenie - część 2]]></title>
+    <link href="http://klolo.github.io/blog/2017/09/17/typescript-wprowadzenie-czesc-2/"/>
+    
+    <updated>2017-09-17T16:40:02+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/09/17/typescript-wprowadzenie-czesc-2</id>
+    
+    <content type="html"><![CDATA[<p>Jeżeli szukasz informacji na temat Typescript to <a href="http://slides.com/kamillolo/deck-3#/">tutaj</a> moją prezentacją
+wprowadzającą do tego języka. W prezentacji znajduje się rozwinięcie tematów poruszonych przeze mnie w 1 części wprowadzenia.</p>
+]]></content>
+    
+  </entry>
   
   <entry>
     

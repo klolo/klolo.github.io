@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://klolo.github.io/blog/2017/09/17/typescript-wprowadzenie-czesc-2/</loc>
+<lastmod>2017-09-17T16:40:02+02:00</lastmod>
+</url>
+<url>
 <loc>http://klolo.github.io/blog/2017/09/03/zaimplementuj-dependency-injection-w-typescript/</loc>
 <lastmod>2017-09-03T15:39:30+02:00</lastmod>
 </url>
