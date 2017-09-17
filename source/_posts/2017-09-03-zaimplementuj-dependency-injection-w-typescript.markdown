@@ -10,6 +10,8 @@ dostępne w ES5. Dzięki wykorzystaniu dekoratorów język ten miejscami przypom
 już nie znajdziemy. Znajdziemy za to zwykły Javascript wykorzystujący prototypy. Pokażę dziś jak zaimplementować mechanizm, który będzie pozwalał na wstrzykiwanie zależności w podobny do Springa sposób.
 Będzie to znakomita okazja, żeby poznać praktyczne zastosowanie dekoratorów Typescriptu.
 
+<!--more-->
+
 ## Czym są dekoratory?
 Zacznijmy od wyjaśnienia, czym tak w ogóle w Ts jest dekorator. Jest to mechanizm bardzo podobny do wzorca "Dekorator" znanego z programowania obiektowego. Dekorator jest funkcją, która na wejściu dostaje
 inną funkcję/właściwość i dekoruje ją dodatkową logiką. Jak to wygląda w praktyce? Zobaczmy to na przykładzie dekoratora o nazwie Deprecated, którego zadaniem będzie wypisywanie
