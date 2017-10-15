@@ -4,7 +4,7 @@
   <title><![CDATA[Category: typescript | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/typescript/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-09-17T16:44:26+02:00</updated>
+  <updated>2017-10-15T17:40:00+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -12,6 +12,148 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pierwsze spotkanie z React]]></title>
+    <link href="http://klolo.github.io/blog/2017/10/14/pierwsze-spotkanie-z-react/"/>
+    <updated>2017-10-14T18:58:19+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/10/14/pierwsze-spotkanie-z-react</id>
+    <content type="html"><![CDATA[<p>Jako programista full stack używający na froncie Angularjs i poznający dobrodziejstwa Angular 4, byłem przekonany o wyższości tych frameworków nad innymi. Nie byłem w stanie przyjąć do wiadomości,
+że na froncie w dzisiejszych czasach można użyć czegoś innego niż Angulara, aby stworzyć nowoczesną
+aplikację SPA. Dziś jednak ten pogląd runął i moim oczom ukazał się stwór o nazwie React.</p>
+
+<!--more-->
+
+
+<p>Zanim jednak zagłębię się w szczegóły Reacta, pokazując jego prostotę, chcę wspomnieć o moim pierwszym spotkaniu z Reactem. Uczestniczyłem w warsztatach zorganizowanych
+przez Łódzki <a href="https://nodeschool.io/lodz/">NodeSchool</a>. Spędziłem pół dnia z osobami, które doskonale znają tę technologię, poznając idee towarzyszącą React, sposób jego
+działania oraz pułapki, na jakie można wpaść przy pisaniu w React. Wszystkim mogę zdecydowanie polecić spotkania w tym pozytywnym gronie. Jest to jedna z lepszych okazji,
+żeby w darmowy sposób rozwinąć swoją wiedzę.</p>
+
+<h2>Czym jest React?</h2>
+
+<p>Jest to biblioteka do budowania interfejsów użytkownika. Nie jest to framework, czyli magiczna machina, która sprawia że
+aplikacja działa, wywołując czasami kawałek napisanego kodu. Jest to biblioteka, której używamy żeby z małych kawałków, jakimi są komponenty<br/>
+zbudować kompletny system w możliwie najprostszy sposób. Podejście komponentowe do budowania aplikacji staje się obecnie standardem. Tak naprawdę zawsze było: nawet
+w takich technologiach jak jsp dało się tworzyć reużywalne tagi, z których potem można było skleić całą stronę. To, co z tego wychodziło w praktyce, to już inna rzecz ;)
+We współczesnych rozwiązaniach opartych o komponenty używałem do tej pory głównie Angular &frac14;, jednak ten okazuje się być gigantyczną machiną dodającą bardzo dużą
+warstwę abstrakcji do wszystkiego, co dzieje się w przeglądarce. Oczywiście ma to swoje plusy, takie jak np. zarządzanie zależnościami. Czasami jednak jest to mechanizm tak trudny do zrozumienia,
+że nie obejdzie się bez wczytania w dokumentację bądź ogromne ilości kodu. Sam fakt, że Angular 4 ma swój kompilator, który może działać
+jako JIT oraz AOT (ahead of time - kompilacja komponentów do html jeszcze przed wysyłaniem do przeglądarki) podkreśla złożoność Angulara. Kilkakrotnie spotkałem się z opinią, że
+Angular to overengineering i powoli zaczynam zgadzać się z tym stwierdzeniem. React przy Angularze sprawia wrażenie wyjątkowo nieskomplikowanego. Trochę czystego js, idea Web components
+i małe API pozwalają szybko zbudować aplikację.</p>
+
+<h2>Web components</h2>
+
+<p>Idea stojąca za React to komponenty, zbliżone do Web components. Mechanizm dostępny natywnie w HTML od wersji 5. Tak, natywnie. Co oznacza również, że można tworzyć
+aplikację zbudowaną z komponentów bez użycia jakiegokolwiek dodatkowego frameworku, biblioteki. Oto przykład takiego natywnego komponentu:</p>
+
+<p>```html
+<html>
+<head></p>
+
+<script>
+class MyNativeComponent extends HTMLElement {
+    constructor() {
+        super();
+        var shadow = this.attachShadow({mode: 'open'});
+        var p = document.createElement('p');
+        p.innerText = 'Hello World from component';
+        shadow.appendChild(p);
+    }
+}
+window.customElements.define('my-native', MyNativeComponent);
+</script>
+
+
+<p></head>
+<body>
+    <my-native name="Anita"></my-native>
+</body>
+</html>
+```</p>
+
+<p>Wszystko co trzeba zrobić żeby klasa ES6 stała się komponentem, to odziedziczenie po klasie HTMLElement, a następnie korzystając z shadow DOM można renderować dynamicznie
+dowolne elementy.</p>
+
+<h2>Komponenty React</h2>
+
+<p>Wadą takich natywnych komponentów jest brak elastycznego mechanizmu do definiowania widoku html dla komponentu oraz łączenia go z logiką biznesową zawartą w klasie js.
+I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym js pozwalającym definiować html komponentu bezpośrednio w js. W praktyce komponent <em>Hello world</em> napisany w React wygląda tak:</p>
+
+<pre><code class="javascript ">import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { username: '' };
+  }
+
+  // uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze
+  handleChange = event =&gt; { 
+    this.setState({username: event.target.value});
+  }
+
+  render() {
+    return (
+      &lt;div className="center-align"&gt;
+        &lt;header&gt;
+          &lt;img src={logo} className="App-logo" /&gt;
+          &lt;h2&gt;Welcome {this.state.username}&lt;/h2&gt;
+        &lt;/header&gt;
+        &lt;div className="row" style=&gt;
+          &lt;input placeholder="Enter your name" onChange={this.handleChange} /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre>
+
+<p>Komponent React to zwykła klasa dziedzicząca po Reactowym <em>Component</em>. W metodzie <em>render</em> zwracamy kod html zapisany za pomocą JSX. Jak widać zawiera on odwołania
+do zmiennych js, może również posiadać osadzony dowolny kod js. Należy jednak pamiętać, że nie jest to zwykły html i nie wszystko, co jest prawidłowym html, będzie poprawnym
+JSX. Przykładowo: nie możemy używać słowa <em>class</em> do dołączania styli ponieważ jest to słowo kluczowe zarezerwowane przez js. Zamiast tego należy dołączać style poprzez
+<em>className</em>. Również sposób używania stylów inline różni się od tego znanego z html, ponieważ do atrybutu style należy przekazać kod js zwracający obiekt definiujący styl.
+Kod js w JSX załącza się w znaczniku <em>{}</em>, natomiast druga para klamer w przykładzie pochodzi od obiektu js. Tak zapisany kod JSX zostanie przetranspilowany do wywołań
+funkcji Reacta tworzących wynikowy kod html.</p>
+
+<p>W powyższym przykładzie pojawił się jeszcze jeden element wymagający wyjaśnienia. Jest to <em>state</em>. Obiekt <em>state</em> odpowiada za przekazywanie danych do Reacta, na podstawie
+których będzie renderowany widok. React nie śledzi jednak zmian w obiekcie <em>state</em>, w przeciwieństwie do Angular, który tworzy watchersy do obiektów w scope.
+React dowie się, że coś w obiekcie <em>state</em> uległo zmianie, dopiero kiedy zostanie wywołana asynchroniczna funkcja <em>setState</em>, która spowoduje wywołanie funkcji <em>render</em> i w rezultacie
+ponowne narysowanie komponentu wraz ze zaktualizowanymi danymi.</p>
+
+<h2>Jak zacząć przygodę z React?</h2>
+
+<p>Żeby stworzyć pierwszą aplikację wystarczy kilka prostych kroków:</p>
+
+<ul>
+<li>Zainstalować node i npm</li>
+<li>Zainstalować generator pustego projektu: <em>npm install -g create-react-app</em></li>
+<li>Utworzyć pusty projekt: <em>create-react-app jakas-dowolna-nazwa</em></li>
+<li>W katalogu projektu uruchomić aplikację: <em>npm start</em></li>
+</ul>
+
+
+<p>Tak stworzony projekt ma minimum konfiguracji, automatycznie wczytuje zmiany w kodzie do przeglądarki i składa się tylko w kilku plików. Wszystkie dalsze informacje
+potrzebne do nauki, znajdują się <a href="https://reactjs.org/docs/installation.html">na oficjalnej stronie</a></p>
+
+<h2>Podsumowanie</h2>
+
+<p>Kod z poprzedniego przykładu wyświetli taki prosty komponent składający się z pola tekstowego oraz etykiety, która się będzie zmianiać wraz z wpisywaniem tekstu:</p>
+
+<p><img src="/images/react.png" alt="GitHub Logo" /></p>
+
+<p>Podczas wpisywania tekstu w polu tekstowym do metody zostanie wysłany event html-a onChange, który ustawi nową wartość w state. Mechanizm bardzo prosty, nie ma tutaj
+dodatkowych watchy, który śledzą zmiany i automatycznie odświeżają widok. Do dyspozycji mamy również mechanizm przekazywania danych między komponentami.
+Do tego właśnie służy parametr konstruktora <em>props</em>. Może on zawierać dane z nadrzędnego komponentu. Oczywiście w nietrywialnych aplikacjach nie zawsze dane są przekazywane
+bezpośrednio od rodzica do dziecka, stąd też w aplikacjach korzystających z React korzysta się często z Redux. Jest to kontener przechowujący dane aplikacji, które łatwo
+można przekazywać do dowolnego miejsca aplikacji. React można również połączyć z Typescript, dzięki czemu do dyspozycji mamy typowanie, interfejsy, dekoratory i wiele innych
+przydatnych rzeczy. Wszystko w React jest bardzo proste, a zarazem wystarczające, żeby budować duże systemy. Mimo że na co dzień używam Angular co zapewne nieszybko się
+zmieni, z pewnością jednak moje pierwsze spotkanie z React nie będzie ostatnim.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Zaimplementuj dependency injection w Typescript]]></title>
