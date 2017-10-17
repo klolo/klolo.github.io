@@ -23,7 +23,7 @@ w takich technologiach jak jsp dało się tworzyć reużywalne tagi, z których 
 We współczesnych rozwiązaniach opartych o komponenty używałem do tej pory głównie Angular 1/4, jednak ten okazuje się być gigantyczną machiną dodającą bardzo dużą
 warstwę abstrakcji do wszystkiego, co dzieje się w przeglądarce. Oczywiście ma to swoje plusy, takie jak np. zarządzanie zależnościami. Czasami jednak jest to mechanizm tak trudny do zrozumienia, 
 że nie obejdzie się bez wczytania w dokumentację bądź ogromne ilości kodu. Sam fakt, że Angular 4 ma swój kompilator, który może działać 
-jako JIT oraz AOT (ahead of time - kompilacja komponentów do html jeszcze przed wysyłaniem do przeglądarki) podkreśla złożoność Angulara. Kilkakrotnie spotkałem się z opinią, że 
+jako JIT oraz AOT (ahead of time - kompilacja komponentów jeszcze przed wysyłaniem do przeglądarki) podkreśla złożoność Angulara. Kilkakrotnie spotkałem się z opinią, że 
 Angular to overengineering i powoli zaczynam zgadzać się z tym stwierdzeniem. React przy Angularze sprawia wrażenie wyjątkowo nieskomplikowanego. Trochę czystego js, idea Web components 
 i małe API pozwalają szybko zbudować aplikację. 
 
