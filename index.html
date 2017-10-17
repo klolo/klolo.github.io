@@ -9,7 +9,7 @@
   <meta name="author" content="Kamil Lolo">
 
   
-  <meta name="description" content="Jako programista full stack używający na froncie Angularjs i poznający dobrodziejstwa Angular 4, byłem przekonany o wyższości tych frameworków nad &hellip;">
+  <meta name="description" content="Dostałem ostatnio drobną poprawkę do wykonania w kodzie. Zwykły null pointer spowodowany tym, że na bazie nie ma części danych. Nie ma, bo nie ma, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +70,48 @@
   <header>
   
     
+      <h1 class="entry-title"><a href="/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/">Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów</a></h1>
+      
+      
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-10-17T20:31:09+02:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>8:31 pm</span></time>
+        
+         <a href="#" style="text-decoration:none; color: #535353"> <a class='category' href='/blog/categories/java/'>java</a> </a>  
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dostałem ostatnio drobną poprawkę do wykonania w kodzie. Zwykły null pointer spowodowany tym, że na bazie nie ma części danych. Nie ma, bo nie ma,
+nie są obligatoryjne. Na backend leci więc podstępny null, pojawia się w polu, gdzie powinna być data. Ten null, w funkcji, która ma posortować
+listę obiektów po dacie, powoduje exception, krwisto czerwony niczym stek. Sprawa prosta, piszę test jednostkowy, żeby zreplikować problem, robię prosty null save,
+buduję projekt, przechodzę code review, push na serwer i zapominam o całej sprawie. Nic z tych rzeczy. Poprawka powróciła do mnie niczym owczarek szkocki w jednym
+z familijnych filmów i srogo się zemściła. Zanim jednak opowiem, jako przestroga, o tym na jaką pułapkę natrafiłem wyjaśnijmy czym jest <em>immutability</em> i
+niezmienne obiekty</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/">Czytaj dalej &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+  
+    
       <h1 class="entry-title"><a href="/blog/2017/10/14/pierwsze-spotkanie-z-react/">Pierwsze spotkanie z React</a></h1>
       
       
@@ -121,7 +163,7 @@ aplikację SPA. Dziś jednak ten pogląd runął i moim oczom ukazał się stwó
 
 <time class='entry-date' datetime='2017-09-17T16:40:02+02:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>4:40 pm</span></time>
         
-         <a href="#" style="text-decoration:none; color: #535353">  </a>  
+         <a href="#" style="text-decoration:none; color: #535353"> <a class='category' href='/blog/categories/typescript/'>typescript</a> </a>  
       </p>
     
   </header>
@@ -531,6 +573,10 @@ bezpiecznego wielowątkowo. Czy na pewno słusznie?</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/">Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/10/14/pierwsze-spotkanie-z-react/">Pierwsze spotkanie z React</a>
       </li>
     
@@ -564,10 +610,6 @@ bezpiecznego wielowątkowo. Czy na pewno słusznie?</p>
     
       <li class="post">
         <a href="/blog/2017/08/05/jak-uzywac-optional/">Jak prawidłowo używać Optional w Java?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/08/04/programistycze-kata/">Programistyczne kata</a>
       </li>
     
   </ul>

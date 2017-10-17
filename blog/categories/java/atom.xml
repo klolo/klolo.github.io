@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-10-15T17:40:00+02:00</updated>
+  <updated>2017-10-17T23:09:50+02:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -12,6 +12,130 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów]]></title>
+    <link href="http://klolo.github.io/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/"/>
+    <updated>2017-10-17T20:31:09+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow</id>
+    <content type="html"><![CDATA[<p>Dostałem ostatnio drobną poprawkę do wykonania w kodzie. Zwykły null pointer spowodowany tym, że na bazie nie ma części danych. Nie ma, bo nie ma,
+nie są obligatoryjne. Na backend leci więc podstępny null, pojawia się w polu, gdzie powinna być data. Ten null, w funkcji, która ma posortować
+listę obiektów po dacie, powoduje exception, krwisto czerwony niczym stek. Sprawa prosta, piszę test jednostkowy, żeby zreplikować problem, robię prosty null save,
+buduję projekt, przechodzę code review, push na serwer i zapominam o całej sprawie. Nic z tych rzeczy. Poprawka powróciła do mnie niczym owczarek szkocki w jednym
+z familijnych filmów i srogo się zemściła. Zanim jednak opowiem, jako przestroga, o tym na jaką pułapkę natrafiłem wyjaśnijmy czym jest <em>immutability</em> i
+niezmienne obiekty</p>
+
+<!--more-->
+
+
+<h2>Niezmienne parametry</h2>
+
+<p>Do tej pory miałem (nie)przyjemność analizować problemy produkcyjne spowodowane tym, że ktoś w długiej metodzie podmieniał parametr wejściowy, a ktoś
+inny oczekiwał, że parametr wejściowy się nie zmieni. Wyglądało to mniej więcej tak:</p>
+
+<pre><code class="java">public void makeFoo(Input input) {
+    log.info("Input: {}", input);
+
+    // ...jakis kod ~100 lini...
+    input = makeBoo();
+
+    // ... jakis kod ~100 lini...
+    input.performSomeOperation(); // exeption
+}
+</code></pre>
+
+<p>W obiekcie input dostaje komplet danych potrzebnych do wykonania <em>performSomeOperation</em>, jednak w połowie funkcji <em>makeFoo</em> ktoś podmienia parametr wejściowy na
+jakiś inny, nie mający już kompletu danych. W rezultacie dostaje gdzieś dalej w kodzie wyjątek. Analiza loggera na początku metody <em>makeFoo</em> wskazuje, że na wejściu
+był komplet danych. Szukam zatem w <em>performSomeOperation</em> oraz w dalszych metodach. Czas mija, produkcja stoi, klient dzwoni, stres maksymalny. Sytuacji, o dziwo, wcale nie ułatwia
+fakt, że jest to system legacy bez testów jednostkowych, metoda <em>makeFoo</em> ciągnie się jak jamnik na sterydach i wygląda na stęsknioną ostrego refactoringu. Mijały godziny zanim
+zauważyłem w czym jest błąd. Problem z oczami wykluczam, bo nie analizowałem kodu sam. Identyczną sytuację miałem od tamtego czasu jeszcze jakieś 3 razy. Po tych przykrych
+doświadczenia pokochałem słowo <em>final</em>. Dzięki niemu nie można podmienić parametru wejściowego do metody. Jest to już jakieś zabezpieczenie. Niektórzy powiedzą, że jest to więcej
+pisania, za dużo roboty. Jeżeli napisanie kilka razy dziennie słowa <em>final</em> w kodzie jest zbyt ciężką pracą - można i tak&hellip; Można też stwierdzić, że to jest szum
+w kodzie, zbędna informacja, że przy prawidłowo napisanych metodach mieszczących się na ekranie bez przewijania, jest to zbędne. Niekoniecznie. Zamiast czytać całą
+metodę w celu ustalenia czy podmieniamy ten parametr czy nie, wystarczy zerknąć na listę parametrów i mieć tę informację od razu. Jakież to szczęście, że w moim obecnym
+projekcie mamy konwencję, która wymusza na nas używanie final w parametrach.</p>
+
+<h2>Niezmienne zmienne lokalne</h2>
+
+<p>Po dłuższym zastanowieniu da się odkryć, że <em>final</em> w parametrach to czasami za mało. Zamiast podmiany parametru można w końcu podmienić zmienną deklarowaną na początku funkcji
+i oczekiwać pierwotnej wartości gdzieś dalej w kodzie. Po co kusić los? Uważam, że zmienne deklarowane w metodach również powinny być <em>final</em>, dzięki czemu kod staje się
+bardziej przewidywalny, jest mniej zmiany stanów, łatwiej go analizować i testować. Początkowo mogą pojawić się zarzuty - że blokujemy możliwość
+przypisania czegoś do zmiennej, że nie da się tak programować. Ano da się. Kiedy przyjrzałem się klasom w różnych systemach, które rozwijam ze zdziwieniem stwierdziłem, że jakieś 90%
+zmiennych po zadeklarowaniu nie ulega zmianie, 5% można tak napisać, żeby się nie zmieniały, a tylko kilka procent kodu faktycznie wymaga zmiennej z różnymi
+stanami, bo tak jest dużo prościej. Dla mnie sprawa z deklarowaniem zmiennych jako <em>final</em> jest prosta. Sprawia to, że tworzony kod jest mnniej <em>bugogenny</em>.
+Przy takim podejściu łatwiej również przestawić się na programowanie funkcyjne, gdzie czyste funkcje nie modyfikują stanu zmiennych.</p>
+
+<h2>Niezmienne obiekty</h2>
+
+<p>Idąc krok dalej, zacząłem się zastanawiać czy nie warto używać final do pól w klasie. Wszystkich pól. I myślę, że to także jest dobry pomysł, funkcjonujący pod nazwą
+<em>immutable objects</em>. Obiekt po utworzeniu nie może zmienić swojego stanu. Przykładami takich obiektów jest np. <em>String</em>, <em>BigDecimal</em>. Pojawia się pytanie - jak ustawiać pola
+w takich obiektach? Jeżeli jest dużo parametrów - będzie potrzebny wielki konstruktor, jeżeli część danych nie jest wymagana - mogą powstawać konstruktory teleskopowe. A co
+w przypadku, kiedy część danych nie jest dostępna od razu, ale trzeba je pobrać z innego miejsca systemu? Rozwiązaniem problemu jest wzorzec builder. Implementowanie tego
+wzorca dla każdego nowego obiektu DTO możemy być uciążliwe, dlatego warto skorzystać z automatycznego generowania buildera przez IDE. Jednak tutaj przy zmianie DTO, należy go
+ręcznie edytować lub jeszcze raz wygenerować. Alternatywą jest biblioteka <em>Lombok</em>, która w momencie kompilacji kodu na podstawie annotacji w kodzie generuje dodatkowy kod,
+taki jak np. gettery, settery, toString czy też kod buildera. Korzystanie z <em>Lombok</em> sprawia, że w kodzie nie mamy zbędnego <em>boilerplate</em> tylko faktyczną logikę biznesową. Oto
+prosty przykład połączenia <em>Lombok</em> i niemutowalnego obiektu:</p>
+
+<pre><code class="java">@Builder
+public class Account {
+    private final AccountType type;
+    private final String number;
+    private final BigDecimal amount;
+    private final Currency currency;
+}
+
+Account.builder()
+        .number("865423")
+        .type(AccountType.RO2)
+        .amount(new BigDecimal("0"))
+        .currency(Currency.CHF)
+        .build();
+</code></pre>
+
+<p>Bez pisania kodu buildera możemy stopniowo wypełniać danymi obiekty, które później nie zmienią swojego stanu i będą bardziej przewidywalne. Dodatkowo takie obiekty ułatwią
+programowanie wielowątkowe. Warto wspomnieć o tym, że korzystając z <em>Lombok</em> można korzystać z <a href="https://projectlombok.org/features/val">val</a>.
+Czy nie zaczyna to jednak za bardzo przypominać innego języka jvm-a&hellip;?</p>
+
+<h2>O tym, jak nie pisać testów jednostkowych</h2>
+
+<p>Na koniec chciałbym opowiedzieć o tym jak zemścił się na mnie brak niemutowalnych obiektów. Napisałem test jednostkowy do null pointera, o którym wspomniałem na początku.
+Test wyglądał mniej więcej tak:</p>
+
+<pre><code class="java">@Test
+public void shouldNotFailedWhenDateIsNull() {
+    // given
+    final List&lt;Item&gt; items = FluentIterable
+                                    .from(Mock.items)
+                                    .transform( item =&gt; {
+                                        item.setDate(null);
+                                        return item;
+                                    })
+                                    .toList();
+    //when 
+    someService.sortByDate(items);
+
+    //then
+    Assert.....
+}
+</code></pre>
+
+<p>Bardzo prosty test, w którym pobieram listę jakiś obiektów z mocka, ustawiam datę jako null, wywołuję metodę, gdzie był błąd <em>NullPointerException</em>
+i robię kilka dodatkowych asercji. Test po uruchomieniu przechodzi, projekt się buduje, osoba robiąca code review nie zgłosiła uwag. Problem pojawił się jednak kolejnego
+dnia, kiedy okazało się, że środowisko testowe nie działa, ponieważ CI nie może zbudować projektu. Dziwna sprawa, inne testy jednostkowe przestały działać.
+Pomyślałem najpierw, że to pewnie przez jakieś inne zmiany w kodzie. W końcu osób commitujących do projektu jest kilka. Jeden z developerów usiadł i zaczął analizować problem.
+No i się zaczęło. Szok i niedowierzanie. Identyczny kod jak na środowisku developerskim, a nie buduje się na Jenkins. Po całym dniu analizy okazało się, że to przez
+wspomniany test jednostkowy. Modyfikuje on dane mockowe, które są wykorzystywane w innych testach. Po ustawieniu null na obiekcie inne testy nie mają prawa działać.
+Dlaczego jednak ten problem nie występuje na środowisku developerskim? Przypadek :) JUnit nie gwarantuje kolejności wykonywania testów. Oczywiście jeżeli w kodzie obiekty
+byłyby niemutowalne, to test musiałbym zaimplementować inaczej i nie byłoby problemu. Czego się nauczyłem? Że niemutowalność jest bardzo dobrą praktyką i pozwala
+uniknąć wielu podstępnych błędów. Na koniec jeszcze <a href="https://github.com/junit-team/junit4/wiki/Test-execution-order">kilka słów</a> o kolejności wykonywania testów w JUnit:</p>
+
+<blockquote><p>By design, JUnit does not specify the execution order of test method invocations. Until now, the methods were simply invoked in the order returned by the reflection API.
+However, using the JVM order is unwise since the Java platform does not specify any particular order, and in fact JDK 7 returns a more or less random order.
+Of course, well-written test code would not assume any order, but some do, and a predictable failure is better than a random failure on certain platforms. From version 4.11,
+JUnit will by default use a deterministic, but not predictable, order (MethodSorters.DEFAULT). To change the test execution order simply annotate your test class
+using @FixMethodOrder and specify one of the available MethodSorters.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Java stream API - darmowy kurs]]></title>
@@ -581,118 +705,6 @@ i w środku metody zamieniać go na Optional. A! No i należy pamiętać o tym �
 
 <blockquote><p>Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”,
 and using null for such was overwhelmingly likely to cause errors.</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Czy warto się przejmować konkatenacją stringów w Java?]]></title>
-    <link href="http://klolo.github.io/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/"/>
-    <updated>2017-08-04T20:37:42+02:00</updated>
-    <id>http://klolo.github.io/blog/2017/08/04/czy-warto-sie-przejmowac-konkatenacja-stringow-w-java</id>
-    <content type="html"><![CDATA[<p>Używasz StringBuilder do łączenia Stringów? Pewnie większość z Was spotkała się ze stwierdzeniem mówiącym, że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer
-bezpiecznego wielowątkowo. Czy na pewno słusznie?</p>
-
-<!--more-->
-
-
-<p>Co daje StringBuilder? Jak wiadomo string jest obiektem niezmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy trzeba napisać dłuższy ciąg znaków tworzony
-jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje
-utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli, jak tutaj:
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="mi">100</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
-        <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-
-<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-
-<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span></code></pre></div></p>
-
-<p>to za każdym obiegiem pętli tworzymy w pamięci niepotrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
-Dlatego pewnie doskonale wiecie, że taka pętla powinna wyglądać mniej więcej tak:
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="mi">100</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">append</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
-        <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-
-<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-<span class="o">}</span>
-<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-
-<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span></code></pre></div></p>
-
-<p>Dzięki użyciu StringBuilder optymalizujemy kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy na pewno musimy taki kod pisać?
-Otóż nie! Dokumentacja mówi:</p>
-
-<blockquote><p>An implementation (of compiler) may choose to perform conversion and concatenation in one step to avoid creating and then discarding an intermediate String object.
-To increase the performance of repeated string concatenation, a Java compiler may use the StringBuffer class or a similar technique to reduce the number of intermediate
-String objects that are created by evaluation of an expression. For primitive types, an implementation may also optimize away the creation of a wrapper object by converting
-directly from a primitive type to a string.</p></blockquote>
-
-<p>Ciekawe tylko dlaczego ten zapis jest mały literami..? :P Wynika z tego, że kompilator potrafi sam wstawić StringBuilder w miejsce konkatenacji stringów. Sprawdźmy!
-Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">&amp;</span><span class="n">hellip</span><span class="o">;);</span>
-    <span class="nl">Code:</span>
-       <span class="mi">0</span><span class="o">:</span> <span class="n">ldc</span>           <span class="err">#</span><span class="mi">2</span> <span class="c1">// String</span>
-       <span class="mi">2</span><span class="o">:</span> <span class="n">astore_1</span>
-       <span class="mi">3</span><span class="o">:</span> <span class="n">iconst_0</span>
-       <span class="mi">4</span><span class="o">:</span> <span class="n">istore_2</span>
-       <span class="mi">5</span><span class="o">:</span> <span class="n">iload_2</span>
-       <span class="mi">6</span><span class="o">:</span> <span class="n">bipush</span>        <span class="mi">100</span>
-       <span class="mi">8</span><span class="o">:</span> <span class="n">if_icmpge</span>     <span class="mi">41</span>
-      <span class="mi">11</span><span class="o">:</span> <span class="k">new</span>           <span class="err">#</span><span class="mi">3</span> <span class="c1">// class java/lang/StringBuilder</span>
-      <span class="mi">14</span><span class="o">:</span> <span class="n">dup</span>
-      <span class="mi">15</span><span class="o">:</span> <span class="n">invokespecial</span> <span class="err">#</span><span class="mi">4</span> <span class="c1">// Method java/lang/StringBuilder.&amp;ldquo;&lt;init&gt;&amp;rdquo;:()V</span>
-      <span class="mi">18</span><span class="o">:</span> <span class="n">aload_1</span>
-      <span class="mi">19</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">5</span> <span class="c1">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
-      <span class="mi">22</span><span class="o">:</span> <span class="n">iload_2</span>
-      <span class="mi">23</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">6</span> <span class="c1">// Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span>
-      <span class="mi">26</span><span class="o">:</span> <span class="n">ldc</span>           <span class="err">#</span><span class="mi">7</span> <span class="c1">// String</span>
-      <span class="mi">28</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">5</span> <span class="c1">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
-      <span class="mi">31</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">8</span> <span class="c1">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
-      <span class="mi">34</span><span class="o">:</span> <span class="n">astore_1</span>
-      <span class="mi">35</span><span class="o">:</span> <span class="n">iinc</span>          <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span>
-      <span class="mi">38</span><span class="o">:</span> <span class="k">goto</span>          <span class="mi">5</span>
-      <span class="mi">41</span><span class="o">:</span> <span class="n">getstatic</span>     <span class="err">#</span><span class="mi">9</span> <span class="c1">// Field java/lang/System.out:Ljava/io/PrintStream;</span>
-      <span class="mi">44</span><span class="o">:</span> <span class="n">aload_1</span>
-      <span class="mi">45</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">10</span> <span class="c1">// Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
-      <span class="mi">48</span><span class="o">:</span> <span class="k">return</span>
-<span class="o">}</span></code></pre></div></p>
-
-<p>Faktycznie w wygenerowanym byte code pojawił się magicznie string builder. A jak w takim razie wygląda kod z listingu 2 gdzie jawnie użyłem StringBuildera?</p>
-
-<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">&amp;</span><span class="n">hellip</span><span class="o">;);</span>
-    <span class="nl">Code:</span>
-       <span class="mi">0</span><span class="o">:</span> <span class="k">new</span>           <span class="err">#</span><span class="mi">2</span> <span class="c1">// class java/lang/StringBuilder</span>
-       <span class="mi">3</span><span class="o">:</span> <span class="n">dup</span>
-       <span class="mi">4</span><span class="o">:</span> <span class="n">invokespecial</span> <span class="err">#</span><span class="mi">3</span> <span class="c1">// Method java/lang/StringBuilder.&amp;ldquo;&lt;init&gt;&amp;rdquo;:()V</span>
-       <span class="mi">7</span><span class="o">:</span> <span class="n">astore_1</span>
-       <span class="mi">8</span><span class="o">:</span> <span class="n">iconst_0</span>
-       <span class="mi">9</span><span class="o">:</span> <span class="n">istore_2</span>
-      <span class="mi">10</span><span class="o">:</span> <span class="n">iload_2</span>
-      <span class="mi">11</span><span class="o">:</span> <span class="n">bipush</span>        <span class="mi">100</span>
-      <span class="mi">13</span><span class="o">:</span> <span class="n">if_icmpge</span>     <span class="mi">33</span>
-      <span class="mi">16</span><span class="o">:</span> <span class="n">aload_1</span>
-      <span class="mi">17</span><span class="o">:</span> <span class="n">iload_2</span>
-      <span class="mi">18</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">4</span> <span class="c1">// Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span>
-      <span class="mi">21</span><span class="o">:</span> <span class="n">ldc</span>           <span class="err">#</span><span class="mi">5</span> <span class="c1">// String</span>
-      <span class="mi">23</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">6</span> <span class="c1">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
-      <span class="mi">26</span><span class="o">:</span> <span class="n">pop</span>
-      <span class="mi">27</span><span class="o">:</span> <span class="n">iinc</span>          <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span>
-      <span class="mi">30</span><span class="o">:</span> <span class="k">goto</span>          <span class="mi">10</span>
-      <span class="mi">33</span><span class="o">:</span> <span class="n">getstatic</span>     <span class="err">#</span><span class="mi">7</span> <span class="c1">// Field java/lang/System.out:Ljava/io/PrintStream;</span>
-      <span class="mi">36</span><span class="o">:</span> <span class="n">aload_1</span>
-      <span class="mi">37</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">8</span> <span class="c1">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
-      <span class="mi">40</span><span class="o">:</span> <span class="n">invokevirtual</span> <span class="err">#</span><span class="mi">9</span> <span class="c1">// Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
-      <span class="mi">43</span><span class="o">:</span> <span class="k">return</span>
-<span class="o">}</span></code></pre></div></p>
-
-<p>Wygląda niemal identycznie. Brakuje mi aż tak rozległej wiedzy o byte code, żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność.
-Uważam jednak, że kompilator w tym przypadku wykonuje za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi. Problem może pojawiać się w Javie starszej niż 1.5, bo tam tego mechanizmu
-nie ma ;)</p>
 ]]></content>
   </entry>
   
