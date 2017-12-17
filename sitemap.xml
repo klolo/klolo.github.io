@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://klolo.github.io/blog/2017/12/17/w-oczekiwaniu-na-jave-10/</loc>
+<lastmod>2017-12-17T13:39:22+01:00</lastmod>
+</url>
+<url>
 <loc>http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy/</loc>
 <lastmod>2017-10-28T20:25:09+02:00</lastmod>
 </url>
@@ -57,16 +61,16 @@
 <lastmod>2017-08-04T20:25:49+02:00</lastmod>
 </url>
 <url>
-<loc>http://klolo.github.io/blog/archives/</loc>
-</url>
-<url>
 <loc>http://klolo.github.io/</loc>
 </url>
 <url>
-<loc>http://klolo.github.io/about/</loc>
+<loc>http://klolo.github.io/blog/archives/</loc>
 </url>
 <url>
 <loc>http://klolo.github.io/lodz/</loc>
+</url>
+<url>
+<loc>http://klolo.github.io/about/</loc>
 </url>
 <url>
 <loc>http://klolo.github.io/blog/categories/methodology/</loc>
