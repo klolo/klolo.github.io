@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2017-12-17T19:17:51+01:00</updated>
+  <updated>2018-01-06T22:22:22+01:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -173,6 +173,9 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
     <id>http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy</id>
     
     <content type="html"><![CDATA[<p>Każdy programista, i to bardzo wcześnie, dowiaduje się, że metody powinny być krótkie. Jednak czytając kody systemów z jakimi pracujemy, znajdujemy często metody ciągnące się przez setki, a nawet tysiące linii. Skąd w takim razie pochodzi taki paskudny kod, skoro teoretycznie wszyscy wiedzą, że długie metody są złe? A może jednak, przez zwykłe lenistwo, nie zastanawiamy się nad tym czy pisana metoda powinna zostać zrefaktorowana? A może nie wiemy jaka długość jest dopuszczalna i kiedy metodę należy rozbić na mniejsze?</p>
+
+<!--more-->
+
 
 <h2>Największe grzechy długich metod</h2>
 
