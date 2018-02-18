@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://klolo.github.io/blog/2018/02/18/dependency-injection-w-js/</loc>
+<lastmod>2018-02-18T10:22:30+01:00</lastmod>
+</url>
+<url>
 <loc>http://klolo.github.io/blog/2017/12/17/w-oczekiwaniu-na-jave-10/</loc>
 <lastmod>2017-12-17T13:39:22+01:00</lastmod>
 </url>
