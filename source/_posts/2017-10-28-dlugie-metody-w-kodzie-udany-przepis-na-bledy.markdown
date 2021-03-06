@@ -7,6 +7,8 @@ categories: JAVA
 ---
 Każdy programista, i to bardzo wcześnie, dowiaduje się, że metody powinny być krótkie. Jednak czytając kody systemów z jakimi pracujemy, znajdujemy często metody ciągnące się przez setki, a nawet tysiące linii. Skąd w takim razie pochodzi taki paskudny kod, skoro teoretycznie wszyscy wiedzą, że długie metody są złe? A może jednak, przez zwykłe lenistwo, nie zastanawiamy się nad tym czy pisana metoda powinna zostać zrefaktorowana? A może nie wiemy jaka długość jest dopuszczalna i kiedy metodę należy rozbić na mniejsze?
 
+<!--more-->
+
 ## Największe grzechy długich metod
 
 Zanim zastanowimy się jaką długość mają dobre metody, omówmy najważniejsze problemy jakie wynikają z przerośniętych funkcji:

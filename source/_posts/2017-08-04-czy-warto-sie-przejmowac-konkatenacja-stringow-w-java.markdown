@@ -5,13 +5,15 @@ date: 2017-08-04 20:37:42 +0200
 comments: true
 categories: JAVA
 ---
-Używasz StringBuilder do łączenia Stringów? Pewnie większość z Was spotkała się ze stwierdzeniem mówiącym, że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer
-bezpiecznego wielowątkowo. Czy na pewno słusznie?
+Używasz StringBuilder do łączenia Stringów? Pewnie większość z Was spotkała się ze stwierdzeniem mówiącym, że w celu optymalizacji operacji łączenia stringów należy używać
+StringBuilder bądź też StringBuffer bezpiecznego wielowątkowo. Czy na pewno słusznie?
 <!--more-->
 
-Co daje StringBuilder? Jak wiadomo string jest obiektem niezmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy trzeba napisać dłuższy ciąg znaków tworzony
-jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje
-utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli, jak tutaj:
+Co daje StringBuilder? Jak wiadomo string jest obiektem niezmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy trzeba napisać dłuższy ciąg
+znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero
+w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli,
+jak tutaj:
+
 {% highlight java %}
   public static void main(final String... args) {
         String result = "";
@@ -23,7 +25,8 @@ utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Je�
     }
 {% endhighlight %}
 
-to za każdym obiegiem pętli tworzymy w pamięci niepotrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych.
+to za każdym obiegiem pętli tworzymy w pamięci niepotrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych
+i ich usuwanie przez gc.
 Dlatego pewnie doskonale wiecie, że taka pętla powinna wyglądać mniej więcej tak:
 {% highlight java %}
   public static void main(final String... args) {
@@ -105,6 +108,7 @@ Faktycznie w wygenerowanym byte code pojawił się magicznie string builder. A j
 }
 {% endhighlight %}
 
-Wygląda niemal identycznie. Brakuje mi aż tak rozległej wiedzy o byte code, żeby stwierdzić czy różnice w tych kilku instrukcjach wpłyną znacząco na wydajność.
-Uważam jednak, że kompilator w tym przypadku wykonuje za nas świetną robotę i nie warto na siłe optymalizować każdej pętli gdzie łączymy stringi. Problem może pojawiać się w Javie starszej niż 1.5, bo tam tego mechanizmu
-nie ma ;)
+Kod w obu przypadkach wygląda podobnie. Ale, w przypadku kodu w którym jawnie użyłem string buildera obiekt typu StringBuilder jest tworzony tylko raz. Natomiast
+w przypadku kodu zooptymalizowanego przez kompilator jest on tworzony przy każdym obiektu pętli. Tak więc nie dość że przy każdym obiegu pętli tworzy się nie
+potrzebny string w pamięci to w dodatku tworzy się również zbędny obiekt StringBuildera. Pokazuje to nam że nie wolno bezgranicznie ufać kompilatorowi. Warto czasami
+zagłębić się byte code i zastanowić się czy napisany kod faktycznie jest optymalny.

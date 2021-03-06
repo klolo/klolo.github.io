@@ -6,9 +6,9 @@ comments: true
 categories:  TYPESCRIPT
 ---
 Typescript jest nadzbiorem javascriptu oferującym statyczne typowanie oraz możliwość programowania obiektowego w dużo bardziej wygodnej formie niż prototypy
-dostępne w ES5. Dzięki wykorzystaniu dekoratorów język ten miejscami przypomina bardzo Javę, w której możemy używać adnotacji. Patrząc jednak na wygenerowany przez kompilator kod, podobieństwa do Javy
-już nie znajdziemy. Znajdziemy za to zwykły Javascript wykorzystujący prototypy. Pokażę dziś jak zaimplementować mechanizm, który będzie pozwalał na wstrzykiwanie zależności w podobny do Springa sposób.
-Będzie to znakomita okazja, żeby poznać praktyczne zastosowanie dekoratorów Typescriptu.
+dostępne w ES5. Dzięki wykorzystaniu dekoratorów język ten miejscami przypomina bardzo Javę, w której możemy używać adnotacji. Patrząc jednak na wygenerowany
+przez kompilator kod, podobieństwa do Javy już nie znajdziemy. Znajdziemy za to zwykły Javascript wykorzystujący prototypy. Pokażę dziś jak zaimplementować mechanizm,
+który będzie pozwalał na wstrzykiwanie zależności w podobny do Springa sposób. Będzie to znakomita okazja, żeby poznać praktyczne zastosowanie dekoratorów Typescriptu.
 
 <!--more-->
 
@@ -69,8 +69,8 @@ function Deprecated(target, key, descriptor) {
 }
 {% endhighlight %}
 
-Brrr...To, co wygenerowało się z tak prostej klasy wygląda na pierwszy rzut oka na bardzo skomplikowany kod. Jest to dobry przykład na to, jak wiele daje kompilator Ts. Nie musimy pisać tak zawiłych
-konstrukcji, tylko tworzymy klasy w sposób do jakiego przywykliśmy w językach takich jak np. Java, C#. Wracając do przykładu z Deprecated, mamy klasę z metodą oznaczoną dekoratorem.
+Brrr...To, co wygenerowało się z tak prostej klasy wygląda na pierwszy rzut oka na bardzo skomplikowany kod. Jest to dobry przykład na to, jak wiele daje kompilator Ts.
+Nie musimy pisać tak zawiłych konstrukcji, tylko tworzymy klasy w sposób do jakiego przywykliśmy w językach takich jak np. Java, C#. Wracając do przykładu z Deprecated, mamy klasę z metodą oznaczoną dekoratorem.
 Dekorator to tak naprawdę funkcja, która ma na celu rozszerzenie działania innej funkcji. W tym przypadku funkcja taka przyjmuje 3 parametry:
 
   * target - funkcja w której został użyty dekorator. W powyższym przykładzie będzie to funkcja reprezentująca klasę _User_
