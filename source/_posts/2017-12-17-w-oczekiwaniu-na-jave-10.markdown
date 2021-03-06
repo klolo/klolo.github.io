@@ -41,46 +41,46 @@ typie znajduje się również w nazwie zmiennej. Jest to niedogodność względe
 się bez podania typów. Piszemy _var_ i na poziomie runtime określany jest typ danych, jakie są przechowywane w zmiennej. Pisząc w javie wiele osób narzeka na boilerplate 
 jaki powstaje w tym języku. Przykładowa bardziej zaawansowana deklaracja mapy w Javie 1.6 wygląda tak: 
 
-```java
+{% highlight java %}
 HashMap<BigDecimal, Map<String, LinkedList<String>>> dataMap
                             = new HashMap<BigDecimal, HashMap<String, LinkedList<String>>>();
-``` 
+{% endhighlight %}
 
 Wychodzi nam porządny jamnik. Java 1.7 upraszcza ten zapis wprowadzając operator _diamond_, dzięki któremu typ generyka zostaje określony 
 na podstawie deklaracji zmiennej:
 
-```java
+{% highlight java %}
 HashMap<BigDecimal, Map<String, LinkedList<String>>> dataMap = new HashMap<>();
-``` 
+{% endhighlight %}
 
 Już jest lepiej. Ale co w przypadku kiedy chcę wyjąć z mapy jakiś element i przypisać do zmiennej? Znów trzeba podać typ elementu. I dostaję coś takiego:
 
-```java
+{% highlight java %}
 Map<String, LinkedList<String>> value = dataMap.get(amount);
-``` 
+{% endhighlight %}
 
 Nie mamy możliwości skrócenia takiego zapisu. Z drugiej strony, typ zmiennej mógłby być z powodzeniem określony na podstawie typu zmiennej _dataMap_. 
 Twórcy javy chcą ułatwić nam życie i dodać do języka możliwość określania typu zmiennej lokalnej na podstawie tego, co do niej przypisujemy. Planowane jest wykorzystanie
 w tym celu słówka kluczowego _var_. Zamiast podawać typ zmiennej, który kompilator sam za nas określi, będzie można napisać: 
   
-```java
+{% highlight java %}
 var value = dataMap.get(amount);
-``` 
+{% endhighlight %}
 
 Taka instrukcja wygląda dużo prościej niż ta z generykiem. Jednak podejrzewam, że może prowadzić do sytuacji kiedy trzeba będzie się chwilę zastanowić jakiego typu
 obiekt mamy w zmiennej. Oczywiście będą też przypadki, w których kompilator nie domyśli się za nas jakiego typu ma być ta zmienna. Przykładowo próbując przypisać 
 lambdę reprezentującą _Runnable_ dostaniemy błąd:
 
-```java
+{% highlight java %}
 var runable = () -> {}; // error: cannot infer type for local variable
-``` 
+{% endhighlight %}
 
 Deklaracje zmiennych lokalnych, gdzie moglibyśmy uprościć zapis korzystając z _var_ to według twórców Javy ponad 90% kodu. Co ciekawe, jako alternatywę dla _var_ 
 podano możliwość rozbudowy wyrażenia diament, tak żeby można było wykorzystać go z lewej strony operatora przypisania. I dawałoby to taki zapis:
 
-```java
+{% highlight java %}
 Map<> value = dataMap.get(amount);
-``` 
+{% endhighlight %}
  
 ## Po co czekać skoro jest Lombok
 
@@ -93,7 +93,7 @@ Rozwiązanie pozwalające pomijać podawanie typów podczas deklaracji zmiennych
 Jeżeli chodzi o mutowalności _var_ w javie 18.3 - architekci nadal dyskutują. Oczekując na kolejny release javy możemy ściągnąć _Lomboka_ 
 i poeksperymentować z _val/var_, tak żeby znać wady i zalety tego podejścia, kiedy już wejdzie oficjalnie do języka. Na koniec przykład wykorzystania _Lomboka_:   
    
-```java
+{% highlight java %}
 import lombok.val;
 ...
     val map = new HashMap<Integer, String>();
@@ -104,4 +104,4 @@ import lombok.val;
       System.out.printf("%d: %s\n", entry.getKey(), entry.getValue());
     }
 ...    
-```   
+{% endhighlight %}  

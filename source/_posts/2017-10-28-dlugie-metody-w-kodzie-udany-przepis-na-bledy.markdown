@@ -41,13 +41,13 @@ Stawiasz breakpoint w środku długiej metody, uruchamiasz funkcję i okazuje si
 
 Jako fan czystego kodu zgadzam się ze stwierdzeniem, że komentarze nie są potrzebne w kodzie. Co więcej widziałem i rozwijałem aplikacje, gdzie komentarzy nie było. No, może z paroma wyjątkami: tam gdzie intencja autora nie była jasna pojawiało się wyjaśnienie, dlaczego coś działa w taki, a nie inny sposób. W systemach tych nikt nie pisał w komentarzach jak działa dany fragment kodu. Metody, klasy były na tyle małe, że stwierdzenie co robią było równie szybkie jak przeczytanie komentarza, który zresztą zawsze może być nieaktualny, bądź niezrozumiale napisany. Nikt w tych systemach nie używał komentarzy, a w kodzie nie było zbędnego szumu, który przeszkadzałby w czytaniu. Nigdy w tych aplikacjach nie spotkałem się z stwierdzeniem, że przydałyby się obowiązkowe komentarze. Komentarze natomiast widywałem w systemach legacy, o bardzo długich metodach. Programiści pisali je mimo że nie mieli takiego obowiązku wynikającego z przyjętych zasad. Często wyglądało to tak:
 
-```java
+{% highlight java %}
 // some comment
 …code…
 
 // some comment
 …code…
-```
+{% endhighlight %}
 
 Czytając funkcje, w której fragmenty kodu są poprzedzone komentarzem aż się prosi, żeby powydzielać mniejsze metody, których nazwa będzie mówić dokładnie to samo co komentarz. Może autorzy kodu próbowali oczyścić sumienie i myśleli, że chociaż w taki sposób ułatwią kolejnym programistom życie?
 
@@ -59,7 +59,7 @@ Problemów z długimi metodami jest oczywiście dużo więcej. Można chociażby
 
 Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za dużo? Czy 25 to maksimum? Niektórzy twierdzą, że dobra metoda powinna mieścić się w całości na ekranie. Można wtedy zadać pytanie o rozmiar czcionki i rozdzielczość. Clean code wspomina o tym, że dobra metoda powinna wykonywać tylko jedną rzecz, ale za to dobrze. Kiedy spojrzymy jednak na np. strumienie w Java 8, to dzięki podejściu deklaratywnym w kilku linijkach możemy zrobić bardzo wiele rzeczy. Dzieje się to dzięki temu, że deklarujemy, co kod ma robić, a nie w jaki sposób. Trudno sobie wyobrazić funkcje pracujące na strumieniach i robiące tylko jedną rzecz. Musiałyby składać się z 2,3 linijek. Tak duża granularność metod może również prowadzić do problemów z czytaniem kodu i wprowadza zbędną złożoność. Nie wspomnę już o wydajności. JVM zamiast wykonywać faktyczny algorytm, spędza więcej czasu na kolejnych wyołaniach. Czynniki te są oczywiście ważne i należy o nich pamiętać, jest jednak jeszcze jedna zasada określająca czy metoda wymaga rozbicia. Są to poziomy abstrakcji. Nigdy nie powinno się ich mieszać. Co to oznacza w praktyce? Spójrzmy na poniższą wymyśloną metodę. Mimo że jest ona krótka, robi zdecydowanie za dużo, mieszając przy tym poziomy abstrakcji:
 
-```java
+{% highlight java %}
 	/**
 	* Metoda pobiera itemy z bazy i wysyla je do innego systemu.
 	*/
@@ -99,13 +99,13 @@ Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za
             handle();
         }
     }
-```
+{% endhighlight %}
 
 Powyższy pseudo kod, oprócz potencjalnych problemów z _sql injection_ pokazuje pomieszanie poziomów abstrakcji. W jednej metodzie mamy zarówno logikę biznesową jak i operacje niższego poziomu (np. pobranie danych z bazy danych) oraz operacje o jeszcze niższym poziomie abstrakcji takie jak sklejanie danych wejściowych do wywołania usługi jakiegoś zewnętrznego systemu oraz obsługę błedów. Za każdym razem kiedy zmienią się wymagania biznesowe funkcja ta będzie zmieniana. Bo jak inaczej np. zmienić dane wejściowe do zewętrznego systemu w ostatnich linijkach _someBusinessLogic_?
 
 Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mgółby wyglądać tak:
 
-```java
+{% highlight java %}
     void someBusinessLogic(Input in) throws SomeException {
         List<Item> items = filterItems(getItems(in), in);
         List<ItemForSend> itemsForSend = convertToItemToSend(items);
@@ -155,7 +155,7 @@ Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i 
         AnotherSystemConnector connector = new AnotherSystemConnector();
         connector.send(input);
     }
-```
+{% endhighlight %}
 
 Walidacja i obsługa wyjatków została przeniesiona do metody nadrzędnej. Nieaktualny komentarz opisujący działanie został usunięty, zamiast tego jest krótki kod, który łatwo zrozumieć. Mówi on dokładnie co biznesowo robi metoda bez wchodzenia w szczegóły techniczne. Mamy odseparowany wysoki poziom abstrakcji, reprezentujący logikę biznesową. Połaczenie do bazy zostało wyniesione na zewnątrz metody, dzieki czemu możemy być reużywane. Jest to przy okazji optymalizacja wydajności. Każda z utworzonych metod jest krótka, łatwo ją reużyć, przetestować. Jeżeli zmienią się wymagania biznesowe możemy dopisać nową funkcję i wpiąć ją w dowolne miejsce procesu bez konieczności modyfikacji istniejących metod.
 

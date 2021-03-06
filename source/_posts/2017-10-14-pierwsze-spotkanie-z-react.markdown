@@ -60,7 +60,7 @@ dowolne elementy.
 Wadą takich natywnych komponentów jest brak elastycznego mechanizmu do definiowania widoku html dla komponentu oraz łączenia go z logiką biznesową zawartą w klasie js.
 I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym js pozwalającym definiować html komponentu bezpośrednio w js. W praktyce komponent _Hello world_ napisany w React wygląda tak:
 
-```javascript 
+{% highlight javascript %}
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -90,7 +90,7 @@ class App extends Component {
     );
   }
 }
-```
+{% endhighlight %}
 
 Komponent React to zwykła klasa dziedzicząca po Reactowym _Component_. W metodzie _render_ zwracamy kod html zapisany za pomocą JSX. Jak widać zawiera on odwołania
 do zmiennych js, może również posiadać osadzony dowolny kod js. Należy jednak pamiętać, że nie jest to zwykły html i nie wszystko, co jest prawidłowym html, będzie poprawnym
