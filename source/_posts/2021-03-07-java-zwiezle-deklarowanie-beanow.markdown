@@ -119,7 +119,7 @@ public class BeanRegistrationContextInitializer implements
 }
 {% endhighlight %}
 
-Rejestracja beanów sprowadza się do wywołania metody registerBean. Spring nie musi już skanować pakietów w poszukiwaniu adnotacji, przekazujemy mu jawnie jakie komponenty ma utworzyć. 
+Jak widać rejestracja beanów sprowadza się do wywołania metody registerBean. Spring nie musi już skanować pakietów w poszukiwaniu adnotacji, przekazujemy mu jawnie jakie komponenty ma utworzyć. 
 Pozwoli to również zmniejszyć czas uruchamiania aplikacji. Na koniec pozostaje jeszcze kwestia, dlaczego w powyższym kodzie pojawiły się metody overrideBean oraz register? 
 Ułatwią one nam życie, w momencie kiedy tworzymy produkt dla kilku różnych klientów i pracujemy na jednym branchu. W taki przypadku kiedy dla jakiegoś klienta (nazwijmy go roboczo X) 
 pojawia się konieczność wprowadzenia customizacji możemy stworzyć dodatkowy initializer:
