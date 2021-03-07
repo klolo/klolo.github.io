@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: java | Łódzki programista]]></title>
+  <link href="http://klolo.github.io/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://klolo.github.io/"/>
+  <updated>2021-03-07T21:35:42+01:00</updated>
+  <id>http://klolo.github.io/</id>
+  <author>
+    <name><![CDATA[Kamil Lolo]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[W oczekiwaniu na Java 10]]></title>
+    <link href="http://klolo.github.io/blog/2017/12/17/w-oczekiwaniu-na-jave-10/"/>
+    <updated>2017-12-17T13:39:22+01:00</updated>
+    <id>http://klolo.github.io/blog/2017/12/17/w-oczekiwaniu-na-jave-10</id>
+    <content type="html"><![CDATA[<p>We wrześniu mieliśmy premierę Javy 9 oraz zapowiedź zmiany cyklu wydawniczego tego języka. Teraz nowe wersje będą pojawiać się co pół roku. W marcu oraz we wrześniu.
+Zmianie ulegnie również wersjonowanie kolejnych wydań. Na stronie Oracle kolejne wydania Javy mają oznaczenie <em>rok.miesiąc</em>. Tak więc za kilka miesięcy
+zamiast Javy 10 zobaczymy Javę 18.3. Zastanawialiście się już jakie nowości mogą trafić do tej wersji Javy?</p>
+
+<!--more-->
+
+
+<h2>Zmiany w 18.3</h2>
+
+<p>Java 18.3 zaoferuje nam oprócz bug fixów, zaledwie 12 większych nowości. W porównaniu z Java 9, gdzie lista nowości obejmowała prawie 100 pozycji, nie jest to aż tak
+rewolucyjne wydanie. W końcu przy półrocznym cyklu wydawniczym nie ma sensu oczekiwać zbyt wielu nowinek w języku.
+W tych zapowiedzianych przez <a href="http://openjdk.java.net/projects/jdk/10/">OpenJDK</a> nowościach (OpenJDK jest wzorcową dla Oracle implementacją jvm) tylko jedna, moim zdaniem, będzie
+miała znaczący wpływ na to, jak programujemy. Ale o tym za chwilę, najpierw zobaczmy, czym są pozostałe zapowiedziane zmiany:</p>
+
+<ul>
+<li>Przez lata kod źródłowy jdk podzielony był na kilka repozytoriów. Dla Javy 9 było ich aż 9, teraz planowane jest umieszczenie wszystkiego w jednym miejscu.</li>
+<li>Zmiany w G1 wprowadzające wielowątkowe odśmiecanie oraz modularność kodu GC.</li>
+<li>Rozbudowa mechanizmu współdzielenia metadanych pomiędzy różnymi procesami Javy. Polega on na tym, że podczas ładowania klasy, jvm najpierw sprawdza czy
+metadane klas znajdują się w cache, a dopiero później próbuje je wczytać. Feature ten pojawił się również w jdk-8u40 jako eksperymentalny. Można go uruchomić za pomocą
+flagi <code>-XX:+UseAppCDS</code>. Jak podano na stronie OpenJDK mechanizm pozwoli przyspieszyć start aplikacji o 20-30% oraz zmniejszyć zużycie pamięci o kilka procent.</li>
+<li>Optymalizacja zarządzania wątkami przez jvm.</li>
+<li>Usunięcie narzędzia <em>javah</em> służącego do generowania nagłówków i kodu metod natywnych w C. Od jdk 1.8 zajmuje się tym kompilator javy, stąd też dodatkowe
+narzędzie nie jest już potrzebne.</li>
+<li>Obsługa nieulotnej pamięci RAM: <a href="http://searchstorage.techtarget.com/definition/NVDIMM-Non-Volatile-Dual-In-line-Memory-Module">NV-DIMM</a>.
+Oferuje ona wolniejszy dostęp dla danych stosu niż <em>DRAM</em>, ale za to korzystając z niej możemy szybszą pamięć zostawić ważniejszym procesom.
+Jako parametr jvma będzie można podać w jakiej pamięci ma być alokowany stos.</li>
+<li>W jdk 9 pojawił się eksperymentalny feature - kompilacja <em>ahead of time</em>. Dzięki skompilowaniu kodu Javy bezpośrednio do kodu natywnego na danej platformie,
+podczas runtime nie ma potrzeby spowalniać aplikacji kompilacją JIT, która uruchamiana jest dopiero po wykonaniu dużej liczby wywołań danego fragmentu kodu
+(tzw. rozgrzanie javy) i nie daje gwarancji, że cały byte code zostanie skompilowany do C. Kompilacja AOT możliwa jest za pomocą polecenia <em>jaotc</em> i wykorzystuje kompilator
+o nazwie <em>Graal</em>. Został on napisany w Javie i w jdk 18.3 będzie można go wykorzystać nie tylko do AOT, ale również do JIT. Oczywiście są to mechanizmy, których
+nie powinniśmy dodawać jeszcze do naszych projektów, z powodu bardzo wczesnego etapu prac nad nimi.</li>
+</ul>
+
+
+<h2>Wisienka na torcie</h2>
+
+<p>Java jako język statycznie typowany zawsze wymagała podawania jakiego typu będzie zmienna. Dodatkowo często zdarza się, że informacja o
+typie znajduje się również w nazwie zmiennej. Jest to niedogodność względem języków dynamicznie typowanych takich jak np. javascript, gdzie zmienne deklaruje
+się bez podania typów. Piszemy <em>var</em> i na poziomie runtime określany jest typ danych, jakie są przechowywane w zmiennej. Pisząc w javie wiele osób narzeka na boilerplate
+jaki powstaje w tym języku. Przykładowa bardziej zaawansowana deklaracja mapy w Javie 1.6 wygląda tak:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span>
+                            <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;();</span></code></pre></div></p>
+
+<p>Wychodzi nam porządny jamnik. Java 1.7 upraszcza ten zapis wprowadzając operator <em>diamond</em>, dzięki któremu typ generyka zostaje określony
+na podstawie deklaracji zmiennej:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();</span></code></pre></div></p>
+
+<p>Już jest lepiej. Ale co w przypadku kiedy chcę wyjąć z mapy jakiś element i przypisać do zmiennej? Znów trzeba podać typ elementu. I dostaję coś takiego:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div></p>
+
+<p>Nie mamy możliwości skrócenia takiego zapisu. Z drugiej strony, typ zmiennej mógłby być z powodzeniem określony na podstawie typu zmiennej <em>dataMap</em>.
+Twórcy javy chcą ułatwić nam życie i dodać do języka możliwość określania typu zmiennej lokalnej na podstawie tego, co do niej przypisujemy. Planowane jest wykorzystanie
+w tym celu słówka kluczowego <em>var</em>. Zamiast podawać typ zmiennej, który kompilator sam za nas określi, będzie można napisać:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">var</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div></p>
+
+<p>Taka instrukcja wygląda dużo prościej niż ta z generykiem. Jednak podejrzewam, że może prowadzić do sytuacji kiedy trzeba będzie się chwilę zastanowić jakiego typu
+obiekt mamy w zmiennej. Oczywiście będą też przypadki, w których kompilator nie domyśli się za nas jakiego typu ma być ta zmienna. Przykładowo próbując przypisać
+lambdę reprezentującą <em>Runnable</em> dostaniemy błąd:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">var</span> <span class="n">runable</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{};</span> <span class="c1">// error: cannot infer type for local variable</span></code></pre></div></p>
+
+<p>Deklaracje zmiennych lokalnych, gdzie moglibyśmy uprościć zapis korzystając z <em>var</em> to według twórców Javy ponad 90% kodu. Co ciekawe, jako alternatywę dla <em>var</em>
+podano możliwość rozbudowy wyrażenia diament, tak żeby można było wykorzystać go z lewej strony operatora przypisania. I dawałoby to taki zapis:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div></p>
+
+<h2>Po co czekać skoro jest Lombok</h2>
+
+<p>Rozwiązanie pozwalające pomijać podawanie typów podczas deklaracji zmiennych oferuje obecnie biblioteka <em>Lombok</em>. Oferuje ona dwa typy:</p>
+
+<ul>
+<li><em>val</em> - zmienna final, której typ określany jest podczas kompilacji. Obecnie w wersji stabilnej biblioteki (od 0.10).</li>
+<li><em>var</em> - zmienna mutowalna,  której typ określany jest podczas kompilacji. Obecnie jeszcze jako eksperymentalny feature. Jeżeli <em>var</em> wejdzie
+do języka w ramach <em>JEP 286</em> to <em>Lombok</em> z pewnością usunie ją. Dostępna od wersji 1.16.12.</li>
+</ul>
+
+
+<p>Jeżeli chodzi o mutowalności <em>var</em> w javie 18.3 - architekci nadal dyskutują. Oczekując na kolejny release javy możemy ściągnąć <em>Lomboka</em>
+i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego podejścia, kiedy już wejdzie oficjalnie do języka. Na koniec przykład wykorzystania <em>Lomboka</em>:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">lombok.val</span><span class="o">;</span>
+<span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
+    <span class="n">val</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">zero</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">five</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">for</span> <span class="o">(</span><span class="n">val</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;%d: %s\n&quot;</span><span class="o">,</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+<span class="o">}</span>
+<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">hellip</span><span class="o">;</span>  <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span></code></pre></div></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Długie metody w kodzie – udany przepis na błędy]]></title>
+    <link href="http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy/"/>
+    <updated>2017-10-28T20:25:09+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy</id>
+    <content type="html"><![CDATA[<p>Każdy programista, i to bardzo wcześnie, dowiaduje się, że metody powinny być krótkie. Jednak czytając kody systemów z jakimi pracujemy, znajdujemy często metody ciągnące się przez setki, a nawet tysiące linii. Skąd w takim razie pochodzi taki paskudny kod, skoro teoretycznie wszyscy wiedzą, że długie metody są złe? A może jednak, przez zwykłe lenistwo, nie zastanawiamy się nad tym czy pisana metoda powinna zostać zrefaktorowana? A może nie wiemy jaka długość jest dopuszczalna i kiedy metodę należy rozbić na mniejsze?</p>
+
+<!--more-->
+
+
+<h2>Największe grzechy długich metod</h2>
+
+<p>Zanim zastanowimy się jaką długość mają dobre metody, omówmy najważniejsze problemy jakie wynikają z przerośniętych funkcji:</p>
+
+<h3>Są trudne do czytania</h3>
+
+<p>Długie metody mają często bardzo wiele poziomów wcięć, przez co łatwo się zgubić i zastanawiać czy <em>if</em>, kilkanaście linijek wcześniej został już domknięty. Do tego dochodzi masa przeróżnych zmiennych deklarowanych gdzie popadnie. Czytając taki kod należy skakać po metodzie niczym kangur, sprawdzając jaka wartość jest przypisana do zmiennej i czy przypadkiem nie jest to parametr wejściowy.</p>
+
+<h3>Trudne do zapamiętania</h3>
+
+<p>W przypadku przerośniętej metody po dokładnym przeanalizowaniu kodu możemy mieć tylko ogólny pogląd tego czego można się po niej spodziewać. Z pewnością nie będziemy pamiętać każdego detalu logiki, jaka się tam znajduje. Może to potem skutkować pojawieniem się błędu w jakimś przypadku, którego nie przetestowaliśmy.</p>
+
+<h3>Trudne do testowania</h3>
+
+<p>Wielki kawał kodu wymaga często długiego <em>mockowania</em> oraz bardzo trudno stwierdzić bez zaglądania w raport pokrycia czy napisany test obejmuje każdy <em>case</em>. Dodatkowo duża liczba parametrów wejściowych jakie należy spreparować w teście może zniechęcić do pisania jakiegokolwiek testu.</p>
+
+<h3>Sprzyjają duplikacji kodu</h3>
+
+<p>Z podowu dużej ilości zmiennych czy parametrów, ze źle napisanych metod trudniej jest wydzielać mniejsze metody. W tym przypadku kusi możliwość pójścia na łatwiznę i skopiowania istniejącej logiki. Łatwo też nie zauważyć, że jakaś logika już jest dostępna w kodzie, ponieważ zaszyła się głęboko w jakiejś funkcji.</p>
+
+<h3>Wiele powodów do zmiany</h3>
+
+<p>Długie metody nigdy nie robią tylko jednej rzeczy. Robią bardzo dużo, przez co nie da się wręcz uniknąć złamania reguły <em>open/close</em>. Reguła ta mówi o tym, że dobrze zaimplementowana jednostka kodu jest zamknięta na modyfikację, ale jednocześnie otwarta na rozszerzanie. Oznacza to tyle, że w celu dodania nowej funkcjonalności nie modyfikujemy istniejącej funkcji, lecz piszemy nową, która wywoła tą starą i dodatkowo wykona nową logikę. Natomiast w przypadku klas powinniśmy skorzystać z polimorfizmu w celu rozbudowy aplikacji o nową funkcjonalność. W długiej metodzie zawsze będzie istnieć wiele powodów do zmiany zawartości i bardzo trudno będzie nie zmodyfikować jej wnętrza. Metody takie są często gorącym miejscem aplikacji. Co kilka tygodni, miesięcy ktoś coś tam zmienia. Jeżeli taki kod nie ma testów jednostkowych, to aż sami się prosimy o błędy.</p>
+
+<h3>Trudność debugowania</h3>
+
+<p>Stawiasz breakpoint w środku długiej metody, uruchamiasz funkcję i okazuje się, że debugger nie zatrzymał się tam gdzie chciałeś. Zaczynasz więc wczytywać się w kod i analizować, bądź przechodzisz na debuggerze linijka po linijce. Znajome? Debugując metodę mającą 100+ linii można się czuć jak ofiara i zadawać sobie pytania: Dlaczego ja!? Czasami nawet okazuje się, że taka metoda jest zbyt wielka, a żeby ją zrozumieć trzeba prześledzić jej działanie na debuggerze.</p>
+
+<h3>Zbyt dużo oczywistych komentarzy</h3>
+
+<p>Jako fan czystego kodu zgadzam się ze stwierdzeniem, że komentarze nie są potrzebne w kodzie. Co więcej widziałem i rozwijałem aplikacje, gdzie komentarzy nie było. No, może z paroma wyjątkami: tam gdzie intencja autora nie była jasna pojawiało się wyjaśnienie, dlaczego coś działa w taki, a nie inny sposób. W systemach tych nikt nie pisał w komentarzach jak działa dany fragment kodu. Metody, klasy były na tyle małe, że stwierdzenie co robią było równie szybkie jak przeczytanie komentarza, który zresztą zawsze może być nieaktualny, bądź niezrozumiale napisany. Nikt w tych systemach nie używał komentarzy, a w kodzie nie było zbędnego szumu, który przeszkadzałby w czytaniu. Nigdy w tych aplikacjach nie spotkałem się z stwierdzeniem, że przydałyby się obowiązkowe komentarze. Komentarze natomiast widywałem w systemach legacy, o bardzo długich metodach. Programiści pisali je mimo że nie mieli takiego obowiązku wynikającego z przyjętych zasad. Często wyglądało to tak:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// some comment</span>
+<span class="err">…</span><span class="n">code</span><span class="err">…</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">// some comment</span>
+<span class="err">…</span><span class="n">code</span><span class="err">…</span></code></pre></div></p>
+
+<p>Czytając funkcje, w której fragmenty kodu są poprzedzone komentarzem aż się prosi, żeby powydzielać mniejsze metody, których nazwa będzie mówić dokładnie to samo co komentarz. Może autorzy kodu próbowali oczyścić sumienie i myśleli, że chociaż w taki sposób ułatwią kolejnym programistom życie?</p>
+
+<h2>Inne problemy</h2>
+
+<p>Problemów z długimi metodami jest oczywiście dużo więcej. Można chociażby jeszcze wspomnieć o dużej liczbie zależności, ścisłym powiązaniach w kodzie (<em>coupling</em>), trudności z optymalizacją. Myślę jednak, że wymienione wyżej problemy są argumentem za tym, że metody powinny być krótkie.</p>
+
+<h2>Jak długa powinna być metoda?</h2>
+
+<p>Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za dużo? Czy 25 to maksimum? Niektórzy twierdzą, że dobra metoda powinna mieścić się w całości na ekranie. Można wtedy zadać pytanie o rozmiar czcionki i rozdzielczość. Clean code wspomina o tym, że dobra metoda powinna wykonywać tylko jedną rzecz, ale za to dobrze. Kiedy spojrzymy jednak na np. strumienie w Java 8, to dzięki podejściu deklaratywnym w kilku linijkach możemy zrobić bardzo wiele rzeczy. Dzieje się to dzięki temu, że deklarujemy, co kod ma robić, a nie w jaki sposób. Trudno sobie wyobrazić funkcje pracujące na strumieniach i robiące tylko jedną rzecz. Musiałyby składać się z 2,3 linijek. Tak duża granularność metod może również prowadzić do problemów z czytaniem kodu i wprowadza zbędną złożoność. Nie wspomnę już o wydajności. JVM zamiast wykonywać faktyczny algorytm, spędza więcej czasu na kolejnych wyołaniach. Czynniki te są oczywiście ważne i należy o nich pamiętać, jest jednak jeszcze jedna zasada określająca czy metoda wymaga rozbicia. Są to poziomy abstrakcji. Nigdy nie powinno się ich mieszać. Co to oznacza w praktyce? Spójrzmy na poniższą wymyśloną metodę. Mimo że jest ona krótka, robi zdecydowanie za dużo, mieszając przy tym poziomy abstrakcji:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;*</span>
+    <span class="o">*</span> <span class="n">Metoda</span> <span class="n">pobiera</span> <span class="n">itemy</span> <span class="n">z</span> <span class="n">bazy</span> <span class="n">i</span> <span class="n">wysyla</span> <span class="n">je</span> <span class="k">do</span> <span class="n">innego</span> <span class="n">systemu</span><span class="o">.</span>
+    <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+    <span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">();</span>
+        <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="k">try</span> <span class="o">{</span>
+        <span class="c1">// pobranie danych z bazy</span>
+        <span class="n">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Connection</span><span class="o">(</span><span class="s">&quot;127.0.0.1:1521&quot;</span><span class="o">);</span>
+        <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">items</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
+
+        <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">ItemForSend</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&amp;</span><span class="n">gt</span><span class="o">;();</span>
+
+        <span class="c1">// pobranie szczegółów dla każdego elementu</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c1">// przefiltrowanie danych, uzupelnienie o szczegóły</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+                <span class="n">itemsForSend</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// wysłanie daych do innego systemu</span>
+        <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
+        <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
+        <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="n">SomeException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">handle</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span></code></pre></div></p>
+
+<p>Powyższy pseudo kod, oprócz potencjalnych problemów z <em>sql injection</em> pokazuje pomieszanie poziomów abstrakcji. W jednej metodzie mamy zarówno logikę biznesową jak i operacje niższego poziomu (np. pobranie danych z bazy danych) oraz operacje o jeszcze niższym poziomie abstrakcji takie jak sklejanie danych wejściowych do wywołania usługi jakiegoś zewnętrznego systemu oraz obsługę błedów. Za każdym razem kiedy zmienią się wymagania biznesowe funkcja ta będzie zmieniana. Bo jak inaczej np. zmienić dane wejściowe do zewętrznego systemu w ostatnich linijkach <em>someBusinessLogic</em>?</p>
+
+<p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mgółby wyglądać tak:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">filterItems</span><span class="o">(</span><span class="n">getItems</span><span class="o">(</span><span class="n">in</span><span class="o">),</span> <span class="n">in</span><span class="o">);</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="n">convertToItemToSend</span><span class="o">(</span><span class="n">items</span><span class="o">);&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">getConnectorInput</span><span class="o">(</span><span class="n">itemsForSend</span><span class="o">,</span> <span class="n">in</span><span class="o">);</span>
+    <span class="n">sendToAnotherSystem</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">filterItems</span><span class="o">(</span><span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">items</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&amp;</span><span class="n">gt</span><span class="o">;();</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">getItems</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
+<span class="o">}</span>
+
+<span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">ItemForSend</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">convertToItemToSend</span><span class="o">(</span><span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Item</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">ItemForSend</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&amp;</span><span class="n">gt</span><span class="o">;();</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="n">getItemDetails</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="n">ItemDetails</span> <span class="nf">getItemDetails</span><span class="o">(</span><span class="n">Item</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="n">String</span> <span class="nf">getConnectorInput</span><span class="o">(</span><span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">ItemForSend</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">itemsForSend</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">sendToAnotherSystem</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
+    <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span></code></pre></div></p>
+
+<p>Walidacja i obsługa wyjatków została przeniesiona do metody nadrzędnej. Nieaktualny komentarz opisujący działanie został usunięty, zamiast tego jest krótki kod, który łatwo zrozumieć. Mówi on dokładnie co biznesowo robi metoda bez wchodzenia w szczegóły techniczne. Mamy odseparowany wysoki poziom abstrakcji, reprezentujący logikę biznesową. Połaczenie do bazy zostało wyniesione na zewnątrz metody, dzieki czemu możemy być reużywane. Jest to przy okazji optymalizacja wydajności. Każda z utworzonych metod jest krótka, łatwo ją reużyć, przetestować. Jeżeli zmienią się wymagania biznesowe możemy dopisać nową funkcję i wpiąć ją w dowolne miejsce procesu bez konieczności modyfikacji istniejących metod.</p>
+
+<p>Na pierwszy rzut oka widać, że kod znacznie sie wydłużył. Mimo to łatwo zrozumieć co robi, a jeżeli skorzystamy z strumieni Javy 8 i wykonany refactoring, skrócimy go znacznie.</p>
+
+<h2>Podsumowanie</h2>
+
+<p>Wiemy już dlaczego długie metody są złe oraz jak powinno się je dzielić. Nie pozostaje teraz nic innego jak pisać kod, który będzie można łatwiej zrozumieć, utrzymywać, a w dodatku nie bedzie powodem do wstydu.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów]]></title>
+    <link href="http://klolo.github.io/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/"/>
+    <updated>2017-10-17T20:31:09+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow</id>
+    <content type="html"><![CDATA[<p>Dostałem ostatnio drobną poprawkę do wykonania w kodzie. Zwykły null pointer spowodowany tym, że na bazie nie ma części danych. Nie ma, bo nie ma,
+nie są obligatoryjne. Na backend leci więc podstępny null, pojawia się w polu, gdzie powinna być data. Ten null, w funkcji, która ma posortować
+listę obiektów po dacie, powoduje exception, krwisto czerwony niczym stek. Sprawa prosta, piszę test jednostkowy, żeby zreplikować problem, robię prosty null save,
+buduję projekt, przechodzę code review, push na serwer i zapominam o całej sprawie. Nic z tych rzeczy. Poprawka powróciła do mnie niczym owczarek szkocki w jednym
+z familijnych filmów i srogo się zemściła. Zanim jednak opowiem, jako przestroga, o tym na jaką pułapkę natrafiłem wyjaśnijmy czym jest <em>immutability</em> i
+niezmienne obiekty</p>
+
+<!--more-->
+
+
+<h2>Niezmienne parametry</h2>
+
+<p>Do tej pory miałem (nie)przyjemność analizować problemy produkcyjne spowodowane tym, że ktoś w długiej metodzie podmieniał parametr wejściowy, a ktoś
+inny oczekiwał, że parametr wejściowy się nie zmieni. Wyglądało to mniej więcej tak:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">makeFoo</span><span class="o">(</span><span class="n">Input</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="nl">Input:</span> <span class="o">{}&amp;</span><span class="n">rdquo</span><span class="o">;,</span> <span class="n">input</span><span class="o">);&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// ...jakis kod ~100 lini...</span>
+<span class="n">input</span> <span class="o">=</span> <span class="n">makeBoo</span><span class="o">();</span>
+
+<span class="c1">// ... jakis kod ~100 lini...</span>
+<span class="n">input</span><span class="o">.</span><span class="na">performSomeOperation</span><span class="o">();</span> <span class="c1">// exeption</span>
+<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span></code></pre></div></p>
+
+<p>W obiekcie input dostaje komplet danych potrzebnych do wykonania <em>performSomeOperation</em>, jednak w połowie funkcji <em>makeFoo</em> ktoś podmienia parametr wejściowy na jakiś inny, nie mający już kompletu danych. W rezultacie dostaje gdzieś dalej w kodzie wyjątek. Analiza loggera na początku metody <em>makeFoo</em> wskazuje, że na wejściu był komplet danych. Szukam zatem w <em>performSomeOperation</em> oraz w dalszych metodach. Czas mija, produkcja stoi, telefon dzwoni, stres maksymalny. Sytuacji, o dziwo, wcale nie ułatwia fakt, że jest to system legacy bez testów jednostkowych, metoda <em>makeFoo</em> ciągnie się jak jamnik na sterydach i wygląda na stęsknioną ostrego refactoringu. Mijały godziny zanim zauważyłem w czym jest błąd. Problem z oczami wykluczam, bo nie analizowałem kodu sam. Identyczną sytuację miałem od tamtego czasu jeszcze jakieś 3 razy. Po tych przykrych doświadczenia pokochałem słowo <em>final</em>. Dzięki niemu nie można podmienić parametru wejściowego do metody. Jest to już jakieś zabezpieczenie. Niektórzy powiedzą, że jest to więcej pisania, za dużo roboty. Jeżeli napisanie kilka razy dziennie słowa <em>final</em> w kodzie jest zbyt ciężką pracą - można i tak&hellip; Można też stwierdzić, że to jest szum w kodzie, zbędna informacja, że przy prawidłowo napisanych metodach mieszczących się na ekranie bez przewijania, jest to zbędne. Niekoniecznie. Zamiast czytać całą metodę w celu ustalenia czy podmieniamy ten parametr czy nie, wystarczy zerknąć na listę parametrów i mieć tę informację od razu. Jakież to szczęście, że w moim obecnym projekcie mamy konwencję, która wymusza na nas używanie final w parametrach.</p>
+
+<h2>Niezmienne zmienne lokalne</h2>
+
+<p>Po dłuższym zastanowieniu da się odkryć, że <em>final</em> w parametrach to czasami za mało. Zamiast podmiany parametru można w końcu podmienić zmienną deklarowaną na początku funkcji
+i oczekiwać pierwotnej wartości gdzieś dalej w kodzie. Po co kusić los? Uważam, że zmienne deklarowane w metodach również powinny być <em>final</em>, dzięki czemu kod staje się bardziej przewidywalny, jest mniej zmiany stanów, łatwiej go analizować i testować. Początkowo mogą pojawić się zarzuty - że blokujemy możliwość przypisania czegoś do zmiennej, że nie da się tak programować. Ano da się. Kiedy przyjrzałem się klasom w różnych systemach, które rozwijam ze zdziwieniem stwierdziłem, że jakieś 90% zmiennych po zadeklarowaniu nie ulega zmianie, 5% można tak napisać, żeby się nie zmieniały, a tylko kilka procent kodu faktycznie wymaga zmiennej z różnymi
+stanami, bo tak jest dużo prościej. Dla mnie sprawa z deklarowaniem zmiennych jako <em>final</em> jest prosta. Sprawia to, że tworzony kod jest mnniej <em>bugogenny</em>.
+Przy takim podejściu łatwiej również przestawić się na programowanie funkcyjne, gdzie czyste funkcje nie modyfikują stanu zmiennych.</p>
+
+<h2>Niezmienne obiekty</h2>
+
+<p>Idąc krok dalej, zacząłem się zastanawiać czy nie warto używać final do pól w klasie. Wszystkich pól. I myślę, że to także jest dobry pomysł, funkcjonujący pod nazwą <em>immutable objects</em>. Obiekt po utworzeniu nie może zmienić swojego stanu. Przykładami takich obiektów jest np. <em>String</em>, <em>BigDecimal</em>. Pojawia się pytanie - jak ustawiać pola w takich obiektach? Jeżeli jest dużo parametrów - będzie potrzebny wielki konstruktor, jeżeli część danych nie jest wymagana - mogą powstawać konstruktory teleskopowe. A co w przypadku, kiedy część danych nie jest dostępna od razu, ale trzeba je pobrać z innego miejsca systemu? Rozwiązaniem problemu jest wzorzec builder. Implementowanie tego wzorca dla każdego nowego obiektu DTO możemy być uciążliwe, dlatego warto skorzystać z automatycznego generowania buildera przez IDE. Jednak tutaj przy zmianie DTO, należy go ręcznie edytować lub jeszcze raz wygenerować. Alternatywą jest biblioteka <em>Lombok</em>, która w momencie kompilacji kodu na podstawie annotacji w kodzie generuje dodatkowy kod,
+taki jak np. gettery, settery, toString czy też kod buildera. Korzystanie z <em>Lombok</em> sprawia, że w kodzie nie mamy zbędnego <em>boilerplate</em> tylko faktyczną logikę biznesową. Oto prosty przykład połączenia <em>Lombok</em> i niemutowalnego obiektu:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Builder</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Account</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">AccountType</span> <span class="n">type</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">number</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Currency</span> <span class="n">currency</span><span class="o">;</span>
+<span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Account</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">number</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="mi">865423</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;)</span>
+        <span class="o">.</span><span class="na">type</span><span class="o">(</span><span class="n">AccountType</span><span class="o">.</span><span class="na">RO2</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">amount</span><span class="o">(</span><span class="k">new</span> <span class="nf">BigDecimal</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;))</span>
+        <span class="o">.</span><span class="na">currency</span><span class="o">(</span><span class="n">Currency</span><span class="o">.</span><span class="na">CHF</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span></code></pre></div></p>
+
+<p>Bez pisania kodu buildera możemy stopniowo wypełniać danymi obiekty, które później nie zmienią swojego stanu i będą bardziej przewidywalne. Dodatkowo takie obiekty ułatwią
+programowanie wielowątkowe. Warto wspomnieć o tym, że korzystając z <em>Lombok</em> można korzystać z <a href="https://projectlombok.org/features/val">val</a>.
+Czy nie zaczyna to jednak za bardzo przypominać innego języka jvm-a&hellip;?</p>
+
+<h2>O tym, jak nie pisać testów jednostkowych</h2>
+
+<p>Na koniec chciałbym opowiedzieć o tym jak zemścił się na mnie brak niemutowalnych obiektów. Napisałem test jednostkowy do null pointera, o którym wspomniałem na początku.
+Test wyglądał mniej więcej tak:</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">shouldNotFailedWhenDateIsNull</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// given</span>
+    <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">FluentIterable</span>
+                                    <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">Mock</span><span class="o">.</span><span class="na">items</span><span class="o">)</span>
+                                    <span class="o">.</span><span class="na">transform</span><span class="o">(</span> <span class="n">item</span> <span class="o">=&gt;</span> <span class="o">{</span>
+                                        <span class="n">item</span><span class="o">.</span><span class="na">setDate</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+                                        <span class="k">return</span> <span class="n">item</span><span class="o">;</span>
+                                    <span class="o">})</span>
+                                    <span class="o">.</span><span class="na">toList</span><span class="o">();</span>
+    <span class="c1">//when</span>
+    <span class="n">someService</span><span class="o">.</span><span class="na">sortByDate</span><span class="o">(</span><span class="n">items</span><span class="o">);&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">//then</span>
+<span class="n">Assert</span><span class="o">.....</span>
+<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span></code></pre></div></p>
+
+<p>Bardzo prosty test, w którym pobieram listę jakiś obiektów z mocka, ustawiam datę jako null, wywołuję metodę, gdzie był błąd <em>NullPointerException</em>
+i robię kilka dodatkowych asercji. Test po uruchomieniu przechodzi, projekt się buduje, osoba robiąca code review nie zgłosiła uwag. Problem pojawił się jednak kolejnego
+dnia, kiedy okazało się, że środowisko testowe nie działa, ponieważ CI nie może zbudować projektu. Dziwna sprawa, inne testy jednostkowe przestały działać.
+Pomyślałem najpierw, że to pewnie przez jakieś inne zmiany w kodzie. W końcu osób commitujących do projektu jest kilka. Jeden z developerów usiadł i zaczął analizować problem.
+No i się zaczęło. Szok i niedowierzanie. Identyczny kod jak na środowisku developerskim, a nie buduje się na Jenkins. Po całym dniu analizy okazało się, że to przez
+wspomniany test jednostkowy. Modyfikuje on dane mockowe, które są wykorzystywane w innych testach. Po ustawieniu null na obiekcie inne testy nie mają prawa działać.
+Dlaczego jednak ten problem nie występuje na środowisku developerskim? Przypadek :) JUnit nie gwarantuje kolejności wykonywania testów. Oczywiście jeżeli w kodzie obiekty
+byłyby niemutowalne, to test musiałbym zaimplementować inaczej i nie byłoby problemu. Czego się nauczyłem? Że niemutowalność jest bardzo dobrą praktyką i pozwala
+uniknąć wielu podstępnych błędów. Na koniec jeszcze <a href="https://github.com/junit-team/junit4/wiki/Test-execution-order">kilka słów</a> o kolejności wykonywania testów w JUnit:</p>
+
+<blockquote><p>By design, JUnit does not specify the execution order of test method invocations. Until now, the methods were simply invoked in the order returned by the reflection API.
+However, using the JVM order is unwise since the Java platform does not specify any particular order, and in fact JDK 7 returns a more or less random order.
+Of course, well-written test code would not assume any order, but some do, and a predictable failure is better than a random failure on certain platforms. From version 4.11,
+JUnit will by default use a deterministic, but not predictable, order (MethodSorters.DEFAULT). To change the test execution order simply annotate your test class
+using @FixMethodOrder and specify one of the available MethodSorters.</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Java stream API - darmowy kurs]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/28/java-stream-api-darmowy-kurs/"/>
+    <updated>2017-08-28T22:52:50+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/08/28/java-stream-api-darmowy-kurs</id>
+    <content type="html"><![CDATA[<p>Jesteś programistą Javy i nie miałeś jeszcze okazji zapoznać się z nowościami Javy 8? Nie umiesz używać <em>stream api</em>? Mam dla Ciebie darmowe
+materiały, dzięki którym możesz poznać nowości w języku oraz nauczyć się biegle używać strumieni.</p>
+
+<!--more-->
+
+
+<h2>Prezentacja</h2>
+
+<p>Prezentacje znajdziesz <a href="https://slides.com/kamillolo/java-7-8-9">tutaj</a>. Oprócz wprowadzenia w najważniejsze nowości Javy 8 zawiera ona również omówienie kilku ciekawych
+mechanizmów Javy 7, o których często się zapomina lub są mniej znane. Dodatkowo, prezentacja zawiera również informację o tym, czego można się spodziewać w nadchodzącej Javie 9.
+Materiały te zostały wykorzystane podczas całodniowego szkolenia, doczytanie o wszystkich poruszanych tematach może zająć równie dużo czasu.</p>
+
+<h2>Ćwiczenia</h2>
+
+<p>Po zapoznaniu się z prezentacją możesz <a href="https://github.com/klolo/java8-stream-free-exercises">sklonować</a> projekt z ćwiczeniami. Ćwiczenia polegają na implementacji metod w klasie WorkShop
+zgodnie z komentarzami, tak żeby testy w klasie testowej WorkShopTest wykonywały się prawidłowo. Wszystkie informacje znajdziesz w pliku README.md w projekcie.</p>
+
+<h2>Podsumowanie</h2>
+
+<p>Prawdziwa siła Javy 8 tkwi nie w wyrażeniach lambda, ale w strumieniach, które potrafią bardzo zmniejszyć ilość kodu jaki musi zostać napisany w celu
+zaimplementowania jakiejś nowej funkcjonalności. Możemy uniknąć pisania kodu <em>boilerplate</em> i skupić się na tym, co ma robić kod, a nie w jaki sposób.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Intellij live templates - szybsze programowanie]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/15/intellij-live-templates-szybsze-programowanie/"/>
+    <updated>2017-08-15T17:01:03+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/08/15/intellij-live-templates-szybsze-programowanie</id>
+    <content type="html"><![CDATA[<p>Niezależnie od tego czy programujesz metodą Copiego i Pejsty, czy też wstukujesz kod niczym sekretarka pisząca notatkę ze spotkania szefa, czasem możesz odnieść wrażenie,
+że zaczynasz od identycznego fragmentu kodu. Ile razu w życiu na początku było <code>System.out.println</code> lub <code>public static void main(final String[] args)</code>? O ile nie jesteś programistą
+utrzymującym przy życiu produkcyjnego dinozaura, to pewnie zdarzyło Ci się kilka razy. Intellij może ułatwić Twoje życie.</p>
+
+<!--more-->
+
+
+<p>Pisząc kod zgodnie z regułami TDD, zaczynamy każdą implementację od napisania testu. Po otwarciu klasy z testami tworzymy zatem pusty test jednostkowy, który za chwilę zapełni się kodem.
+Pusty test jednostkowy zazwyczaj wygląda podobnie jak setki innych w projekcie - u góry adnotacje &ldquo;test&rdquo;, jakaś metoda <code>public void</code> z odpowiednią nazwą, w środku metody podział
+na sekcje give/when/then (o ile oczywiście taką mamy konwencję), no i jakaś assercja.</p>
+
+<p><div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">shouldDoSomething</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// given&lt;/p&gt;</span>
+
+<span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// when</span>
+
+<span class="c1">// then</span>
+<span class="n">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+<span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span></code></pre></div></p>
+
+<p>Za każdym razem wpisuję taką funkcję ręcznie. Czy to naprawdę konieczne? Czy trzeba kopiować istniejący test i dopiero czyścić go z tego, czego nie potrzebuje? Otóż nie!
+Intellij oferuje bardzo wygodne narzędzie o nazwie &ldquo;Live template&rdquo;, dzięki któremu można tworzyć szablony kodu, które będą dostępne po wpisaniu odpowiedniego aliasu.</p>
+
+<h2>Wbudowane szablony</h2>
+
+<p>Jakie wbudowane szablony są do dyspozycji oraz jak z nich korzystać? Każdy szablon ma swój alias, po wpisaniu którego
+w menu automatycznego wypełniania pojawia się szablon o podanej nazwie. Po wybraniu szablonu, w miejscu, w którym znajduje się kursor pojawi się wybrany szablon. Jednym z wbudowanych szablonów
+jest <em>sout</em>, który wstawia instrukcję wypisania na konsoli: <em>System.out.println</em>.</p>
+
+<p><img src="/images/sout.png" alt="GitHub Logo" /></p>
+
+<p>Innymi dostępnymi domyślnie szablonami dla Javy są:</p>
+
+<ul>
+<li><code>psvm</code> - wstawia pustą metodę main.</li>
+<li><code>geti</code>- tworzy metodę do pobierania instancji singletona getInstance</li>
+<li><code>ifn</code> - warunek sprawdzający czy zmienna nie nullem, przeciwieństwo <code>inn</code></li>
+<li><code>inst</code> - warunek sprawdzający czy zmienna jest instancją klasy za pomocą instanceof</li>
+<li><code>lazy</code> - sprawdza czy zmienna jest nullem i jeżeli jest to tworzy jej instancję.</li>
+<li><code>lst</code> - wyciąga ostatni element tablicy</li>
+<li><code>mn</code> - wywołuję funkcję <em>Math.min</em>, przeciwieństwo <code>mx</code></li>
+<li><code>toar</code> - zamienia kolekcję na tablicę</li>
+<li><code>prsf</code> - <em>private static final</em></li>
+<li><code>psf</code> - <em>public static final</em></li>
+<li><code>psfi</code> - <em>public static final int</em></li>
+<li><code>psfs</code> - <em>public static final String</em></li>
+<li><code>St</code> - <em>String</em></li>
+<li><code>thr</code> - <em>throw new</em></li>
+</ul>
+
+
+<p>Oczywiście każdy szablon związany jest również z miejscem, w którym może występować. Przykładowo dla Javy do wyboru możliwe jest kilka zakresów:</p>
+
+<ul>
+<li>Statement</li>
+<li>Expression</li>
+<li>Declaration</li>
+<li>Comment</li>
+<li>String</li>
+<li>Smart type completion</li>
+<li>Other</li>
+</ul>
+
+
+<p>  Intellij na podstawie fragmentu kodu, w którym aktualnie znajduje się kursom określi z jakiego zakresu zaproponować szablony. Zakresy różnią się w zależności
+  od języka oraz od frameworka, w którym chcemy wykorzystać szablon.</p>
+
+<h2>Surround templates</h2>
+
+<p>Oprócz szablonów wstawianych w danym miejscu kodu, mamy do dyspozycji szablony otaczające kod. Szablony takie działają na zasadzie otaczania zaznaczonego kodu jakimś predefiniowanym szablonem, przykładowo
+blokiem synchronized. Z takiego szablonu można skorzystać po zaznaczeniu fragmentu kodu i wybraniu skrótu klawiszowego
+<em>Ctrl-Alt-J</em> oraz <em>Ctrl-Alt-T</em>, który wyświetli również kilka przydatnych szablonów wbudowanych w IDE, takie jak np. otoczenie kodu w blok try-catch.</p>
+
+<p><img src="/images/templatesMenu.png" alt="GitHub Logo" /></p>
+
+<h2>Tworzenie własnych szablonów</h2>
+
+<p>Szablon można utworzyć wchodząc w ustawieniach IDE w zakładkę Live templates i wybierając przycisk plusika z prawej strony. Jest tam również opcja dodania grupy szablonów, w przypadku kiedy chcemy
+je w jakiś logiczny sposób zgrupować. Podczas tworzenia szablonu należy podać jego alias, poprzez który będziemy się do niego odwoływać, opis, kod szablonu oraz kontekst, w którym ma być dostępny. Proste, prawda?
+Nie do końca jeżeli spojrzy się na przykłady wbudowanych w Intellij szablonów. Występują tam różnego rodzaju zmienne, dzięki którym kod nie jest tylko wpisanym na sztywno tekstem, ale faktycznie
+szablonem na podstawie, którego utworzy się fragment przydatnego kodu. Oprócz zmiennych, mamy nawet dostęp do kilku predefiniowanych funkcji, które można wywoływać w szablonie. Lista zmiennych i metod
+dostępnych w Live templates różni się w zależności od zainstalowanych pluginów. Te najbardziej podstawowe to:</p>
+
+<ul>
+<li>$END$ - określa miejsce, w którym ma znaleźć się kursor po wstawieniu szablonu</li>
+<li>$SELECTION$ - w przypadku szablonu otaczającego kodu zmienna zawiera zaznaczony przez użytkownika tekst.</li>
+</ul>
+
+
+<p>Mamy również do dyspozycji funkcje, które pozwolą jeszcze bardziej rozbudować szablon. Kilka, według mnie, najbardziej przydatnych:</p>
+
+<ul>
+<li><code>camelCase(String)</code> - zwraca podany tekst jako camel case.</li>
+<li><code>methodName()</code> - nazwa metody, w której się znajdujemy</li>
+<li><code>date(sDate)</code> - zwraca datę w podanym formacie</li>
+<li><code>currentPackage()</code> - aktualny pakiet</li>
+</ul>
+
+
+<p>Funkcji nie możemy jednak wywoływać bezpośrednio w szablonie. W szablonie odwołujemy się do zmiennych, które przechowują wartość wywołań funkcji. Zmienne mogą mieć dowolną nazwę, jednak trzeba im
+później przypisać wywołanie funkcji w okienku dostępnym po wybraniu <em>Edit variables</em>. Przykład szablonu tworzącego zmienną przechowującą nazwę funkcji oraz logującego jakiś komunikat do logów. Komunikat
+ten można podać po wstawieniu loggera, z powodu zmiennej <em>$END$</em>.</p>
+
+<p><img src="/images/newLiveTemplate.png" alt="GitHub Logo" /></p>
+
+<h2>Podsumowanie</h2>
+
+<p>Kod można pisać w bardzo szybki sposób, nie korzystając przy tym z kopiowania i wklejania. Myślę, że jest to podejście, które sprawi, że kod będzie miał mniej błędów. Ile razy zdarzyło Ci
+się przenieść jakiś fragment kodu z innego miejsca systemu i naciąć się na to, że nie działa? A wystarczyłoby napisać go ręcznie i wyłapać błędy. Dbajmy o to, aby nasza praca była wydajniejsza
+i lepsza. Tak na marginesie, Eclipse również udostępnia podobną opcję, nazywa się to Templates, jednak nie potrafię określić na ile różni się to z Live Templates dostępnymi w Intellij. Oprócz Live templates Intellij posiada również
+mechanizm szablonów kodu, który w menu znajdziecie jako File and code templates. Szablony te są dostępne w menu pojawiającym się po wciśnięciu alt+insert. Jest tam nawet pusty szablon metody testowej JUnit ;)</p>
+
+<p>Wszystkie informacje na temat Live templates znajdziecie <a href="https://www.jetbrains.com/help/idea/live-templates.html">tutaj</a></p>
+]]></content>
+  </entry>
+  
+</feed>

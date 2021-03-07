@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Długie metody w kodzie – udany przepis na błędy - Łódzki programista</title>
+  <meta name="author" content="Kamil Lolo">
+
+  
+  <meta name="description" content="Każdy programista, i to bardzo wcześnie, dowiaduje się, że metody powinny być krótkie. Jednak czytając kody systemów z jakimi pracujemy, znajdujemy &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="Łódzki programista" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+  
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-104079933-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header style="text-align: center" role="banner"><img src="/images/logo.png" />
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script>
+  <script type='text/javascript'>kofiwidget2.init('Buy me a coffee', '#25baf1', 'A187461B');kofiwidget2.draw();</script>
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Programowanie</a></li>
+  <li><a href="/lodz">Łódź</a></li>
+  <li><a href="/blog/archives">Archiwum</a></li>
+  <li><a href="/about">O mnie</a></li>
+</ul>
+</nav>
+  <div id="main">
+    <div id="content">
+      <progress value="0" id="progressBar">
+  <div class="progress-container">
+    <span class="progress-bar"></span>
+  </div>
+</progress>
+
+<div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Długie metody w kodzie – udany przepis na błędy</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-10-28T20:25:09+02:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>8:25 pm</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Każdy programista, i to bardzo wcześnie, dowiaduje się, że metody powinny być krótkie. Jednak czytając kody systemów z jakimi pracujemy, znajdujemy często metody ciągnące się przez setki, a nawet tysiące linii. Skąd w takim razie pochodzi taki paskudny kod, skoro teoretycznie wszyscy wiedzą, że długie metody są złe? A może jednak, przez zwykłe lenistwo, nie zastanawiamy się nad tym czy pisana metoda powinna zostać zrefaktorowana? A może nie wiemy jaka długość jest dopuszczalna i kiedy metodę należy rozbić na mniejsze?</p>
+
+<!--more-->
+
+
+<h2>Największe grzechy długich metod</h2>
+
+<p>Zanim zastanowimy się jaką długość mają dobre metody, omówmy najważniejsze problemy jakie wynikają z przerośniętych funkcji:</p>
+
+<h3>Są trudne do czytania</h3>
+
+<p>Długie metody mają często bardzo wiele poziomów wcięć, przez co łatwo się zgubić i zastanawiać czy <em>if</em>, kilkanaście linijek wcześniej został już domknięty. Do tego dochodzi masa przeróżnych zmiennych deklarowanych gdzie popadnie. Czytając taki kod należy skakać po metodzie niczym kangur, sprawdzając jaka wartość jest przypisana do zmiennej i czy przypadkiem nie jest to parametr wejściowy.</p>
+
+<h3>Trudne do zapamiętania</h3>
+
+<p>W przypadku przerośniętej metody po dokładnym przeanalizowaniu kodu możemy mieć tylko ogólny pogląd tego czego można się po niej spodziewać. Z pewnością nie będziemy pamiętać każdego detalu logiki, jaka się tam znajduje. Może to potem skutkować pojawieniem się błędu w jakimś przypadku, którego nie przetestowaliśmy.</p>
+
+<h3>Trudne do testowania</h3>
+
+<p>Wielki kawał kodu wymaga często długiego <em>mockowania</em> oraz bardzo trudno stwierdzić bez zaglądania w raport pokrycia czy napisany test obejmuje każdy <em>case</em>. Dodatkowo duża liczba parametrów wejściowych jakie należy spreparować w teście może zniechęcić do pisania jakiegokolwiek testu.</p>
+
+<h3>Sprzyjają duplikacji kodu</h3>
+
+<p>Z podowu dużej ilości zmiennych czy parametrów, ze źle napisanych metod trudniej jest wydzielać mniejsze metody. W tym przypadku kusi możliwość pójścia na łatwiznę i skopiowania istniejącej logiki. Łatwo też nie zauważyć, że jakaś logika już jest dostępna w kodzie, ponieważ zaszyła się głęboko w jakiejś funkcji.</p>
+
+<h3>Wiele powodów do zmiany</h3>
+
+<p>Długie metody nigdy nie robią tylko jednej rzeczy. Robią bardzo dużo, przez co nie da się wręcz uniknąć złamania reguły <em>open/close</em>. Reguła ta mówi o tym, że dobrze zaimplementowana jednostka kodu jest zamknięta na modyfikację, ale jednocześnie otwarta na rozszerzanie. Oznacza to tyle, że w celu dodania nowej funkcjonalności nie modyfikujemy istniejącej funkcji, lecz piszemy nową, która wywoła tą starą i dodatkowo wykona nową logikę. Natomiast w przypadku klas powinniśmy skorzystać z polimorfizmu w celu rozbudowy aplikacji o nową funkcjonalność. W długiej metodzie zawsze będzie istnieć wiele powodów do zmiany zawartości i bardzo trudno będzie nie zmodyfikować jej wnętrza. Metody takie są często gorącym miejscem aplikacji. Co kilka tygodni, miesięcy ktoś coś tam zmienia. Jeżeli taki kod nie ma testów jednostkowych, to aż sami się prosimy o błędy.</p>
+
+<h3>Trudność debugowania</h3>
+
+<p>Stawiasz breakpoint w środku długiej metody, uruchamiasz funkcję i okazuje się, że debugger nie zatrzymał się tam gdzie chciałeś. Zaczynasz więc wczytywać się w kod i analizować, bądź przechodzisz na debuggerze linijka po linijce. Znajome? Debugując metodę mającą 100+ linii można się czuć jak ofiara i zadawać sobie pytania: Dlaczego ja!? Czasami nawet okazuje się, że taka metoda jest zbyt wielka, a żeby ją zrozumieć trzeba prześledzić jej działanie na debuggerze.</p>
+
+<h3>Zbyt dużo oczywistych komentarzy</h3>
+
+<p>Jako fan czystego kodu zgadzam się ze stwierdzeniem, że komentarze nie są potrzebne w kodzie. Co więcej widziałem i rozwijałem aplikacje, gdzie komentarzy nie było. No, może z paroma wyjątkami: tam gdzie intencja autora nie była jasna pojawiało się wyjaśnienie, dlaczego coś działa w taki, a nie inny sposób. W systemach tych nikt nie pisał w komentarzach jak działa dany fragment kodu. Metody, klasy były na tyle małe, że stwierdzenie co robią było równie szybkie jak przeczytanie komentarza, który zresztą zawsze może być nieaktualny, bądź niezrozumiale napisany. Nikt w tych systemach nie używał komentarzy, a w kodzie nie było zbędnego szumu, który przeszkadzałby w czytaniu. Nigdy w tych aplikacjach nie spotkałem się z stwierdzeniem, że przydałyby się obowiązkowe komentarze. Komentarze natomiast widywałem w systemach legacy, o bardzo długich metodach. Programiści pisali je mimo że nie mieli takiego obowiązku wynikającego z przyjętych zasad. Często wyglądało to tak:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// some comment</span>
+<span class="err">…</span><span class="n">code</span><span class="err">…</span>
+
+<span class="c1">// some comment</span>
+<span class="err">…</span><span class="n">code</span><span class="err">…</span></code></pre></div>
+
+
+<p>Czytając funkcje, w której fragmenty kodu są poprzedzone komentarzem aż się prosi, żeby powydzielać mniejsze metody, których nazwa będzie mówić dokładnie to samo co komentarz. Może autorzy kodu próbowali oczyścić sumienie i myśleli, że chociaż w taki sposób ułatwią kolejnym programistom życie?</p>
+
+<h2>Inne problemy</h2>
+
+<p>Problemów z długimi metodami jest oczywiście dużo więcej. Można chociażby jeszcze wspomnieć o dużej liczbie zależności, ścisłym powiązaniach w kodzie (<em>coupling</em>), trudności z optymalizacją. Myślę jednak, że wymienione wyżej problemy są argumentem za tym, że metody powinny być krótkie.</p>
+
+<h2>Jak długa powinna być metoda?</h2>
+
+<p>Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za dużo? Czy 25 to maksimum? Niektórzy twierdzą, że dobra metoda powinna mieścić się w całości na ekranie. Można wtedy zadać pytanie o rozmiar czcionki i rozdzielczość. Clean code wspomina o tym, że dobra metoda powinna wykonywać tylko jedną rzecz, ale za to dobrze. Kiedy spojrzymy jednak na np. strumienie w Java 8, to dzięki podejściu deklaratywnym w kilku linijkach możemy zrobić bardzo wiele rzeczy. Dzieje się to dzięki temu, że deklarujemy, co kod ma robić, a nie w jaki sposób. Trudno sobie wyobrazić funkcje pracujące na strumieniach i robiące tylko jedną rzecz. Musiałyby składać się z 2,3 linijek. Tak duża granularność metod może również prowadzić do problemów z czytaniem kodu i wprowadza zbędną złożoność. Nie wspomnę już o wydajności. JVM zamiast wykonywać faktyczny algorytm, spędza więcej czasu na kolejnych wyołaniach. Czynniki te są oczywiście ważne i należy o nich pamiętać, jest jednak jeszcze jedna zasada określająca czy metoda wymaga rozbicia. Są to poziomy abstrakcji. Nigdy nie powinno się ich mieszać. Co to oznacza w praktyce? Spójrzmy na poniższą wymyśloną metodę. Mimo że jest ona krótka, robi zdecydowanie za dużo, mieszając przy tym poziomy abstrakcji:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**</span>
+<span class="cm">   * Metoda pobiera itemy z bazy i wysyla je do innego systemu.</span>
+<span class="cm">   */</span>
+    <span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// pobranie danych z bazy</span>
+            <span class="n">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Connection</span><span class="o">(</span><span class="s">&quot;127.0.0.1:1521&quot;</span><span class="o">);</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
+            
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+
+            <span class="c1">// pobranie szczegółów dla każdego elementu</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="c1">// przefiltrowanie danych, uzupelnienie o szczegóły</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+                    <span class="n">itemsForSend</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="c1">// wysłanie daych do innego systemu</span>
+            <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
+            <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
+            <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">catch</span> <span class="o">(</span><span class="n">SomeException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">handle</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></div>
+
+
+<p>Powyższy pseudo kod, oprócz potencjalnych problemów z <em>sql injection</em> pokazuje pomieszanie poziomów abstrakcji. W jednej metodzie mamy zarówno logikę biznesową jak i operacje niższego poziomu (np. pobranie danych z bazy danych) oraz operacje o jeszcze niższym poziomie abstrakcji takie jak sklejanie danych wejściowych do wywołania usługi jakiegoś zewnętrznego systemu oraz obsługę błedów. Za każdym razem kiedy zmienią się wymagania biznesowe funkcja ta będzie zmieniana. Bo jak inaczej np. zmienić dane wejściowe do zewętrznego systemu w ostatnich linijkach <em>someBusinessLogic</em>?</p>
+
+<p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mgółby wyglądać tak:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">filterItems</span><span class="o">(</span><span class="n">getItems</span><span class="o">(</span><span class="n">in</span><span class="o">),</span> <span class="n">in</span><span class="o">);</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="n">convertToItemToSend</span><span class="o">(</span><span class="n">items</span><span class="o">);</span>
+
+        <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">getConnectorInput</span><span class="o">(</span><span class="n">itemsForSend</span><span class="o">,</span> <span class="n">in</span><span class="o">);</span>
+        <span class="n">sendToAnotherSystem</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">filterItems</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">getItems</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="nf">convertToItemToSend</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="n">getItemDetails</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">ItemDetails</span> <span class="nf">getItemDetails</span><span class="o">(</span><span class="n">Item</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">String</span> <span class="nf">getConnectorInput</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">sendToAnotherSystem</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
+        <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></div>
+
+
+<p>Walidacja i obsługa wyjatków została przeniesiona do metody nadrzędnej. Nieaktualny komentarz opisujący działanie został usunięty, zamiast tego jest krótki kod, który łatwo zrozumieć. Mówi on dokładnie co biznesowo robi metoda bez wchodzenia w szczegóły techniczne. Mamy odseparowany wysoki poziom abstrakcji, reprezentujący logikę biznesową. Połaczenie do bazy zostało wyniesione na zewnątrz metody, dzieki czemu możemy być reużywane. Jest to przy okazji optymalizacja wydajności. Każda z utworzonych metod jest krótka, łatwo ją reużyć, przetestować. Jeżeli zmienią się wymagania biznesowe możemy dopisać nową funkcję i wpiąć ją w dowolne miejsce procesu bez konieczności modyfikacji istniejących metod.</p>
+
+<p>Na pierwszy rzut oka widać, że kod znacznie sie wydłużył. Mimo to łatwo zrozumieć co robi, a jeżeli skorzystamy z strumieni Javy 8 i wykonany refactoring, skrócimy go znacznie.</p>
+
+<h2>Podsumowanie</h2>
+
+<p>Wiemy już dlaczego długie metody są złe oraz jak powinno się je dzielić. Nie pozostaje teraz nic innego jak pisać kod, który będzie można łatwiej zrozumieć, utrzymywać, a w dodatku nie bedzie powodem do wstydu.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Kamil Lolo</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-10-28T20:25:09+02:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>8:25 pm</span></time>
+    </p>
+    <p class="meta">
+      Kategoria: 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy/" data-via="" data-counturl="http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/" title="Previous Post: Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów">&laquo; Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2017/12/17/w-oczekiwaniu-na-jave-10/" title="Next Post: W oczekiwaniu na Java 10">W oczekiwaniu na Java 10 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/">[spring boot] Wystawianie endpointów na wielu portach</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/">Java: zwięzłe deklarowanie beanów</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/18/dependency-injection-w-js/">Dependency injection w js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/17/w-oczekiwaniu-na-jave-10/">W oczekiwaniu na Java 10</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy/">Długie metody w kodzie – udany przepis na błędy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/10/17/dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/">Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/10/14/pierwsze-spotkanie-z-react/">Pierwsze spotkanie z React</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/17/typescript-wprowadzenie-czesc-2/">Typescript wprowadzenie - część 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/03/zaimplementuj-dependency-injection-w-typescript/">Zaimplementuj dependency injection w Typescript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/28/java-stream-api-darmowy-kurs/">Java stream API - darmowy kurs</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>  
+    <a href="https://github.com/klolo">@klolo</a> on GitHub
+    
+  </h2>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'klolo',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+<!-- Pasek postepu podczas czytania -->
+<script>
+    $(document).ready(function(){
+        var getMax = function(){
+            return $(document).height() - $(window).height();
+        }
+
+        var getValue = function(){
+            return $(window).scrollTop();
+        }
+
+        if('max' in document.createElement('progress')){
+            // Browser supports progress element
+            var progressBar = $('progress');
+
+            // Set the Max attr for the first time
+            progressBar.attr({ max: getMax() });
+
+            $(document).on('scroll', function(){
+                // On scroll only Value attr needs to be calculated
+                progressBar.attr({ value: getValue() });
+            });
+
+            $(window).resize(function(){
+                // On resize, both Max/Value attr needs to be calculated
+                progressBar.attr({ max: getMax(), value: getValue() });
+            });
+        }
+        else {
+            var progressBar = $('.progress-bar'),
+                max = getMax(),
+                value, width;
+
+            var getWidth = function(){
+                // Calculate width in percentage
+                value = getValue();
+                width = (value/max) * 100;
+                width = width + '%';
+                return width;
+            }
+
+            var setWidth = function(){
+                progressBar.css({ width: getWidth() });
+            }
+
+            $(document).on('scroll', setWidth);
+            $(window).on('resize', function(){
+                // Need to reset the Max attr
+                max = getMax();
+                setWidth();
+            });
+        }
+    });
+
+
+    $(document).ready(function(){
+        $('#flat').addClass("active");
+        $('#progressBar').addClass('flat');
+
+        $('#flat').on('click', function(){
+            $('#progressBar').removeClass().addClass('flat');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+        });
+
+        $('#single').on('click', function(){
+            $('#progressBar').removeClass().addClass('single');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+        });
+
+        $('#multiple').on('click', function(){
+            $('#progressBar').removeClass().addClass('multiple');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+        });
+
+        $('#semantic').on('click', function(){
+            $('#progressBar').removeClass().addClass('semantic');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+            alert('hello');
+        });
+    });
+</script>
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Kamil Lolo <br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>, customized with <a href="https://github.com/mjhea0/whiterspace">whiterspace</a>.</span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'klolo-github-io';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy/';
+        var disqus_url = 'http://klolo.github.io/blog/2017/10/28/dlugie-metody-w-kodzie-udany-przepis-na-bledy/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

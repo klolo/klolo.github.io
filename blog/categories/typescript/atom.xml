@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: typescript | Łódzki programista]]></title>
+  <link href="http://klolo.github.io/blog/categories/typescript/atom.xml" rel="self"/>
+  <link href="http://klolo.github.io/"/>
+  <updated>2021-03-07T21:35:42+01:00</updated>
+  <id>http://klolo.github.io/</id>
+  <author>
+    <name><![CDATA[Kamil Lolo]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pierwsze spotkanie z React]]></title>
+    <link href="http://klolo.github.io/blog/2017/10/14/pierwsze-spotkanie-z-react/"/>
+    <updated>2017-10-14T18:58:19+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/10/14/pierwsze-spotkanie-z-react</id>
+    <content type="html"><![CDATA[<p>Jako programista full stack używający na froncie Angularjs i poznający dobrodziejstwa Angular 4, byłem przekonany o wyższości tych frameworków nad innymi. Nie byłem w stanie przyjąć do wiadomości,
+że na froncie w dzisiejszych czasach można użyć czegoś innego niż Angulara, aby stworzyć nowoczesną
+aplikację SPA. Dziś jednak ten pogląd runął i moim oczom ukazał się stwór o nazwie React.</p>
+
+<!--more-->
+
+
+<p>Zanim jednak zagłębię się w szczegóły Reacta, pokazując jego prostotę, chcę wspomnieć o moim pierwszym spotkaniu z Reactem. Uczestniczyłem w warsztatach zorganizowanych
+przez Łódzki <a href="https://nodeschool.io/lodz/">NodeSchool</a>. Spędziłem pół dnia z osobami, które doskonale znają tę technologię, poznając idee towarzyszącą React, sposób jego
+działania oraz pułapki, na jakie można wpaść przy pisaniu w React. Wszystkim mogę zdecydowanie polecić spotkania w tym pozytywnym gronie. Jest to jedna z lepszych okazji,
+żeby w darmowy sposób rozwinąć swoją wiedzę.</p>
+
+<h2>Czym jest React?</h2>
+
+<p>Jest to biblioteka do budowania interfejsów użytkownika. Nie jest to framework, czyli magiczna machina, która sprawia że
+aplikacja działa, wywołując czasami kawałek napisanego kodu. Jest to biblioteka, której używamy żeby z małych kawałków, jakimi są komponenty<br/>
+zbudować kompletny system w możliwie najprostszy sposób. Podejście komponentowe do budowania aplikacji staje się obecnie standardem. Tak naprawdę zawsze było: nawet
+w takich technologiach jak jsp dało się tworzyć reużywalne tagi, z których potem można było skleić całą stronę. To, co z tego wychodziło w praktyce, to już inna rzecz ;)
+We współczesnych rozwiązaniach opartych o komponenty używałem do tej pory głównie Angular &frac14;, jednak ten okazuje się być gigantyczną machiną dodającą bardzo dużą
+warstwę abstrakcji do wszystkiego, co dzieje się w przeglądarce. Oczywiście ma to swoje plusy, takie jak np. zarządzanie zależnościami. Czasami jednak jest to mechanizm tak trudny do zrozumienia,
+że nie obejdzie się bez wczytania w dokumentację bądź ogromne ilości kodu. Sam fakt, że Angular 4 ma swój kompilator, który może działać
+jako JIT oraz AOT (ahead of time - kompilacja komponentów jeszcze przed wysyłaniem do przeglądarki) podkreśla złożoność Angulara. Kilkakrotnie spotkałem się z opinią, że
+Angular to overengineering i powoli zaczynam zgadzać się z tym stwierdzeniem. React przy Angularze sprawia wrażenie wyjątkowo nieskomplikowanego. Trochę czystego js, idea Web components
+i małe API pozwalają szybko zbudować aplikację.</p>
+
+<h2>Web components</h2>
+
+<p>Idea stojąca za React to komponenty, zbliżone do Web components. Mechanizm dostępny natywnie w HTML od wersji 5. Tak, natywnie. Co oznacza również, że można tworzyć
+aplikację zbudowaną z komponentów bez użycia jakiegokolwiek dodatkowego frameworku, biblioteki. Oto przykład takiego natywnego komponentu:</p>
+
+<p>```html
+<html>
+<head></p>
+
+<script>
+class MyNativeComponent extends HTMLElement {
+    constructor() {
+        super();
+        var shadow = this.attachShadow({mode: 'open'});
+        var p = document.createElement('p');
+        p.innerText = 'Hello World from component';
+        shadow.appendChild(p);
+    }
+}
+window.customElements.define('my-native', MyNativeComponent);
+</script>
+
+
+<p></head>
+<body>
+    <my-native name="Anita"></my-native>
+</body>
+</html>
+```</p>
+
+<p>Wszystko co trzeba zrobić żeby klasa ES6 stała się komponentem, to odziedziczenie po klasie HTMLElement, a następnie korzystając z shadow DOM można renderować dynamicznie
+dowolne elementy.</p>
+
+<h2>Komponenty React</h2>
+
+<p>Wadą takich natywnych komponentów jest brak elastycznego mechanizmu do definiowania widoku html dla komponentu oraz łączenia go z logiką biznesową zawartą w klasie js.
+I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym js pozwalającym definiować html komponentu bezpośrednio w js. W praktyce komponent <em>Hello world</em> napisany w React wygląda tak:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">react</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+<span class="kr">import</span> <span class="nx">logo</span> <span class="nx">from</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="o">/</span><span class="nx">logo</span><span class="p">.</span><span class="nx">svg</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+<span class="kr">import</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="o">/</span><span class="nx">App</span><span class="p">.</span><span class="nx">css</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kr">class</span> <span class="nx">App</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">username</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span> <span class="p">};</span>
+  <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="c1">// uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze</span>
+  <span class="nx">handleChange</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">username</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">});</span>
+  <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;center-align&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">header</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">logo</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;App-logo&quot;</span> <span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
+        <span class="o">&lt;</span><span class="err">/header&gt;</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;row&quot;</span> <span class="nx">style</span><span class="o">=&gt;</span>
+          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="err">/div&gt;</span>
+      <span class="o">&lt;</span><span class="err">/div&gt;</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div></p>
+
+<p>Komponent React to zwykła klasa dziedzicząca po Reactowym <em>Component</em>. W metodzie <em>render</em> zwracamy kod html zapisany za pomocą JSX. Jak widać zawiera on odwołania
+do zmiennych js, może również posiadać osadzony dowolny kod js. Należy jednak pamiętać, że nie jest to zwykły html i nie wszystko, co jest prawidłowym html, będzie poprawnym
+JSX. Przykładowo: nie możemy używać słowa <em>class</em> do dołączania styli ponieważ jest to słowo kluczowe zarezerwowane przez js. Zamiast tego należy dołączać style poprzez
+<em>className</em>. Również sposób używania stylów inline różni się od tego znanego z html, ponieważ do atrybutu style należy przekazać kod js zwracający obiekt definiujący styl.
+Kod js w JSX załącza się w znaczniku <em>{}</em>, natomiast druga para klamer w przykładzie pochodzi od obiektu js. Tak zapisany kod JSX zostanie przetranspilowany do wywołań
+funkcji Reacta tworzących wynikowy kod html.</p>
+
+<p>W powyższym przykładzie pojawił się jeszcze jeden element wymagający wyjaśnienia. Jest to <em>state</em>. Obiekt <em>state</em> odpowiada za przekazywanie danych do Reacta, na podstawie
+których będzie renderowany widok. React nie śledzi jednak zmian w obiekcie <em>state</em>, w przeciwieństwie do Angular, który tworzy watchersy do obiektów w scope.
+React dowie się, że coś w obiekcie <em>state</em> uległo zmianie, dopiero kiedy zostanie wywołana asynchroniczna funkcja <em>setState</em>, która spowoduje wywołanie funkcji <em>render</em> i w rezultacie
+ponowne narysowanie komponentu wraz ze zaktualizowanymi danymi.</p>
+
+<h2>Jak zacząć przygodę z React?</h2>
+
+<p>Żeby stworzyć pierwszą aplikację wystarczy kilka prostych kroków:</p>
+
+<ul>
+<li>Zainstalować node i npm</li>
+<li>Zainstalować generator pustego projektu: <em>npm install -g create-react-app</em></li>
+<li>Utworzyć pusty projekt: <em>create-react-app jakas-dowolna-nazwa</em></li>
+<li>W katalogu projektu uruchomić aplikację: <em>npm start</em></li>
+</ul>
+
+
+<p>Tak stworzony projekt ma minimum konfiguracji, automatycznie wczytuje zmiany w kodzie do przeglądarki i składa się tylko w kilku plików. Wszystkie dalsze informacje
+potrzebne do nauki, znajdują się <a href="https://reactjs.org/docs/installation.html">na oficjalnej stronie</a></p>
+
+<h2>Podsumowanie</h2>
+
+<p>Kod z poprzedniego przykładu wyświetli taki prosty komponent składający się z pola tekstowego oraz etykiety, która się będzie zmianiać wraz z wpisywaniem tekstu:</p>
+
+<p><img src="/images/react.png" alt="GitHub Logo" /></p>
+
+<p>Podczas wpisywania tekstu w polu tekstowym do metody zostanie wysłany event html-a onChange, który ustawi nową wartość w state. Mechanizm bardzo prosty, nie ma tutaj
+dodatkowych watchy, który śledzą zmiany i automatycznie odświeżają widok. Do dyspozycji mamy również mechanizm przekazywania danych między komponentami.
+Do tego właśnie służy parametr konstruktora <em>props</em>. Może on zawierać dane z nadrzędnego komponentu. Oczywiście w nietrywialnych aplikacjach nie zawsze dane są przekazywane
+bezpośrednio od rodzica do dziecka, stąd też w aplikacjach korzystających z React korzysta się często z Redux. Jest to kontener przechowujący dane aplikacji, które łatwo
+można przekazywać do dowolnego miejsca aplikacji. React można również połączyć z Typescript, dzięki czemu do dyspozycji mamy typowanie, interfejsy, dekoratory i wiele innych
+przydatnych rzeczy. Wszystko w React jest bardzo proste, a zarazem wystarczające, żeby budować duże systemy. Mimo że na co dzień używam Angular co zapewne nieszybko się
+zmieni, z pewnością jednak moje pierwsze spotkanie z React nie będzie ostatnim.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Typescript wprowadzenie - część 2]]></title>
+    <link href="http://klolo.github.io/blog/2017/09/17/typescript-wprowadzenie-czesc-2/"/>
+    <updated>2017-09-17T16:40:02+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/09/17/typescript-wprowadzenie-czesc-2</id>
+    <content type="html"><![CDATA[<p>Jeżeli szukasz informacji na temat Typescript to <a href="http://slides.com/kamillolo/deck-3#/">tutaj</a> moją prezentacją
+wprowadzającą do tego języka. W prezentacji znajduje się rozwinięcie tematów poruszonych przeze mnie w 1 części wprowadzenia.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Zaimplementuj dependency injection w Typescript]]></title>
+    <link href="http://klolo.github.io/blog/2017/09/03/zaimplementuj-dependency-injection-w-typescript/"/>
+    <updated>2017-09-03T15:39:30+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/09/03/zaimplementuj-dependency-injection-w-typescript</id>
+    <content type="html"><![CDATA[<p>Typescript jest nadzbiorem javascriptu oferującym statyczne typowanie oraz możliwość programowania obiektowego w dużo bardziej wygodnej formie niż prototypy
+dostępne w ES5. Dzięki wykorzystaniu dekoratorów język ten miejscami przypomina bardzo Javę, w której możemy używać adnotacji. Patrząc jednak na wygenerowany
+przez kompilator kod, podobieństwa do Javy już nie znajdziemy. Znajdziemy za to zwykły Javascript wykorzystujący prototypy. Pokażę dziś jak zaimplementować mechanizm,
+który będzie pozwalał na wstrzykiwanie zależności w podobny do Springa sposób. Będzie to znakomita okazja, żeby poznać praktyczne zastosowanie dekoratorów Typescriptu.</p>
+
+<!--more-->
+
+
+<h2>Czym są dekoratory?</h2>
+
+<p>Zacznijmy od wyjaśnienia, czym tak w ogóle w Ts jest dekorator. Jest to mechanizm bardzo podobny do wzorca &ldquo;Dekorator&rdquo; znanego z programowania obiektowego. Dekorator jest funkcją, która na wejściu dostaje
+inną funkcję/właściwość i dekoruje ją dodatkową logiką. Jak to wygląda w praktyce? Zobaczmy to na przykładzie dekoratora o nazwie Deprecated, którego zadaniem będzie wypisywanie
+na ekranie informacji o tym, że wywołano właśnie przestarzałą metodę. Stwórzmy klasę, w której znajdzie się taki dekorator:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">User</span> <span class="p">{</span>
+    <span class="kr">public</span> <span class="nx">userName</span><span class="o">:</span> <span class="nx">string</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">constructor</span><span class="p">(</span><span class="nx">userName</span><span class="o">?:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">userName</span> <span class="o">=</span> <span class="nx">userName</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="err">@</span><span class="nx">Deprecated</span>
+<span class="nx">setUserName</span><span class="p">(</span><span class="nx">userName</span><span class="o">:</span> <span class="nx">string</span><span class="p">)</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">userName</span> <span class="o">=</span> <span class="nx">userName</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span></code></pre></div></p>
+
+<p>Klasa bardzo prosta. Zawiera konstruktor i setter. Z jakiś powodów setter został oznaczony dekoratorem Deprecated. Użycie dekoratora przypomina tutaj do złudzenia użycie adnotacji
+w Java, mimo że mechanizm bardzo się od niej różni. Adnotacje w Javie służą do oznaczania pól czy metod, nie modyfikują jednak działania tych elementów, są tylko informacją
+dla logiki umieszczonej w innym miejscu o tym, że należy wykonać jakąś dodatkową operację na adnotowanym polu/metodzie. W Ts dekoratory bezpośrednio modyfikują elementy klasy, nad którymi zostały
+umieszczone. Dekoratorów użytych do oznaczenia metody w klasie może byc więcej. Nie musimy ograniczać się nawet do samych metod, możemy oznaczać w ten sposób również pola, parametry metod, a nawet całe klasy.
+W końcu klasa w wygenerowanym przez kompilator Ts kodzie to również funkcja. Dla klasy <em>User</em> wygenerowany kod będzie miał taką postać:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">User</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">User</span><span class="p">(</span><span class="nx">userName</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">userName</span> <span class="o">=</span> <span class="nx">userName</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setUserName</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">userName</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">userName</span> <span class="o">=</span> <span class="nx">userName</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="o">&lt;</span><span class="nx">strong</span><span class="o">&gt;</span><span class="nx">decorate</span><span class="p">([</span>
+        <span class="nx">Deprecated</span><span class="p">,</span>
+        <span class="o">&lt;</span><span class="err">/strong&gt;metadata(&amp;ldquo;design:type&amp;rdquo;, Function),</span>
+        <span class="o">&lt;</span><span class="nx">strong</span><span class="o">&gt;</span><span class="nx">metadata</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">design</span><span class="o">:</span><span class="nx">paramtypes</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="p">[</span><span class="nb">String</span><span class="p">]),</span>
+        <span class="o">&lt;</span><span class="err">/strong&gt;metadata(&amp;ldquo;design:returntype&amp;rdquo;, void 0)</span>
+    <span class="p">],</span> <span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">setUserName</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">User</span><span class="p">;</span>
+<span class="p">}());</span>
+<span class="k">new</span> <span class="nx">User</span><span class="p">();</span>
+<span class="kd">function</span> <span class="nx">Deprecated</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">descriptor</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="o">&lt;</span><span class="nx">em</span><span class="o">&gt;</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">&lt;</span><span class="err">/em&gt;i &amp;lt; arguments.length; &lt;em&gt;i++) {</span>
+                <span class="nx">args</span><span class="p">[</span><span class="o">&lt;</span><span class="err">/em&gt;i] = arguments[_i];</span>
+            <span class="p">}</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">Using</span> <span class="nx">deprecated</span> <span class="nx">API</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span> <span class="o">+</span> <span class="nx">target</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span> <span class="o">+</span> <span class="nx">key</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">descriptor</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span></code></pre></div></p>
+
+<p>Brrr&hellip;To, co wygenerowało się z tak prostej klasy wygląda na pierwszy rzut oka na bardzo skomplikowany kod. Jest to dobry przykład na to, jak wiele daje kompilator Ts.
+Nie musimy pisać tak zawiłych konstrukcji, tylko tworzymy klasy w sposób do jakiego przywykliśmy w językach takich jak np. Java, C#. Wracając do przykładu z Deprecated, mamy klasę z metodą oznaczoną dekoratorem.
+Dekorator to tak naprawdę funkcja, która ma na celu rozszerzenie działania innej funkcji. W tym przypadku funkcja taka przyjmuje 3 parametry:</p>
+
+<ul>
+<li>target - funkcja w której został użyty dekorator. W powyższym przykładzie będzie to funkcja reprezentująca klasę <em>User</em></li>
+<li>key - nazwa metody, którą oznaczyliśmy adnotacją (<em>setUserName</em>)</li>
+<li>descriptor - wynik wywołania funkcji <em>Object.getOwnPropertyDescriptor()</em> zwracający podstawowe informacje o polu które zostało oznaczone dekoratorem.
+Przykładowo: <em>{&ldquo;writable&rdquo;:true,&ldquo;enumerable&rdquo;:true,&ldquo;configurable&rdquo;:true}</em></li>
+</ul>
+
+
+<p>Mając te wszystkie informacje możemy napisać dekorator, który będzie informował o użyciu przestarzałej metody:
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Deprecated</span><span class="p">(</span><span class="nx">target</span><span class="o">:</span> <span class="nx">any</span><span class="p">,</span> <span class="nx">key</span><span class="o">:</span> <span class="nx">string</span><span class="p">,</span> <span class="nx">descriptor</span><span class="o">:</span> <span class="nx">any</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">hellip</span><span class="p">;</span><span class="nx">args</span><span class="o">:</span> <span class="nx">any</span><span class="p">[])</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">Using</span> <span class="nx">deprecated</span> <span class="nx">API</span><span class="o">:</span> <span class="nx">$</span><span class="p">{</span><span class="nx">target</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span><span class="p">}.</span><span class="nx">$</span><span class="p">{</span><span class="nx">key</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/code&gt;);</span>
+            <span class="k">return</span> <span class="nx">descriptor</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span></code></pre></div>
+Wartość zwrócona z dekoratora zastąpi deskryptor metody <em>setUserName</em>, a dokładnie pole <em>value</em> w tym deskryptorze. Krótko mówiąc nadpiszemy funkcję własną implementacją.
+Dekorator po wylogowaniu na konsoli odpowiedniego ostrzeżenia wywołuje pierwotną metodę korzystając z <em>apply</em>, parametrów wywołania i zmiennej this. Jak widać logikę metody, nad którą
+został wstawiony dekorator możemy dowolnie modyfikować, dekorować o kolejną logikę. Daje nam to potężny mechanizm do zmniejszenia ilości powielanego kodu i otwiera drogę do budowania
+bardziej abstrakcyjnych mechanizmów.</p>
+
+<h2>Wymagania</h2>
+
+<p>Przedstawiona za chwilę implementacja Typescriptowej wersji Springa będzie wyjątkowo prosta. Będzie się ona składać z dekoratora @Bean, który to pozwoli automatycznie tworzyć obiekty klas i wstrzykiwać
+je w pola, które będą miały dekorator @Inject. Przeanalizujmy zatem prosty przypadek użycia takiego narzędzia. Tworzymy klasę <em>User</em>, która będzie odpowiadać za przechowywanie
+danych zalogowanego użytkownika. Dla uproszczenia będzie to tylko login:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="err">@</span><span class="nx">Bean</span><span class="p">()</span>
+<span class="kr">class</span> <span class="nx">User</span> <span class="p">{</span>
+    <span class="kr">public</span> <span class="nx">login</span><span class="o">:</span> <span class="nx">string</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div></p>
+
+<p>Kolejną klasą będzie <em>Transfer</em> odpowiedzialny za wykonanie przelewu dla zalogowanego użytkownika. Obiekt użytkownika będzie wstrzykiwany przez dekorator <em>Inject</em>, bez konieczności
+ręcznego ustawiania pola. Dodatkowo pole w klasie będzie miało ustawiony modyfikator dostępu private, tak żeby nikomu nie przyszło do głowy próbować go ustawiać ręcznie.
+Obiekt ten będzie singletonem przechowywanym przez omawianą implementację Springa.</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="err">@</span><span class="nx">Bean</span><span class="p">()</span>
+<span class="kr">class</span> <span class="nx">Transfer</span> <span class="p">{</span>
+    <span class="err">@</span><span class="nx">Inject</span>
+    <span class="kr">private</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">User</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">makeTransfer</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Create transfer for: &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">login</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span></code></pre></div></p>
+
+<p>Ostatnią klasą będzie <em>Application</em>, mająca wstrzykniętą instancję obiektu <em>User</em> oraz <em>Transfer</em>.</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">Application</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="err">@</span><span class="nx">Inject</span>
+<span class="kr">private</span> <span class="nx">transfer</span><span class="o">:</span> <span class="nx">Transfer</span><span class="p">;</span>
+
+<span class="err">@</span><span class="nx">Inject</span>
+<span class="kr">private</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">User</span><span class="p">;</span>
+
+<span class="nx">login</span><span class="p">(</span><span class="nx">userName</span><span class="o">:</span> <span class="nx">string</span><span class="p">)</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="nx">userName</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">sendTransfer</span><span class="p">()</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">transfer</span><span class="p">.</span><span class="nx">makeTransfer</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kr">const</span> <span class="nx">app</span><span class="o">:</span> <span class="nx">Application</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Application</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kamil</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">sendTransfer</span><span class="p">();</span></code></pre></div></p>
+
+<p>Podczas wywołania metody <em>login</em>, imię aktualnie zalogowanego użytkownika przekazywane jest do obiektu klasy <em>User</em>. Tak się składa, że ten sam obiekt został wstrzyknięty również do obiektu Transfer.
+Omawiany mechanizm tworzy tylko jedną instancję obiektu i wszędzie ją wstrzykuje. Po wywołaniu metody <em>makeTransfer</em>, obiekt <em>Transfer</em>
+prawidłowo wypisuje komunikat: <em>Create transfer for: Kamil</em>. Tak więc, bez konieczności martwienia się o utworzenie i ustawienie obiektu <em>User</em> i <em>Transfer</em> mamy możliwość korzystania z tych obiektów
+w dowolnym miejscu aplikacji.</p>
+
+<h2>Implementacja</h2>
+
+<p>Przejdźmy teraz do właściwiej części, czyli do omówienia jak to działa. Pierwszym elementem jest moduł, za pomocą którego są przechowywane utworzone/wstrzykiwane obiekty. Dlaczego moduł?
+Żeby np. nie brudzić przestrzeni nazw, mieć możliwość importu go w dowolnym miejscu aplikacji. Oto jak może wyglądać taki moduł:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">module</span> <span class="nx">ApplicationContext</span> <span class="p">{</span>
+    <span class="kr">interface</span> <span class="nx">IRegister</span> <span class="p">{</span>
+        <span class="p">[</span><span class="nx">key</span><span class="o">:</span> <span class="nx">string</span><span class="p">]</span><span class="o">:</span> <span class="nx">any</span><span class="p">;</span>
+    <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kr">const</span> <span class="nx">beanRegistry</span><span class="o">:</span> <span class="nx">IRegister</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kr">export</span> <span class="kd">function</span> <span class="nx">registerBean</span><span class="p">(</span><span class="nx">name</span><span class="o">:</span> <span class="nx">string</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="nb">Object</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">beanRegistry</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">lowerCaseName</span><span class="o">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">Register</span><span class="o">:</span> <span class="nx">$</span><span class="p">{</span><span class="nx">lowerCaseName</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+        <span class="nx">beanRegistry</span><span class="p">[</span><span class="nx">lowerCaseName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">export</span> <span class="kd">function</span> <span class="nx">getBean</span><span class="p">(</span><span class="nx">name</span><span class="o">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">result</span><span class="o">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="nx">beanRegistry</span><span class="p">[</span><span class="nx">name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="err">`</span><span class="nx">Bean</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()}</span> <span class="nx">not</span> <span class="nx">found</span><span class="err">`</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span></code></pre></div></p>
+
+<p>Moduł składa się z tablicy przechowującej utworzone obiekty. Tablica ta została zadeklarowana za pomocą interfejsu w celu umożliwienia odwoływania sie do elementów tablicy
+poprzez klucz-string. Bez tego interfejsu moglibyśmy wyciągać obiekty tylko poprzez indeks. Moduł oprócz tablicy zawiera funkcję, która zapisuje nowe obiekty w tablicy pod przekazaną nazwą.
+Nazwa jest zamieniana na małe litery, podobnie jak w dalszej części kodu. Jest to rozwiązanie bardzo proste, jednak posiada tą wadę, że w przypadku gdy pole oznaczone <em>Inject</em> będzie się nazywać
+inaczej niż nazwa klasy pisana małymi literami, to mechanizm nie znajdzie obiektu. W przypadku gdy obiekt istnieje już w tablicy nic nie zostanie zrobione. Warto tutaj się pokusić o wyrzucenie
+błędu z informacją: <em>multiple bean definition found</em>. Druga metoda modułu wyciąga z tablicy utworzony obiekt i go zwraca. W przypadku braku obiektu wyrzucany jest błąd.</p>
+
+<p>Zajmijmy się teraz dekoratorem odpowiedzialnym za rejestrowanie komponentów w <em>beanRegistry</em>:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Bean</span><span class="p">()</span><span class="o">:</span> <span class="nx">any</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">target</span><span class="o">:</span> <span class="nx">any</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">original</span> <span class="o">=</span> <span class="nx">target</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>    <span class="kd">function</span> <span class="nx">construct</span><span class="p">(</span><span class="nx">constructor</span><span class="o">:</span> <span class="nx">any</span><span class="p">,</span> <span class="nx">args</span><span class="o">:</span> <span class="nx">any</span><span class="p">,</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">c</span><span class="o">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">constructor</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">c</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">c</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">result</span><span class="o">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="nx">construct</span><span class="p">(</span><span class="nx">original</span><span class="p">,</span> <span class="p">[]);</span>
+    <span class="nx">ApplicationContext</span><span class="p">.</span><span class="nx">registerBean</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span>
+
+    <span class="kd">let</span> <span class="nx">f</span><span class="o">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(...</span><span class="nx">args</span><span class="o">:</span> <span class="nx">any</span><span class="p">[])</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;create:&#39;</span> <span class="o">+</span> <span class="nx">target</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">());</span>
+        <span class="kd">let</span> <span class="nx">result</span><span class="o">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="nx">construct</span><span class="p">(</span><span class="nx">original</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">f</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">original</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span></code></pre></div></p>
+
+<p>Dekorator <em>Bean</em> tworzy funkcję <em>f</em>, która zastępuje konstruktor klasy oznaczonej tym dekoratorem. Funkcja ta odpowiada za wywołanie oryginalnego konstruktora, zapisanie utworzonego
+obiektu w tablicy <em>beanRegistry</em> za pomocą funkcji <em>registerBean</em> oraz zwrócenie instancji obiektu obiektu. Mamy mechanizm rejestrowania komponentów, spójrzmy teraz jak działa
+wstrzykiwanie tych komponentów:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Inject</span><span class="p">(</span><span class="nx">target</span><span class="o">:</span> <span class="nx">any</span><span class="p">,</span> <span class="nx">key</span><span class="o">:</span> <span class="nx">any</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">_val</span> <span class="o">=</span> <span class="k">this</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kr">const</span> <span class="nx">getter</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;create:&#39;</span> <span class="o">+</span> <span class="nx">key</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">());</span>
+        <span class="nx">_val</span> <span class="o">=</span> <span class="nx">ApplicationContext</span><span class="p">.</span><span class="nx">getBean</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_val</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">Get</span><span class="o">:</span> <span class="nx">$</span><span class="p">{</span><span class="nx">key</span><span class="p">}</span> <span class="o">=&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">$</span><span class="p">{</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">_val</span><span class="p">)}</span><span class="err">`</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">_val</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="k">delete</span> <span class="k">this</span><span class="p">[</span><span class="nx">key</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">get</span><span class="o">:</span> <span class="nx">getter</span><span class="p">,</span>
+        <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span></code></pre></div></p>
+
+<p>Główną rzeczą jaką robi ten dekorator jest nadpisywanie gettera dla właściwości, z którą został użyty. Podczas odwoływania się do takiego pola, zostaje uruchomiony zdefiniowany tutaj
+getter. Zwraca on instancję obiektu o nazwie takiej, jak nazwa pola gdzie został użyty <em>Inject</em>. Nazwa ta musi oczywiście odpowiadać nazwie klasy, którą chcemy wstrzyknąć. Ot, to cała magia kryjąca się
+za wstrzykiwaniem zależności.</p>
+
+<h2>Quo vadis?</h2>
+
+<p>Za pomocą dekoratorów stworzyliśmy bardzo prosty mechanizm DI. Nic nie stoi na przeszkodzie, żeby go rozbudować i korzystać z niego w np. aplikacjach serwerowych pisanych w Node.js. Jak to mówią,
+<em>sky is the limit</em>.
+Jednak żeby stworzone tutaj rozwiązanie było w pełni wartościowe, należy zatroszczyć się o kilka rzeczy:</p>
+
+<ul>
+<li>możliwość definiowania sposobu tworzenia komponentów. Obecnie zawsze jest to singleton i nie ma możliwości tworzenia kolejnych obiektów za pomocą tego mechanizmu</li>
+<li>usuwanie obiektów z rejestru, kiedy zostaje usunięty ostatni obiekt korzystający z komponentu. Pozwoli to uniknąć wycieków pamięci. Może warto dodać jakiś licznik w rejestrze?</li>
+<li>definiowanie dowolnej nazwy komponentu, w tej formie zawsze nazwa pola musi pokrywać się z nazwą klasy</li>
+<li>w przypadku obsługi wielu użytkowników w aplikacji, rejestr powinien być związany z sesją użytkownika.</li>
+</ul>
+
+
+<p>Zachęcam do samodzielnej próby rozbudowy tego mechanizmu, kto wie, może to Twoja implementacja będzie w przyszłości popularnym DI dla Node.js ;)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Typescript wprowadzenie - część 1]]></title>
+    <link href="http://klolo.github.io/blog/2017/08/28/typescript-wprowadzenie-czesc-1/"/>
+    <updated>2017-08-28T22:11:51+02:00</updated>
+    <id>http://klolo.github.io/blog/2017/08/28/typescript-wprowadzenie-czesc-1</id>
+    <content type="html"><![CDATA[<p>Jesteś programistą javascript chcącym pisać aplikację z wykorzystaniem Typescript? Chcesz nauczyć się Angular 2/4? Jesteś programistą Javy, który próbuje tworzyć frontend?
+Doskonale trafiłeś. W serii kilku wpisów postaram się przybliżyć Ci ten język. Dzisiaj opowiem o tym czym jest ts, jak zacząć z nim pracę oraz jakie podstawowe typy
+są dostępne w tym języku.</p>
+
+<!--more-->
+
+
+<h2>Co to jest typescript?</h2>
+
+<p>Krótko mówiąc Typescript jest nadzbiorem języka javascript stworzonym przez Microsoft w celu dodania do js takich elementów jak statyczne typowanie. Jest to rozszerzenie języka
+javascript, stąd też każdy prawidłowy kod języka js jest również prawidłowym kodem ts. Nie działa to jednak w drugą stronę, ponieważ ts nie jest obsługiwany przez silnik js wbudowany
+np. w przeglądarkę. Ts przed uruchomieniem musi zostać zamieniony na js przez specjalny kompilator o nazwie <em>tsc</em>. Proces przepisywania kodu napisanego w jednym języku na inny nosi
+nazwę transpilacji.</p>
+
+<h2>Hello World</h2>
+
+<p>W celu rozpoczęcia zabawy z ts należy zainstalować Node.js i za pomocą managera pakietów npm zainstalować kompilator:</p>
+
+<blockquote><p>npm install -g typescript</p></blockquote>
+
+<p>Po wykonaniu polecenie będziemy mogli uruchomić hello world zapisane w pliku demo.ts:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">getHello</span><span class="p">(</span><span class="nx">userName</span><span class="o">:</span> <span class="nx">string</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">userName</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/code&gt;;</span>
+<span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">let</span> <span class="nx">hello</span><span class="o">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">getHello</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kamil</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">hello</span><span class="p">);</span></code></pre></div></p>
+
+<p>W celu skompilowania kodu ts do js uruchamiamy polecenia:</p>
+
+<blockquote><p>tsc ./demo.ts &amp;&amp; node ./demo.js</p></blockquote>
+
+<p>Jak widać w powyższym poleceniu, zostanie wygenerowany plik js, który będzie zawierał wygenerowany kod js:
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">getHello</span><span class="p">(</span><span class="nx">userName</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">Hello</span> <span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span> <span class="o">+</span> <span class="nx">userName</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">hello</span> <span class="o">=</span> <span class="nx">getHello</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kamil</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">hello</span><span class="p">);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span></code></pre></div></p>
+
+<p>Wszystkie fragmenty kodu związane z ts, nie będące poprawnym js zniknęły. Środowisko, w którym będziemy uruchamiać taki kod nie będzie miało żadnej informacji
+o tym, że kod był tworzony w ts.</p>
+
+<h2>Statyczne typowanie</h2>
+
+<p>Jak wiadomo js jest językiem dynamicznie typowanym, co oznacza, że informacja o tym, jakiego typu obiekt jest przechowywany w zmiennej, określany jest w trakcie działania
+aplikacji. Do zmiennej możemy w jednej linijce przypisać jakiś string, a w następnej obiekt całkowicie innego typu:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Karol</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">user</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Karol</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
+    <span class="nx">age</span><span class="o">:</span> <span class="mi">18</span>
+<span class="p">};</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span></code></pre></div></p>
+
+<p>Nie ma tutaj żadnego mechanizmu, który sprawdzi czy w zmiennej jest obiekt prawidłowego typu, jaki jest wymagany w danej funkcji. Jest to mechanizm, który sprawia, że js jest
+bardzo elastyczny, ekspresyjny ale zarazem jest to przyczyna wielu błędów, często trudnych do wychwycenia. Typescript daje programiście możliwość definiowania typów zmiennych,
+parametrów funkcji
+dzięki czemu kompilator w czasie transpilacji kodu ma możliwość weryfikacji czy nie popełniliśmy błędu i nie próbujemy użyć błędnego typu w danym miejscu aplikacji. Sposób wykorzystania
+typów
+w ts przedstawia również przykład z <em>hello world</em>. Składnia ts wymaga od nas jedynie podania po nazwie zmiennej dwukropka
+po którym będzie stać typ zmiennej. W celu określenia typu zwracanego z metody należy dwukropek i typ zwracany podać miedzy nawiasem zamykającym listę argumentów a klamrą
+otwierającą ciało funkcji.</p>
+
+<h2>Typy proste</h2>
+
+<p>Do dyspozycji mamy podstawowe typu danych znane z js:</p>
+
+<ul>
+<li>boolean - true/false</li>
+<li>number - liczba zmiennoprzecinkowa</li>
+<li>string - ciąg znaków</li>
+<li>null - brak wartości zmiennej, która została zainicjalizowana</li>
+<li>undefined - wartość domyślna zmiennych, mówiąca o tym że zmienna nie została zainicjalizowana</li>
+</ul>
+
+
+<p>Przy korzystaniu z typów prostych takich jak np. string należy jednak zwracać uwagę czy nie piszemy nazwy typu z dużej litery. Obiekty, do których byśmy się wtedy odwoływali są
+wrapperami na typy proste. Jest to mechanizm podobny do tego w Java. Używanie wrapperów zamiast typów prostych sprawi, że nasz kod będzie mniej wydajny.</p>
+
+<p>Dodatkowo typescript dodaje możliwość korzystania z kilku dodatkowych typów, które warto wyjaśnić.</p>
+
+<h2>any</h2>
+
+<p>Przechodząc z js na ts możemy robić to stopniowo, nie musimy przepisywać od razu całej aplikacji. Może się jednak pojawić problem z tym, że istniejący kod zwraca obiekty
+jakiegoś typu i ts nie może zweryfikować co to za typ. W takich przypadkach przydatny jest specjalny typ <em>any</em> pozwalający przypisać do zmiennej obiekt dowolnego typu, bez walidowania
+tego typu.
+Nasuwa się pytanie dlaczego nie można wykorzystać <em>Object</em> jako typu dla danych, które przechodzą z jakiejś np. biblioteki? Świetnie to wyjaśnia przykład kodu wprost z dokumentacji ts:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">notSure</span><span class="o">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nx">notSure</span><span class="p">.</span><span class="nx">ifItExists</span><span class="p">();</span> <span class="c1">// okay, ifItExists might exist at runtime</span>
+<span class="nx">notSure</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">();</span> <span class="c1">// okay, toFixed exists (but the compiler doesn&amp;rsquo;t check)&lt;/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">let</span> <span class="nx">prettySure</span><span class="o">:</span> <span class="nb">Object</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nx">prettySure</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">();</span> <span class="c1">// Error: Property &amp;lsquo;toFixed&amp;rsquo; doesn&amp;rsquo;t exist on type &amp;lsquo;Object&amp;rsquo;.</span></code></pre></div></p>
+
+<p>Oczywiście należy pamiętać o tym, żeby zmiennych typu <em>any</em> w kodzie było jak najmniej, a nawet żeby ich nie było w ogóle. Ponieważ korzystając z <em>any</em> tracimy dobrodziejstwa statycznego
+typowania jakie daje nam ts. Kompilator można uruchomić z flagą, która sprawi, że kod który zawiera <em>any</em> nie skompiluje się.</p>
+
+<h2>void</h2>
+
+<p>Typ ten jest wykorzystywany do informowania kompilatora o tym, że funkcja nie będzie nic zwracać. Zachowanie analogiczne do tego znanego z np. Javy. Możemy użyć instrukcji
+return, ale tylko gdy nie będzie ona zawierać żadnych danych które mają zostać zwrócone. Funkcja może zwracać jedynie null, undefined bądź nic. Używanie void w ts zabezpiecza nas przed
+przypadkowym zwróceniem jakiejś wartości z funkcji, bądź próbą przypisania wyniku takiej funkcji do zmiennej typu innego niż void.</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">voidFun</span><span class="p">()</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// ewentualnie undefined</span>
+<span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">let</span> <span class="nx">x</span><span class="o">:</span> <span class="k">void</span> <span class="o">=</span> <span class="nx">voidFun</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span></code></pre></div></p>
+
+<h2>never</h2>
+
+<p>Never jest bardzo ciekawym typem prostym wbudowanym w ts. Oznacza się nim funkcje, które nic nie mogą zwrócić. Jednak w przeciwieństwie do void, taka funkcja nie może
+ani posiadać instrukcji return ani się kończy w prawidłowy sposób. Metody oznaczone jako never mogą w środku zawierać jedynie nieskończone pętle, bądź też wyrzucać wyjątek,
+zamiast normalnego wyjścia z metody.</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">neverFun</span><span class="p">()</span><span class="o">:</span> <span class="nx">never</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">neverFunWithThrow</span><span class="p">()</span><span class="o">:</span> <span class="nx">never</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">neverFunWithThrow</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="k">this</span> <span class="nx">is</span> <span class="nx">never</span> <span class="nx">enging</span> <span class="kd">function</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+<span class="p">}</span></code></pre></div></p>
+
+<h2>tuples</h2>
+
+<p>Jest to konstrukcja pozwalająca w tablicy umieścić pewną ilość zmiennych, których typ jest znany podczas definiowania tablicy. Semantycznie wygląda to tak, że deklarujemy
+tablice podając typ każdego z elementów tej tablicy. Kompilator sprawdzi za nas czy w poszczególne komórki tablicy przypisujemy prawidłowe typy oraz czy wyciągnięte dane
+z tablicy są prawidłowo użyte.</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">tupleUser</span><span class="o">:</span> <span class="p">[</span><span class="nx">string</span><span class="p">,</span> <span class="nx">number</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kamil</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span> <span class="mi">18</span><span class="p">];</span>
+<span class="nx">tupleUser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// error</span>
+<span class="nx">tupleUser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Bartek</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span> <span class="c1">// ok&lt;/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kr">const</span> <span class="nx">userName</span><span class="o">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">tupleUser</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">toLowerCase</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">tupleUser</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="c1">// error</span></code></pre></div></p>
+
+<h2>enum</h2>
+
+<p>Często zdarza się, że w aplikacji mamy kilka stałych, które mają pewien wspólny kontekst. W czystym js można było je zgrupować za pomocą np. odpowiednich nazw, bądź
+jako statyczne pola użyte razem z konstruktorem:</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Color</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">Color</span><span class="p">.</span><span class="nx">RED</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">RED</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+<span class="nx">Color</span><span class="p">.</span><span class="nx">GREEN</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">GREEN</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+<span class="nx">Color</span><span class="p">.</span><span class="nx">BLUE</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">BLUE</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span></code></pre></div></p>
+
+<p>Wadą takiego rozwiązania jest to, że wartości tych stałych mogą się zmienić dynamicznie w trakcie działania aplikacji. Oczywiście js pozwala nam obejść ten problem za pomocą
+bardziej zaawansowanych technik, jednak rozwiązania takie będą już skomplikowane. Ts pozwala używać enumów, dzięki którym możemy zgrupować zmienne bez obawy przed tym że ich wartość
+zmieni się w trakcie działania aplikacji. Dodatkowo kompilator sprawdzi, czy w miejsce gdzie ma być przekazana stała z enuma przekazujemy poprawną wartość. Wartościom stałych można
+ustawiać dowolne wartości. Jeżeli pominiemy ustawianie wartości, to stałe w enum będą miały wartości kolejno: 0, 1, 2 itd.</p>
+
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">enum</span> <span class="nx">ColorRGB</span> <span class="p">{</span>
+    <span class="nx">RED</span> <span class="o">=</span>  <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">red</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
+    <span class="nx">GREEN</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">green</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
+    <span class="nx">BLUE</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">blue</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span>
+<span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">ColorRGB</span><span class="p">.</span><span class="nx">RED</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">green</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span> <span class="c1">// error&lt;/p&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kr">const</span> <span class="nx">red</span><span class="o">:</span> <span class="nx">ColorRGB</span> <span class="o">=</span> <span class="nx">ColorRGB</span><span class="p">.</span><span class="nx">RED</span><span class="p">;</span></code></pre></div></p>
+
+<h2>Podsumowanie</h2>
+
+<p>Typescript jest językiem programowania bazującym na javascript, który pozwala w bardziej bezpieczny sposób implementować aplikację. Statyczne typowanie, zapewni że
+to właśnie kompilator znajdzie błędne użycie typów w momencie kompilacji, a nie klient na środowisku produkcyjnym. Ts jest językiem obiektowym, pozwalającym używać wbudowanych
+typów oraz definiować nowe. Jak to robić, opiszę dla Was w kolejnym wpisie.</p>
+]]></content>
+  </entry>
+  
+</feed>
