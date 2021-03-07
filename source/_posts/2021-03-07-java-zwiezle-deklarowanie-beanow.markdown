@@ -119,7 +119,7 @@ public class BeanRegistrationContextInitializer implements
 }
 {% endhighlight %}
 
-Jak widać rejestracja beanów sprowadza się do wywołania metody registerBean. Spring nie musi już skanować pakietów w poszukiwaniu adnotacji, przekazujemy mu jawnie jakie komponenty ma utworzyć. 
+Rejestracja beanów sprowadza się do wywołania metody registerBean. Spring nie musi już skanować pakietów w poszukiwaniu adnotacji, przekazujemy mu jawnie jakie komponenty ma utworzyć. 
 Pozwoli to również zmniejszyć czas uruchamiania aplikacji. Na koniec pozostaje jeszcze kwestia, dlaczego w powyższym kodzie pojawiły się metody overrideBean oraz register? 
 Ułatwią one nam życie, w momencie kiedy tworzymy produkt dla kilku różnych klientów i pracujemy na jednym branchu. W taki przypadku kiedy dla jakiegoś klienta (nazwijmy go roboczo X) 
 pojawia się konieczność wprowadzenia customizacji możemy stworzyć dodatkowy initializer:
@@ -155,3 +155,4 @@ Natomiast w testach integracyjnych możemy skorzystać z adnotacji: @ContextConf
 Dodatkową zaletą powyższego sposobu konfiguracji jest to, że możemy wprowadzać go stopniowo. Kod zawierający konfigurację z wykorzystaniem adnotacji @Bean będzie nadal uruchamiany 
 i możemy ciągle z niego korzystać. Jeżeli w Twoim projekcie nadal jest dużo kodu, w którym deklarujesz komponenty z wykorzystaniem adnotacji @Bean, zachęcam Cię do spróbowania alternatywy 
 w formie DSLa w języku Kotlin, bądź też w formie prostego mechanizmu jaki przedstawiłem.
+
