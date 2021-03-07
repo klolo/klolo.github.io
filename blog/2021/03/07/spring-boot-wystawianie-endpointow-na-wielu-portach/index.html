@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Łódź loves IT - Łódzki programista</title>
+  <title>[spring boot] Wystawianie endpointów na wielu portach - Łódzki programista</title>
   <meta name="author" content="Kamil Lolo">
 
   
-  <meta name="description" content="Łódź loves IT Aug 5th, 2017 1:44 pm Na stronie będą się pojawiać ciekawe informacje z Łodzi. Zapraszam! 4Developers Łódź zbliża się wielkimi krokami &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://klolo.github.io/lodz">
+  <link rel="canonical" href="http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="" rel="alternate" title="Łódzki programista" type="application/atom+xml">
@@ -64,42 +65,87 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article role="article">
+      <progress value="0" id="progressBar">
+  <div class="progress-container">
+    <span class="progress-bar"></span>
+  </div>
+</progress>
+
+<div>
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Łódź loves IT</h1>
-    <p class="meta">
+  
+    
+      <h1 class="entry-title">[spring boot] Wystawianie endpointów na wielu portach</h1>
+    
+  
+    
+      <p class="meta">
+        
 
 
 
 
-<time class='entry-date' datetime='2017-08-05T13:44:00+02:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>1:44 pm</span></time></p>
+<time class='entry-date' datetime='2021-03-07T21:31:32+01:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2021</span></span> <span class='time'>9:31 pm</span></time>
+        
+        
+      </p>
+    
   </header>
+
+
+<div class="entry-content">
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <p>Na stronie będą się pojawiać ciekawe informacje z Łodzi. Zapraszam!</p>
 
-<h2>4Developers Łódź zbliża się wielkimi krokami (2017-10-17)</h2>
+<span class="byline author vcard">Posted by <span class="fn">Kamil Lolo</span></span>
 
-<p>Już 9 Listopada będzie miała miejsce konferencja 4Developers w Łodzi. Dostępne 4 ścieżki:</p>
-
-<ul>
-<li>JVM</li>
-<li>Javascript</li>
-<li>Agile</li>
-<li>Databases</li>
-</ul>
+      
 
 
-<p>Sprawią że każdy z pewnością znajdzie coś dla siebie. Do tego na konferecji wystapia świetni prelegenci, z kilkoma miałem już styczność na innych konferencjach
-i jestem pewniem że będzie wysoki poziom i świetna atmosfera.</p>
 
-<h2>Zachód słońca nad fabryczną (2017-08-23)</h2>
 
-<p><img src="/images/lodz/fabryczny1.jpg" alt="GitHub Logo" /></p>
+<time class='entry-date' datetime='2021-03-07T21:31:32+01:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2021</span></span> <span class='time'>9:31 pm</span></time>
+    </p>
+    <p class="meta">
+      Kategoria: 
 
+
+    </p>
+    
+      <div class="sharing">
   
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/" data-via="" data-counturl="http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/" title="Previous Post: Java: zwięzłe deklarowanie beanów">&laquo; Java: zwięzłe deklarowanie beanów</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -190,6 +236,95 @@ i jestem pewniem że będzie wysoki poziom i świetna atmosfera.</p>
 </aside>
 
 
+<!-- Pasek postepu podczas czytania -->
+<script>
+    $(document).ready(function(){
+        var getMax = function(){
+            return $(document).height() - $(window).height();
+        }
+
+        var getValue = function(){
+            return $(window).scrollTop();
+        }
+
+        if('max' in document.createElement('progress')){
+            // Browser supports progress element
+            var progressBar = $('progress');
+
+            // Set the Max attr for the first time
+            progressBar.attr({ max: getMax() });
+
+            $(document).on('scroll', function(){
+                // On scroll only Value attr needs to be calculated
+                progressBar.attr({ value: getValue() });
+            });
+
+            $(window).resize(function(){
+                // On resize, both Max/Value attr needs to be calculated
+                progressBar.attr({ max: getMax(), value: getValue() });
+            });
+        }
+        else {
+            var progressBar = $('.progress-bar'),
+                max = getMax(),
+                value, width;
+
+            var getWidth = function(){
+                // Calculate width in percentage
+                value = getValue();
+                width = (value/max) * 100;
+                width = width + '%';
+                return width;
+            }
+
+            var setWidth = function(){
+                progressBar.css({ width: getWidth() });
+            }
+
+            $(document).on('scroll', setWidth);
+            $(window).on('resize', function(){
+                // Need to reset the Max attr
+                max = getMax();
+                setWidth();
+            });
+        }
+    });
+
+
+    $(document).ready(function(){
+        $('#flat').addClass("active");
+        $('#progressBar').addClass('flat');
+
+        $('#flat').on('click', function(){
+            $('#progressBar').removeClass().addClass('flat');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+        });
+
+        $('#single').on('click', function(){
+            $('#progressBar').removeClass().addClass('single');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+        });
+
+        $('#multiple').on('click', function(){
+            $('#progressBar').removeClass().addClass('multiple');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+        });
+
+        $('#semantic').on('click', function(){
+            $('#progressBar').removeClass().addClass('semantic');
+            $('a').removeClass();
+            $(this).addClass('active');
+            $(this).preventDefault();
+            alert('hello');
+        });
+    });
+</script>
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -199,6 +334,22 @@ i jestem pewniem że będzie wysoki poziom i świetna atmosfera.</p>
 
 </footer>
   
+
+<script type="text/javascript">
+      var disqus_shortname = 'klolo-github-io';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/';
+        var disqus_url = 'http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 
