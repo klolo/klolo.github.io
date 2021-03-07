@@ -155,4 +155,3 @@ Natomiast w testach integracyjnych możemy skorzystać z adnotacji: @ContextConf
 Dodatkową zaletą powyższego sposobu konfiguracji jest to, że możemy wprowadzać go stopniowo. Kod zawierający konfigurację z wykorzystaniem adnotacji @Bean będzie nadal uruchamiany 
 i możemy ciągle z niego korzystać. Jeżeli w Twoim projekcie nadal jest dużo kodu, w którym deklarujesz komponenty z wykorzystaniem adnotacji @Bean, zachęcam Cię do spróbowania alternatywy 
 w formie DSLa w języku Kotlin, bądź też w formie prostego mechanizmu jaki przedstawiłem.
-
