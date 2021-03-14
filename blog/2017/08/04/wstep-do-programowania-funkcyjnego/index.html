@@ -27,8 +27,11 @@
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
 
+  <script src="/javascripts/prism.js"></script>
+
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link href="/stylesheets/prism.css" rel="stylesheet" />
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -48,20 +51,22 @@
 </head>
 
 <body   class="collapse-sidebar sidebar-footer" >
-  <header style="text-align: center" role="banner"><img src="/images/logo.png" />
-</header>
+
   <nav role="navigation"><ul class="subscription" data-subscription="rss email">
   <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script>
-  <script type='text/javascript'>kofiwidget2.init('Buy me a coffee', '#25baf1', 'A187461B');kofiwidget2.draw();</script>
+  <script type='text/javascript'>kofiwidget2.init('Podoba się? Postaw mi kawę', '#25baf1', 'A187461B');kofiwidget2.draw();</script>
 </ul>
   
 <ul class="main-navigation">
-  <li><a href="/">Programowanie</a></li>
+  <li><a href="/"><img src="/favicon.png" style="height: 0.8em"/>&nbsp;Programowanie</a></li>
   <li><a href="/lodz">Łódź</a></li>
   <li><a href="/blog/archives">Archiwum</a></li>
   <li><a href="/about">O mnie</a></li>
 </ul>
 </nav>
+  <header style="text-align: center" role="banner"><a href="/"><img src="/images/logo.png" /></a>
+</header>
+
   <div id="main">
     <div id="content">
       <progress value="0" id="progressBar">
@@ -146,7 +151,7 @@ do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wypo
 <span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">circleArea</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-&gt;</span> <span class="n">r</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">PI</span><span class="o">;</span>
 
 <span class="c1">// Przekazanie funkcji do metody</span>
-<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">algorithm</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">r</span><span class="o">));</span>
 <span class="o">}</span></code></pre></div>
 
@@ -277,11 +282,11 @@ przewidzieć co się w nich znajduje, dzięki czemu można szybciej zdiagnozowa�
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/">[spring boot] Wystawianie endpointów na wielu portach</a>
+        <a href="/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/">spring boot: Wystawianie endpointów na wielu portach</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/">Java: zwięzłe deklarowanie beanów</a>
+        <a href="/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/">java: zwięzłe deklarowanie beanów</a>
       </li>
     
       <li class="post">

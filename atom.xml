@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2021-03-07T21:42:42+01:00</updated>
+  <updated>2021-03-14T16:14:57+01:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -15,7 +15,7 @@
   
   <entry>
     
-    <title type="html"><![CDATA[[spring boot] Wystawianie endpointów na wielu portach]]></title>
+    <title type="html"><![CDATA[spring boot: Wystawianie endpointów na wielu portach]]></title>
     <link href="http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/"/>
     
     <updated>2021-03-07T21:31:32+01:00</updated>
@@ -28,7 +28,7 @@
   
   <entry>
     
-    <title type="html"><![CDATA[Java: zwięzłe deklarowanie beanów]]></title>
+    <title type="html"><![CDATA[java: zwięzłe deklarowanie beanów]]></title>
     <link href="http://klolo.github.io/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/"/>
     
     <updated>2021-03-07T00:38:50+01:00</updated>
@@ -454,6 +454,8 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
 
 <p>Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za dużo? Czy 25 to maksimum? Niektórzy twierdzą, że dobra metoda powinna mieścić się w całości na ekranie. Można wtedy zadać pytanie o rozmiar czcionki i rozdzielczość. Clean code wspomina o tym, że dobra metoda powinna wykonywać tylko jedną rzecz, ale za to dobrze. Kiedy spojrzymy jednak na np. strumienie w Java 8, to dzięki podejściu deklaratywnym w kilku linijkach możemy zrobić bardzo wiele rzeczy. Dzieje się to dzięki temu, że deklarujemy, co kod ma robić, a nie w jaki sposób. Trudno sobie wyobrazić funkcje pracujące na strumieniach i robiące tylko jedną rzecz. Musiałyby składać się z 2,3 linijek. Tak duża granularność metod może również prowadzić do problemów z czytaniem kodu i wprowadza zbędną złożoność. Nie wspomnę już o wydajności. JVM zamiast wykonywać faktyczny algorytm, spędza więcej czasu na kolejnych wyołaniach. Czynniki te są oczywiście ważne i należy o nich pamiętać, jest jednak jeszcze jedna zasada określająca czy metoda wymaga rozbicia. Są to poziomy abstrakcji. Nigdy nie powinno się ich mieszać. Co to oznacza w praktyce? Spójrzmy na poniższą wymyśloną metodę. Mimo że jest ona krótka, robi zdecydowanie za dużo, mieszając przy tym poziomy abstrakcji:</p>
 
+<p>Uwaga: W kodzie pojawia się doklejanie danych z parametru do zapytania bazodanowego. Nie rób tak, narażasz się na sql injection.</p>
+
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**</span>
 <span class="cm">   * Metoda pobiera itemy z bazy i wysyla je do innego systemu.</span>
 <span class="cm">   */</span>
@@ -497,7 +499,7 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
 
 <p>Powyższy pseudo kod, oprócz potencjalnych problemów z <em>sql injection</em> pokazuje pomieszanie poziomów abstrakcji. W jednej metodzie mamy zarówno logikę biznesową jak i operacje niższego poziomu (np. pobranie danych z bazy danych) oraz operacje o jeszcze niższym poziomie abstrakcji takie jak sklejanie danych wejściowych do wywołania usługi jakiegoś zewnętrznego systemu oraz obsługę błedów. Za każdym razem kiedy zmienią się wymagania biznesowe funkcja ta będzie zmieniana. Bo jak inaczej np. zmienić dane wejściowe do zewętrznego systemu w ostatnich linijkach <em>someBusinessLogic</em>?</p>
 
-<p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mgółby wyglądać tak:</p>
+<p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mógłby wyglądać tak:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
         <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">filterItems</span><span class="o">(</span><span class="n">getItems</span><span class="o">(</span><span class="n">in</span><span class="o">),</span> <span class="n">in</span><span class="o">);</span>
@@ -709,45 +711,25 @@ i małe API pozwalają szybko zbudować aplikację.</p>
 <p>Idea stojąca za React to komponenty, zbliżone do Web components. Mechanizm dostępny natywnie w HTML od wersji 5. Tak, natywnie. Co oznacza również, że można tworzyć
 aplikację zbudowaną z komponentów bez użycia jakiegokolwiek dodatkowego frameworku, biblioteki. Oto przykład takiego natywnego komponentu:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
-</span><span class='line'><span class="nt">&lt;head&gt;</span>
-</span><span class='line'><span class="nt">&lt;script&gt;</span>
-</span><span class='line'><span class="kr">class</span> <span class="nx">MyNativeComponent</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="kr">super</span><span class="p">();</span>
-</span><span class='line'>      <span class="kd">var</span> <span class="nx">shadow</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span><span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;open&#39;</span><span class="p">});</span>
-</span><span class='line'>      <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
-</span><span class='line'>      <span class="nx">p</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s1">&#39;Hello World from component&#39;</span><span class="p">;</span>
-</span><span class='line'>      <span class="nx">shadow</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;my-native&#39;</span><span class="p">,</span> <span class="nx">MyNativeComponent</span><span class="p">);</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
-</span><span class='line'><span class="nt">&lt;/head&gt;</span>
-</span><span class='line'><span class="nt">&lt;body&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;my-native</span> <span class="na">name=</span><span class="s">&quot;Anita&quot;</span><span class="nt">&gt;&lt;/my-native&gt;</span>
-</span><span class='line'><span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="kr">class</span> <span class="nx">MyNativeComponent</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kr">super</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">shadow</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span><span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;open&#39;</span><span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
+        <span class="nx">p</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s1">&#39;Hello World from component&#39;</span><span class="p">;</span>
+        <span class="nx">shadow</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;my-native&#39;</span><span class="p">,</span> <span class="nx">MyNativeComponent</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;my-native</span> <span class="na">name=</span><span class="s">&quot;Anita&quot;</span><span class="nt">&gt;&lt;/my-native&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre></div>
 
 
 <p>Wszystko co trzeba zrobić żeby klasa ES6 stała się komponentem, to odziedziczenie po klasie HTMLElement, a następnie korzystając z shadow DOM można renderować dynamicznie
@@ -768,7 +750,8 @@ I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">username</span><span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="p">};</span>
   <span class="p">}</span>
 
-  <span class="c1">// uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze</span>
+  <span class="c1">// uwaga: jeżeli nie używasz Arrow function </span>
+  <span class="c1">// to musisz zbindować this w konstruktorze</span>
   <span class="nx">handleChange</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span> 
     <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">username</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">});</span>
   <span class="p">}</span>
@@ -781,7 +764,8 @@ I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym
           <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
         <span class="o">&lt;</span><span class="err">/header&gt;</span>
         <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;row&quot;</span> <span class="nx">style</span><span class="o">=&gt;</span>
-          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span> 
+                 <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
         <span class="o">&lt;</span><span class="err">/div&gt;</span>
       <span class="o">&lt;</span><span class="err">/div&gt;</span>
     <span class="p">);</span>
@@ -2025,7 +2009,7 @@ and using null for such was overwhelmingly likely to cause errors.</p></blockquo
 
 
 <div style="text-align:center">
-    <img src="http://totalcombat.net/wp-content/uploads/2012/12/shotokan-kata-1.jpg" />
+    <img src="https://www.martialtribes.com/wp-content/uploads/2018/05/kata1-1-1024x512.jpg" />
 </div>
 
 
@@ -2241,7 +2225,7 @@ do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wypo
 <span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">circleArea</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-&gt;</span> <span class="n">r</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">PI</span><span class="o">;</span>
 
 <span class="c1">// Przekazanie funkcji do metody</span>
-<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="n">Function</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">algorithm</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">r</span><span class="o">));</span>
 <span class="o">}</span></code></pre></div>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: typescript | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/typescript/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2021-03-07T21:42:42+01:00</updated>
+  <updated>2021-03-14T16:14:57+01:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -48,30 +48,28 @@ i małe API pozwalają szybko zbudować aplikację.</p>
 <p>Idea stojąca za React to komponenty, zbliżone do Web components. Mechanizm dostępny natywnie w HTML od wersji 5. Tak, natywnie. Co oznacza również, że można tworzyć
 aplikację zbudowaną z komponentów bez użycia jakiegokolwiek dodatkowego frameworku, biblioteki. Oto przykład takiego natywnego komponentu:</p>
 
-<p>```html
-<html>
-<head></p>
+<p><div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;&lt;/p&gt;</span>
 
-<script>
-class MyNativeComponent extends HTMLElement {
-    constructor() {
-        super();
-        var shadow = this.attachShadow({mode: 'open'});
-        var p = document.createElement('p');
-        p.innerText = 'Hello World from component';
-        shadow.appendChild(p);
-    }
-}
-window.customElements.define('my-native', MyNativeComponent);
-</script>
+<span class="nt">&lt;script&gt;</span>
+<span class="kr">class</span> <span class="nx">MyNativeComponent</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kr">super</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">shadow</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span><span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;open&#39;</span><span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
+        <span class="nx">p</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s1">&#39;Hello World from component&#39;</span><span class="p">;</span>
+        <span class="nx">shadow</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;my-native&#39;</span><span class="p">,</span> <span class="nx">MyNativeComponent</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
 
 
-<p></head>
-<body>
-    <my-native name="Anita"></my-native>
-</body>
-</html>
-```</p>
+<span class="nt">&lt;p&gt;&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;my-native</span> <span class="na">name=</span><span class="s">&quot;Anita&quot;</span><span class="nt">&gt;&lt;/my-native&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre></div></p>
 
 <p>Wszystko co trzeba zrobić żeby klasa ES6 stała się komponentem, to odziedziczenie po klasie HTMLElement, a następnie korzystając z shadow DOM można renderować dynamicznie
 dowolne elementy.</p>
@@ -91,7 +89,8 @@ I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">username</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span> <span class="p">};</span>
   <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 
-<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="c1">// uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze</span>
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="c1">// uwaga: jeżeli nie używasz Arrow function</span>
+  <span class="c1">// to musisz zbindować this w konstruktorze</span>
   <span class="nx">handleChange</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">username</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">});</span>
   <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
@@ -104,7 +103,8 @@ I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym
           <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
         <span class="o">&lt;</span><span class="err">/header&gt;</span>
         <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;row&quot;</span> <span class="nx">style</span><span class="o">=&gt;</span>
-          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span>
+                 <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
         <span class="o">&lt;</span><span class="err">/div&gt;</span>
       <span class="o">&lt;</span><span class="err">/div&gt;</span>
     <span class="p">);</span>

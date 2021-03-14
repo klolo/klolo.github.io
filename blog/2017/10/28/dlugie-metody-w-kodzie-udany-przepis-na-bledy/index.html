@@ -27,8 +27,11 @@
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
 
+  <script src="/javascripts/prism.js"></script>
+
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link href="/stylesheets/prism.css" rel="stylesheet" />
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -48,20 +51,22 @@
 </head>
 
 <body   class="collapse-sidebar sidebar-footer" >
-  <header style="text-align: center" role="banner"><img src="/images/logo.png" />
-</header>
+
   <nav role="navigation"><ul class="subscription" data-subscription="rss email">
   <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script>
-  <script type='text/javascript'>kofiwidget2.init('Buy me a coffee', '#25baf1', 'A187461B');kofiwidget2.draw();</script>
+  <script type='text/javascript'>kofiwidget2.init('Podoba się? Postaw mi kawę', '#25baf1', 'A187461B');kofiwidget2.draw();</script>
 </ul>
   
 <ul class="main-navigation">
-  <li><a href="/">Programowanie</a></li>
+  <li><a href="/"><img src="/favicon.png" style="height: 0.8em"/>&nbsp;Programowanie</a></li>
   <li><a href="/lodz">Łódź</a></li>
   <li><a href="/blog/archives">Archiwum</a></li>
   <li><a href="/about">O mnie</a></li>
 </ul>
 </nav>
+  <header style="text-align: center" role="banner"><a href="/"><img src="/images/logo.png" /></a>
+</header>
+
   <div id="main">
     <div id="content">
       <progress value="0" id="progressBar">
@@ -148,6 +153,8 @@
 
 <p>Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za dużo? Czy 25 to maksimum? Niektórzy twierdzą, że dobra metoda powinna mieścić się w całości na ekranie. Można wtedy zadać pytanie o rozmiar czcionki i rozdzielczość. Clean code wspomina o tym, że dobra metoda powinna wykonywać tylko jedną rzecz, ale za to dobrze. Kiedy spojrzymy jednak na np. strumienie w Java 8, to dzięki podejściu deklaratywnym w kilku linijkach możemy zrobić bardzo wiele rzeczy. Dzieje się to dzięki temu, że deklarujemy, co kod ma robić, a nie w jaki sposób. Trudno sobie wyobrazić funkcje pracujące na strumieniach i robiące tylko jedną rzecz. Musiałyby składać się z 2,3 linijek. Tak duża granularność metod może również prowadzić do problemów z czytaniem kodu i wprowadza zbędną złożoność. Nie wspomnę już o wydajności. JVM zamiast wykonywać faktyczny algorytm, spędza więcej czasu na kolejnych wyołaniach. Czynniki te są oczywiście ważne i należy o nich pamiętać, jest jednak jeszcze jedna zasada określająca czy metoda wymaga rozbicia. Są to poziomy abstrakcji. Nigdy nie powinno się ich mieszać. Co to oznacza w praktyce? Spójrzmy na poniższą wymyśloną metodę. Mimo że jest ona krótka, robi zdecydowanie za dużo, mieszając przy tym poziomy abstrakcji:</p>
 
+<p>Uwaga: W kodzie pojawia się doklejanie danych z parametru do zapytania bazodanowego. Nie rób tak, narażasz się na sql injection.</p>
+
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**</span>
 <span class="cm">   * Metoda pobiera itemy z bazy i wysyla je do innego systemu.</span>
 <span class="cm">   */</span>
@@ -191,7 +198,7 @@
 
 <p>Powyższy pseudo kod, oprócz potencjalnych problemów z <em>sql injection</em> pokazuje pomieszanie poziomów abstrakcji. W jednej metodzie mamy zarówno logikę biznesową jak i operacje niższego poziomu (np. pobranie danych z bazy danych) oraz operacje o jeszcze niższym poziomie abstrakcji takie jak sklejanie danych wejściowych do wywołania usługi jakiegoś zewnętrznego systemu oraz obsługę błedów. Za każdym razem kiedy zmienią się wymagania biznesowe funkcja ta będzie zmieniana. Bo jak inaczej np. zmienić dane wejściowe do zewętrznego systemu w ostatnich linijkach <em>someBusinessLogic</em>?</p>
 
-<p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mgółby wyglądać tak:</p>
+<p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mógłby wyglądać tak:</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
         <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">filterItems</span><span class="o">(</span><span class="n">getItems</span><span class="o">(</span><span class="n">in</span><span class="o">),</span> <span class="n">in</span><span class="o">);</span>
@@ -319,11 +326,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/">[spring boot] Wystawianie endpointów na wielu portach</a>
+        <a href="/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/">spring boot: Wystawianie endpointów na wielu portach</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/">Java: zwięzłe deklarowanie beanów</a>
+        <a href="/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/">java: zwięzłe deklarowanie beanów</a>
       </li>
     
       <li class="post">

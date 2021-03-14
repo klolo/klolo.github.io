@@ -4,7 +4,7 @@
   <title><![CDATA[Category: methodology | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/methodology/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2021-03-07T21:42:42+01:00</updated>
+  <updated>2021-03-14T16:14:57+01:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -96,7 +96,7 @@ znać każdy, a niekoniecznie tak jest.</p>
 
 
 <div style="text-align:center">
-    <img src="http://totalcombat.net/wp-content/uploads/2012/12/shotokan-kata-1.jpg" />
+    <img src="https://www.martialtribes.com/wp-content/uploads/2018/05/kata1-1-1024x512.jpg" />
 </div>
 
 
@@ -184,7 +184,7 @@ do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wypo
 <span class="kd">final</span> <span class="n">Function</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">circleArea</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-&gt;</span> <span class="n">r</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">PI</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 
 <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">// Przekazanie funkcji do metody</span>
-<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="kd">final</span> <span class="n">Function</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">void</span> <span class="nf">showCalculatedArea</span><span class="o">(</span><span class="n">Function</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Double</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">algorithm</span><span class="o">,</span> <span class="kt">double</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">algorithm</span><span class="o">.</span><span class="na">apply</span><span class="o">&amp;</span><span class="n">reg</span><span class="o">;);</span>
 <span class="o">}</span></code></pre></div></p>
 
