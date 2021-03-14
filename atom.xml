@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2018-02-18T13:38:01+01:00</updated>
+  <updated>2021-03-07T21:42:42+01:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -15,13 +15,264 @@
   
   <entry>
     
+    <title type="html"><![CDATA[[spring boot] Wystawianie endpointów na wielu portach]]></title>
+    <link href="http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/"/>
+    
+    <updated>2021-03-07T21:31:32+01:00</updated>
+    <id>http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach</id>
+    
+    <content type="html"><![CDATA[
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Java: zwięzłe deklarowanie beanów]]></title>
+    <link href="http://klolo.github.io/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/"/>
+    
+    <updated>2021-03-07T00:38:50+01:00</updated>
+    <id>http://klolo.github.io/blog/2021/03/07/java-zwiezle-deklarowanie-beanow</id>
+    
+    <content type="html"><![CDATA[<!--more-->
+
+
+<p>Projekt bankowości korporacyjnej w jakim uczestniczę musi sprostać bardzo różnorodnym wymaganiom wielu klientów. Niesie to ze sobą konieczność wykorzystania w projekcie szerokiego zakresu technologii.
+Odizolowanie aspektów czysto technicznych od biznesu jest w takim przypadku koniecznością. Kto chciałby mieć domenę biznesową ubrudzoną adnotacjami i zależnościami do różnych frameworków?
+Takie zależności to prosta droga, żeby elastyczny system zmieniał się w kod legacy.</p>
+
+<p>Wiele warstw systemu i oddzielenie domeny od infrastruktury nie jest jednak czymś, co możemy dostać za darmo. W przypadku naszego projektu, w którym wykorzystujemy framework Spring,
+konieczne okazało się dodanie w warstwie infrastruktury konfiguracji, która zamieni zwykłe klasy Javy w komponenty Spring, później wstrzykiwanych jako zależności. Jeszcze parę lat temu,
+na początku tego projektu, konfiguracja taka mogła zostać napisana na dwa różne sposoby: za pomocą XML lub w formie klas Javy zawierających konfigurację beanów z wykorzystaniem adnotacji Spring.
+Wykorzystaliśmy ten drugi sposób. Przykładowy kod definiujący komponenty w naszym przypadku wyglądał tak:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventFactoryConfiguration</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">AccountsBalancesSynchronizationEventFactory</span> <span class="nf">accountsBalancesSynchronizationEventFactory</span><span class="o">(</span>
+            <span class="n">InterfaceNameResolver</span> <span class="n">interfaceNameResolver</span><span class="o">,</span>
+            <span class="n">AccountRepository</span> <span class="n">accountRepository</span><span class="o">,</span>
+            <span class="n">BalanceProvider</span> <span class="n">balanceProvider</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AccountsBalancesSynchronizationEventFactory</span><span class="o">(</span>
+                        <span class="n">interfaceNameResolver</span><span class="o">,</span><span class="n">accountRepository</span><span class="o">,</span> <span class="n">balanceProvider</span>
+                    <span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">AccountSynchronizationEventFactory</span> <span class="nf">accountSynchronizationEventFactory</span><span class="o">(</span>
+            <span class="n">InterfaceNameResolver</span> <span class="n">interfaceNameResolver</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AccountSynchronizationEventFactory</span><span class="o">(</span><span class="n">interfaceNameResolver</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">StopAccountDispositionSynchronizationEventFactory</span> <span class="nf">stopAccountDispositionSynchronizationEventFactory</span><span class="o">(</span>
+            <span class="n">InterfaceNameResolver</span> <span class="n">interfaceNameResolver</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">StopAccountDispositionSynchronizationEventFactory</span><span class="o">(</span><span class="n">interfaceNameResolver</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">AccountBalancesSynchronizationEventFactory</span> <span class="nf">accountBalancesSynchronizationEventFactory</span><span class="o">(</span>
+            <span class="n">InterfaceNameResolver</span> <span class="n">interfaceNameResolver</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AccountBalancesSynchronizationEventFactory</span><span class="o">(</span><span class="n">interfaceNameResolver</span><span class="o">);</span> 
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+
+<p>Czy ten kod nie wygląda jak zwykły boilerplate? Wygląda. A w 99% przypadków jest czymś, z czym Spring potrafiłby sobie sam poradzić,
+ale jako świadomi programiści zdecydowaliśmy się nie wpuszczać adnotacji @Component do naszej domeny. Dodatkową wadą takich deklaracji oprócz tego,
+że w dużym projekcie zajmują setki a nawet tysiące linii kodu jest fakt, że kiedy dodajemy w klasie nowy parametr konstruktora, konieczne okazuje się
+również dodanie go w klasie z konfiguracją. A o tym programista często przypomina sobie dopiero w momencie kompilowania projektu.</p>
+
+<p>Jak żyć zatem? Czy trzeba kupić wygodną mechaniczną klawiaturę i pisać setki linii kodu z konfiguracją? Otóż nie! Od wersji 5, Spring daje alternatywę w formie
+dodatkowych metod do rejestrowania beanów. Dokumentacja pokazuje przykład definicji beana za pomocą takiej metody:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">GenericApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">GenericApplicationContext</span><span class="o">();</span>
+<span class="n">context</span><span class="o">.</span><span class="na">registerBean</span><span class="o">(</span><span class="n">Foo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">context</span><span class="o">.</span><span class="na">registerBean</span><span class="o">(</span><span class="n">Bar</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="k">new</span>
+    <span class="nf">Bar</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">Foo</span><span class="o">.</span><span class="na">class</span><span class="o">))</span>
+<span class="o">);</span></code></pre></div>
+
+
+<p>Wystarczy podać jakiej klasy beana rejestrujemy, a resztą zajmie się Spring. Nie musimy jawnie przekazywać zależności. No chyba że chcemy, wtedy również mamy taką możliwość.
+Proste, a zarazem potężne narzędzie. Otwiera to nowe możliwości pisania kodu w paradygmacie funkcyjnym. Połączenie tego podejścia i języka takiego jak na przykład Kotlin,
+zaowocowało powstaniem DSL-a do rejestrowania beanów. Osobiście uważam, że jest to najbardziej efektywny sposób pracy z Springiem. Ale co gdy z jakichkolwiek przyczyn nie możemy użyć Kotlina?
+W takim przypadku pozostaje użycie funkcyjnego sposobu deklaracji beanów z poziomu Javy, co również pozwoli usunąć bardzo dużo kodu konfiguracji. Mogą to być nawet dziesiątki tysięcy linii kodu,
+jak w naszym przypadku. Chciałbym skupić się teraz na takim właśnie przypadku i pokazać jak wpleść funkcyjny sposób konfiguracji z istniejącym projektem Spring Boot w Javie.</p>
+
+<p>Zacznijmy od zebrania komponentów, które chcemy zarejestrować w formie jakiegoś rejestru. Dobrze jest w jakiś sposób pogrupować te deklaracje od razu. Ja przyjmę grupowanie layer-first,
+ale nic nie stoi na przeszkodzie, żeby użyć feature-first. Klasa z definicjami beanów z poprzedniego przykładu będzie wyglądać tak:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventFactoryBeans</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">eventFactories</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
+        <span class="n">AccountsBalancesSynchronizationEventFactory</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">AccountSynchronizationEventFactory</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">StopAccountDispositionSynchronizationEventFactory</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">AccountBalancesSynchronizationEventFactory</span><span class="o">.</span><span class="na">class</span>
+    <span class="o">)</span>
+<span class="o">}</span></code></pre></div>
+
+
+<p>Czyż nie jest to czytelniejszy zapis? Większość kodu stało się niepotrzebne. Warto zauważyć, że podaję listę konkretnych klas, a nie np. interfejsów.
+Mimo to nadal jest możliwość wstrzykiwania za pomocą interfejsu, który klasa implementuje.
+Żeby jednak ta lista klas została zamieniona na beany Springa w runtime potrzebuję jeszcze wywołać gdzieś metodę registerBean.
+W tym celu dodam implementację interfejsu ApplicationContextInitializer:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContextInitializer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.GenericApplicationContext</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeanRegistrationContextInitializer</span> <span class="kd">implements</span> 
+    <span class="n">ApplicationContextInitializer</span><span class="o">&lt;</span><span class="n">GenericApplicationContext</span><span class="o">&gt;</span> <span class="o">{</span>
+    
+    <span class="kd">private</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">allBeans</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
+        <span class="n">EventFactoryBeans</span><span class="o">.</span><span class="na">eventFactories</span>
+        <span class="c1">// miejsce na reszte deklaracji komponentów</span>
+    <span class="o">);</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="o">(</span><span class="n">GenericApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">allBeans</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">bean</span> <span class="o">-&gt;</span> <span class="n">context</span><span class="o">.</span><span class="na">registerBean</span><span class="o">(</span><span class="n">bean</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">overrideBean</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">oldBean</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">newBean</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">allBeans</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">oldBean</span><span class="o">);</span>
+        <span class="n">allBeans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">newBean</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">register</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">newBean</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">allBeans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">newBean</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+
+<p>Jak widać rejestracja beanów sprowadza się do wywołania metody registerBean. Spring nie musi już skanować pakietów w poszukiwaniu adnotacji, przekazujemy mu jawnie jakie komponenty ma utworzyć.
+Pozwoli to również zmniejszyć czas uruchamiania aplikacji. Na koniec pozostaje jeszcze kwestia, dlaczego w powyższym kodzie pojawiły się metody overrideBean oraz register?
+Ułatwią one nam życie, w momencie kiedy tworzymy produkt dla kilku różnych klientów i pracujemy na jednym branchu. W taki przypadku kiedy dla jakiegoś klienta (nazwijmy go roboczo X)
+pojawia się konieczność wprowadzenia customizacji możemy stworzyć dodatkowy initializer:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeanRegistrationContextInitializerX</span> <span class="kd">extends</span>
+    <span class="n">BeanRegistrationContextInitializer</span> <span class="o">{</span>
+    
+    <span class="kd">public</span> <span class="nf">BeanRegistrationContextInitializerX</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">overrideBean</span><span class="o">(</span><span class="n">AccountFileRepository</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">AccountFileRepositoryX</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+        <span class="n">register</span><span class="o">(</span><span class="n">CustomerTypeToCustomerConverterX</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">register</span><span class="o">(</span><span class="n">CustomerHttpEndpointX</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+<span class="o">}</span></code></pre></div>
+
+
+<p>Jak widać możemy dowolne fragmenty procesów biznesowych nadpisywać specyficznym dla klienta kodem. Pozostaje jeszcze pytanie jak powiadomić Spring Boota o tym, że ma uruchomić initializer:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">new</span> <span class="nf">SpringApplicationBuilder</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">initializers</span><span class="o">(</span><span class="k">new</span> <span class="nf">BeanRegistrationContextInitializer</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+
+<p>Natomiast w testach integracyjnych możemy skorzystać z adnotacji: @ContextConfiguration(initializers = BeanRegistrationContextInitializer.class)</p>
+
+<p>Dodatkową zaletą powyższego sposobu konfiguracji jest to, że możemy wprowadzać go stopniowo. Kod zawierający konfigurację z wykorzystaniem adnotacji @Bean będzie nadal uruchamiany
+i możemy ciągle z niego korzystać. Jeżeli w Twoim projekcie nadal jest dużo kodu, w którym deklarujesz komponenty z wykorzystaniem adnotacji @Bean, zachęcam Cię do spróbowania alternatywy
+w formie DSLa w języku Kotlin, bądź też w formie prostego mechanizmu jaki przedstawiłem.</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
     <title type="html"><![CDATA[Dependency injection w js]]></title>
     <link href="http://klolo.github.io/blog/2018/02/18/dependency-injection-w-js/"/>
     
     <updated>2018-02-18T10:22:30+01:00</updated>
     <id>http://klolo.github.io/blog/2018/02/18/dependency-injection-w-js</id>
     
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>Czy do wstrzykiwania zależności w javascript potrzebny jest framework? Czy jest jakiś wbudowany mechanizm języka który pozwala nam to robić
+w łatwy sposób? Jest!</p>
+
+<!--more-->
+
+
+<p>W javascript programowanie obiektowe możliwe było przez lata dzięki funkcjom i dziedziczeniu przez prototypy. Syntax sugar w postaci klas jakie pojawiły
+sie razem z ES6 nie zmieniają tego. Nadaj pod spodem wykorzystywane są prototypy. Warto więc poznać możliwości jakie nam dają. Zacznijmy od prostego przykładu
+w którym za pomocą funkcji definiujemy obiekt Engine:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Engine</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">=</span> <span class="nx">model</span><span class="p">;</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span>  <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">start</span> <span class="nx">engine</span><span class="o">:</span> <span class="nx">$</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">}</span><span class="err">`</span><span class="p">)</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">engine</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Engine</span><span class="p">(</span><span class="s1">&#39;v8&#39;</span><span class="p">);</span>
+<span class="nx">engine</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span></code></pre></div>
+
+
+<p>Po zdefiniowaniu funkcji, wykorzystuje ją do stworzenia obiektu w którym znajdą się zarówno dane jak i logika. Jak widać bez użycia klas mamy programowanie obiektowe.
+Funkcje które są używane w js razem z <em>new</em> nazywane są konstruktorami i zwyczajowo ich nazwa zaczyna się z dużej litery. Ok, idźmy dalej. Warto zwrócić uwagę na to że
+jeżeli zmienimy funkcje <em>start</em> na lambdę (arrow function) to w dalszej części nie będziemy mieli dostępu do zmiennej model. Wynika to w różnicy w bindowaniu
+kontekstu this. Dla <em>function</em> this domyślnie odnosi się do miejsce gdzie funkcja jest wywoływana a dla <em>arrow</em> będzie to miejsce gdzie funkcja została zadeklarowana.
+Zdefiniujmy teraz silnik Diesel który będzie dziedziczył po Engine i zawierał dodatkową logikę:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Diesel</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">=</span> <span class="nx">model</span><span class="p">;</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">checkIsOk</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;is ok&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">Diesel</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Engine</span><span class="p">();</span></code></pre></div>
+
+
+<p>Po zdefiniowaniu funkcji Diesel do prototypu podpinam obiekt Engine. Dzięki czemu obiekt typu Diesel będzie miał wszystkie funkcje z obiektu Engine. Widać to na przykładzie:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">diesel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Diesel</span><span class="p">(</span><span class="s1">&#39;vw&#39;</span><span class="p">);</span>
+<span class="nx">diesel</span><span class="p">.</span><span class="nx">checkIsOk</span><span class="p">();</span>
+<span class="nx">diesel</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span></code></pre></div>
+
+
+<p>Jak widać bez użycia klas tworzymy kod wykorzystujący paradygmat obiektowości i używamy przy tym dziedziczenia. Co więcej w dowolnym miejscu aplikacji możemy zmienić prototype
+obiektu. Jet to coś co nie jest możliwe w takich językach jak np. Java. Tam dziedziczenie odbywa się na poziomie kodu źródłowego i po skomplikowaniu nie możemy w łatwy sposób
+zmieniać klasy bazowej po której dziedziczymy. Tak więc język który na pierwszy rzu oka wygląda jakby nie był obiektowy oferuje bardzo elastyczną obiektowość. Jak możemy to
+wykorzystać do wstrzykiwania zależności? Utwórzmy na początek obiekt typu Car:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Car</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">drive</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">engine</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;drive&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+
+<p>W funkcji drive wykorzystałem obiekt typu Engine, ale ten nigdzie nie został ustawiony. Jak go wstrzyknąć? Również za pomocą prototypu:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">Car</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">engine</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Engine</span><span class="p">(</span><span class="s1">&#39;v8&#39;</span><span class="p">);</span></code></pre></div>
+
+
+<p>Jak widać tworzymy obiekt Engine i podpinamy go do prototypu <em>Car</em> dzięki czemu będzie on dostępny we wszystkich obiektach ego typ. W łatwy sposób możemy wstrzykiwać zależności
+do obiektu, bez konieczności wykorzystywania dodatkowych bibliotek. No dobra ale co w przypadku kiedy Car będzie miał inny model silnika niż <em>v8</em>? Przy obecnym podejściu
+wszystkie samochody będą miały taki sam silnik. Możemy podejść do tego problemy w taki sposób:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Car</span><span class="p">(</span><span class="nx">engineModel</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">=</span> <span class="s1">&#39;another&#39;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">drive</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">engine</span><span class="p">.</span><span class="nx">start</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;drive&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+
+<p>Korzystając z metody call zmieniamy kontekst this funkcji <em>start</em> z <em>Engine</em>, dzięki czemu mamy możliwość zmiany danych na jakich pracuje ten obiekt.</p>
+
+<p>Podsumowując, javascript jest bardzo ciekawym językiem. Oferuje odmienne podejście do obiektowości niż main streamowe języki takie jak np. Java. Czy te podejście jest
+lepsze? To zależy, jak zawsze. Może ono powodować problemy ze zrozumieniem wśród programistów znających inne języki, dodatkowo może utrudniać zrozumienie takiego kodu.
+W końcu w klasach mamy wszystko w jednym miejscu, tutaj prototyp można zmienić w dowolnym miejscy aplikacji. Mimo to js daje większą elastyczność jeżeli chodzi
+o dziedziczenie i wstrzykiwanie zależności.</p>
 ]]></content>
     
   </entry>
@@ -75,65 +326,40 @@ typie znajduje się również w nazwie zmiennej. Jest to niedogodność względe
 się bez podania typów. Piszemy <em>var</em> i na poziomie runtime określany jest typ danych, jakie są przechowywane w zmiennej. Pisząc w javie wiele osób narzeka na boilerplate
 jaki powstaje w tym języku. Przykładowa bardziej zaawansowana deklaracja mapy w Javie 1.6 wygląda tak:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span>
-</span><span class='line'>                            <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;();</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span>
+                            <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;();</span></code></pre></div>
 
-
-<p></p>
 
 <p>Wychodzi nam porządny jamnik. Java 1.7 upraszcza ten zapis wprowadzając operator <em>diamond</em>, dzięki któremu typ generyka zostaje określony
 na podstawie deklaracji zmiennej:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span></code></pre></div>
 
-
-<p></p>
 
 <p>Już jest lepiej. Ale co w przypadku kiedy chcę wyjąć z mapy jakiś element i przypisać do zmiennej? Znów trzeba podać typ elementu. I dostaję coś takiego:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div>
 
-
-<p></p>
 
 <p>Nie mamy możliwości skrócenia takiego zapisu. Z drugiej strony, typ zmiennej mógłby być z powodzeniem określony na podstawie typu zmiennej <em>dataMap</em>.
 Twórcy javy chcą ułatwić nam życie i dodać do języka możliwość określania typu zmiennej lokalnej na podstawie tego, co do niej przypisujemy. Planowane jest wykorzystanie
 w tym celu słówka kluczowego <em>var</em>. Zamiast podawać typ zmiennej, który kompilator sam za nas określi, będzie można napisać:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">var</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div>
 
-
-<p></p>
 
 <p>Taka instrukcja wygląda dużo prościej niż ta z generykiem. Jednak podejrzewam, że może prowadzić do sytuacji kiedy trzeba będzie się chwilę zastanowić jakiego typu
 obiekt mamy w zmiennej. Oczywiście będą też przypadki, w których kompilator nie domyśli się za nas jakiego typu ma być ta zmienna. Przykładowo próbując przypisać
 lambdę reprezentującą <em>Runnable</em> dostaniemy błąd:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">var</span> <span class="n">runable</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{};</span> <span class="c1">// error: cannot infer type for local variable</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">var</span> <span class="n">runable</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{};</span> <span class="c1">// error: cannot infer type for local variable</span></code></pre></div>
 
-
-<p></p>
 
 <p>Deklaracje zmiennych lokalnych, gdzie moglibyśmy uprościć zapis korzystając z <em>var</em> to według twórców Javy ponad 90% kodu. Co ciekawe, jako alternatywę dla <em>var</em>
 podano możliwość rozbudowy wyrażenia diament, tak żeby można było wykorzystać go z lewej strony operatora przypisania. I dawałoby to taki zapis:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Map</span><span class="o">&lt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div>
 
-
-<p></p>
 
 <h2>Po co czekać skoro jest Lombok</h2>
 
@@ -149,30 +375,19 @@ do języka w ramach <em>JEP 286</em> to <em>Lombok</em> z pewnością usunie ją
 <p>Jeżeli chodzi o mutowalności <em>var</em> w javie 18.3 - architekci nadal dyskutują. Oczekując na kolejny release javy możemy ściągnąć <em>Lomboka</em>
 i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego podejścia, kiedy już wejdzie oficjalnie do języka. Na koniec przykład wykorzystania <em>Lomboka</em>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">lombok.val</span><span class="o">;</span>
-</span><span class='line'><span class="o">...</span>
-</span><span class='line'>    <span class="n">val</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
-</span><span class='line'>    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="s">&quot;zero&quot;</span><span class="o">);</span>
-</span><span class='line'>    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="s">&quot;five&quot;</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">val</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;%d: %s\n&quot;</span><span class="o">,</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">...</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">lombok.val</span><span class="o">;</span>
+<span class="o">...</span>
+    <span class="n">val</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="s">&quot;zero&quot;</span><span class="o">);</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="s">&quot;five&quot;</span><span class="o">);</span>
+    
+    <span class="k">for</span> <span class="o">(</span><span class="n">val</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;%d: %s\n&quot;</span><span class="o">,</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">...</span></code></pre></div>
 
 
-<p></p>
+
 ]]></content>
     
   </entry>
@@ -222,17 +437,11 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
 
 <p>Jako fan czystego kodu zgadzam się ze stwierdzeniem, że komentarze nie są potrzebne w kodzie. Co więcej widziałem i rozwijałem aplikacje, gdzie komentarzy nie było. No, może z paroma wyjątkami: tam gdzie intencja autora nie była jasna pojawiało się wyjaśnienie, dlaczego coś działa w taki, a nie inny sposób. W systemach tych nikt nie pisał w komentarzach jak działa dany fragment kodu. Metody, klasy były na tyle małe, że stwierdzenie co robią było równie szybkie jak przeczytanie komentarza, który zresztą zawsze może być nieaktualny, bądź niezrozumiale napisany. Nikt w tych systemach nie używał komentarzy, a w kodzie nie było zbędnego szumu, który przeszkadzałby w czytaniu. Nigdy w tych aplikacjach nie spotkałem się z stwierdzeniem, że przydałyby się obowiązkowe komentarze. Komentarze natomiast widywałem w systemach legacy, o bardzo długich metodach. Programiści pisali je mimo że nie mieli takiego obowiązku wynikającego z przyjętych zasad. Często wyglądało to tak:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// some comment</span>
-</span><span class='line'><span class="err">…</span><span class="n">code</span><span class="err">…</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// some comment</span>
-</span><span class='line'><span class="err">…</span><span class="n">code</span><span class="err">…</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// some comment</span>
+<span class="err">…</span><span class="n">code</span><span class="err">…</span>
+
+<span class="c1">// some comment</span>
+<span class="err">…</span><span class="n">code</span><span class="err">…</span></code></pre></div>
 
 
 <p>Czytając funkcje, w której fragmenty kodu są poprzedzone komentarzem aż się prosi, żeby powydzielać mniejsze metody, których nazwa będzie mówić dokładnie to samo co komentarz. Może autorzy kodu próbowali oczyścić sumienie i myśleli, że chociaż w taki sposób ułatwią kolejnym programistom życie?</p>
@@ -245,190 +454,100 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
 
 <p>Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za dużo? Czy 25 to maksimum? Niektórzy twierdzą, że dobra metoda powinna mieścić się w całości na ekranie. Można wtedy zadać pytanie o rozmiar czcionki i rozdzielczość. Clean code wspomina o tym, że dobra metoda powinna wykonywać tylko jedną rzecz, ale za to dobrze. Kiedy spojrzymy jednak na np. strumienie w Java 8, to dzięki podejściu deklaratywnym w kilku linijkach możemy zrobić bardzo wiele rzeczy. Dzieje się to dzięki temu, że deklarujemy, co kod ma robić, a nie w jaki sposób. Trudno sobie wyobrazić funkcje pracujące na strumieniach i robiące tylko jedną rzecz. Musiałyby składać się z 2,3 linijek. Tak duża granularność metod może również prowadzić do problemów z czytaniem kodu i wprowadza zbędną złożoność. Nie wspomnę już o wydajności. JVM zamiast wykonywać faktyczny algorytm, spędza więcej czasu na kolejnych wyołaniach. Czynniki te są oczywiście ważne i należy o nich pamiętać, jest jednak jeszcze jedna zasada określająca czy metoda wymaga rozbicia. Są to poziomy abstrakcji. Nigdy nie powinno się ich mieszać. Co to oznacza w praktyce? Spójrzmy na poniższą wymyśloną metodę. Mimo że jest ona krótka, robi zdecydowanie za dużo, mieszając przy tym poziomy abstrakcji:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm">* Metoda pobiera itemy z bazy i wysyla je do innego systemu.</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">();</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>        <span class="c1">// pobranie danych z bazy</span>
-</span><span class='line'>        <span class="n">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Connection</span><span class="o">(</span><span class="s">&quot;127.0.0.1:1521&quot;</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// pobranie szczegółów dla każdego elementu</span>
-</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="c1">// przefiltrowanie danych, uzupelnienie o szczegóły</span>
-</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>                <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
-</span><span class='line'>                <span class="n">itemsForSend</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// wysłanie daych do innego systemu</span>
-</span><span class='line'>        <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
-</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>    <span class="k">catch</span> <span class="o">(</span><span class="n">SomeException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">handle</span><span class="o">();</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**</span>
+<span class="cm">   * Metoda pobiera itemy z bazy i wysyla je do innego systemu.</span>
+<span class="cm">   */</span>
+    <span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// pobranie danych z bazy</span>
+            <span class="n">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Connection</span><span class="o">(</span><span class="s">&quot;127.0.0.1:1521&quot;</span><span class="o">);</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
+            
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+
+            <span class="c1">// pobranie szczegółów dla każdego elementu</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="c1">// przefiltrowanie danych, uzupelnienie o szczegóły</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+                    <span class="n">itemsForSend</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="c1">// wysłanie daych do innego systemu</span>
+            <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
+            <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
+            <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">catch</span> <span class="o">(</span><span class="n">SomeException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">handle</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></div>
 
 
 <p>Powyższy pseudo kod, oprócz potencjalnych problemów z <em>sql injection</em> pokazuje pomieszanie poziomów abstrakcji. W jednej metodzie mamy zarówno logikę biznesową jak i operacje niższego poziomu (np. pobranie danych z bazy danych) oraz operacje o jeszcze niższym poziomie abstrakcji takie jak sklejanie danych wejściowych do wywołania usługi jakiegoś zewnętrznego systemu oraz obsługę błedów. Za każdym razem kiedy zmienią się wymagania biznesowe funkcja ta będzie zmieniana. Bo jak inaczej np. zmienić dane wejściowe do zewętrznego systemu w ostatnich linijkach <em>someBusinessLogic</em>?</p>
 
 <p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mgółby wyglądać tak:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">filterItems</span><span class="o">(</span><span class="n">getItems</span><span class="o">(</span><span class="n">in</span><span class="o">),</span> <span class="n">in</span><span class="o">);</span>
-</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="n">convertToItemToSend</span><span class="o">(</span><span class="n">items</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">getConnectorInput</span><span class="o">(</span><span class="n">itemsForSend</span><span class="o">,</span> <span class="n">in</span><span class="o">);</span>
-</span><span class='line'>    <span class="n">sendToAnotherSystem</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">filterItems</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
-</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">getItems</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="nf">convertToItemToSend</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
-</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="n">getItemDetails</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">ItemDetails</span> <span class="nf">getItemDetails</span><span class="o">(</span><span class="n">Item</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">String</span> <span class="nf">getConnectorInput</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
-</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">void</span> <span class="nf">sendToAnotherSystem</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
-</span><span class='line'>    <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">someBusinessLogic</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">filterItems</span><span class="o">(</span><span class="n">getItems</span><span class="o">(</span><span class="n">in</span><span class="o">),</span> <span class="n">in</span><span class="o">);</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span> <span class="o">=</span> <span class="n">convertToItemToSend</span><span class="o">(</span><span class="n">items</span><span class="o">);</span>
+
+        <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="n">getConnectorInput</span><span class="o">(</span><span class="n">itemsForSend</span><span class="o">,</span> <span class="n">in</span><span class="o">);</span>
+        <span class="n">sendToAnotherSystem</span><span class="o">(</span><span class="n">connectorInput</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">filterItems</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">isSomething</span><span class="o">(</span><span class="n">in</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="nf">getItems</span><span class="o">(</span><span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from items where sth=&quot;</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getSth</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="nf">convertToItemToSend</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Item</span> <span class="n">i</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ItemDetails</span> <span class="n">details</span> <span class="o">=</span> <span class="n">getItemDetails</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ItemForSend</span><span class="o">(</span><span class="n">details</span><span class="o">));</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">ItemDetails</span> <span class="nf">getItemDetails</span><span class="o">(</span><span class="n">Item</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">ItemDetails</span><span class="o">)</span> <span class="n">con</span><span class="o">.</span><span class="na">makeQuery</span><span class="o">(</span><span class="s">&quot;select * from details where id = &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">String</span> <span class="nf">getConnectorInput</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">ItemForSend</span><span class="o">&gt;</span> <span class="n">itemsForSend</span><span class="o">,</span> <span class="n">Input</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SomeException</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">connectorInput</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">ItemForSend</span> <span class="n">itemForSend</span> <span class="o">:</span> <span class="n">itemsForSend</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">connectorInput</span> <span class="o">+=</span> <span class="n">itemForSend</span><span class="o">.</span><span class="na">toJson</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">connectorInput</span><span class="o">.</span><span class="na">trim</span><span class="o">()</span> <span class="o">+</span> <span class="n">in</span><span class="o">.</span><span class="na">getAdditionalData</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">sendToAnotherSystem</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">AnotherSystemConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnotherSystemConnector</span><span class="o">();</span>
+        <span class="n">connector</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></div>
 
 
 <p>Walidacja i obsługa wyjatków została przeniesiona do metody nadrzędnej. Nieaktualny komentarz opisujący działanie został usunięty, zamiast tego jest krótki kod, który łatwo zrozumieć. Mówi on dokładnie co biznesowo robi metoda bez wchodzenia w szczegóły techniczne. Mamy odseparowany wysoki poziom abstrakcji, reprezentujący logikę biznesową. Połaczenie do bazy zostało wyniesione na zewnątrz metody, dzieki czemu możemy być reużywane. Jest to przy okazji optymalizacja wydajności. Każda z utworzonych metod jest krótka, łatwo ją reużyć, przetestować. Jeżeli zmienią się wymagania biznesowe możemy dopisać nową funkcję i wpiąć ją w dowolne miejsce procesu bez konieczności modyfikacji istniejących metod.</p>
@@ -465,25 +584,15 @@ niezmienne obiekty</p>
 <p>Do tej pory miałem (nie)przyjemność analizować problemy produkcyjne spowodowane tym, że ktoś w długiej metodzie podmieniał parametr wejściowy, a ktoś
 inny oczekiwał, że parametr wejściowy się nie zmieni. Wyglądało to mniej więcej tak:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">makeFoo</span><span class="o">(</span><span class="n">Input</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;Input: {}&quot;</span><span class="o">,</span> <span class="n">input</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// ...jakis kod ~100 lini...</span>
-</span><span class='line'>    <span class="n">input</span> <span class="o">=</span> <span class="n">makeBoo</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// ... jakis kod ~100 lini...</span>
-</span><span class='line'>    <span class="n">input</span><span class="o">.</span><span class="na">performSomeOperation</span><span class="o">();</span> <span class="c1">// exeption</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">makeFoo</span><span class="o">(</span><span class="n">Input</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;Input: {}&quot;</span><span class="o">,</span> <span class="n">input</span><span class="o">);</span>
+    
+    <span class="c1">// ...jakis kod ~100 lini...</span>
+    <span class="n">input</span> <span class="o">=</span> <span class="n">makeBoo</span><span class="o">();</span>
+    
+    <span class="c1">// ... jakis kod ~100 lini...</span>
+    <span class="n">input</span><span class="o">.</span><span class="na">performSomeOperation</span><span class="o">();</span> <span class="c1">// exeption</span>
+<span class="o">}</span></code></pre></div>
 
 
 <p>W obiekcie input dostaje komplet danych potrzebnych do wykonania <em>performSomeOperation</em>, jednak w połowie funkcji <em>makeFoo</em> ktoś podmienia parametr wejściowy na jakiś inny, nie mający już kompletu danych. W rezultacie dostaje gdzieś dalej w kodzie wyjątek. Analiza loggera na początku metody <em>makeFoo</em> wskazuje, że na wejściu był komplet danych. Szukam zatem w <em>performSomeOperation</em> oraz w dalszych metodach. Czas mija, produkcja stoi, telefon dzwoni, stres maksymalny. Sytuacji, o dziwo, wcale nie ułatwia fakt, że jest to system legacy bez testów jednostkowych, metoda <em>makeFoo</em> ciągnie się jak jamnik na sterydach i wygląda na stęsknioną ostrego refactoringu. Mijały godziny zanim zauważyłem w czym jest błąd. Problem z oczami wykluczam, bo nie analizowałem kodu sam. Identyczną sytuację miałem od tamtego czasu jeszcze jakieś 3 razy. Po tych przykrych doświadczenia pokochałem słowo <em>final</em>. Dzięki niemu nie można podmienić parametru wejściowego do metody. Jest to już jakieś zabezpieczenie. Niektórzy powiedzą, że jest to więcej pisania, za dużo roboty. Jeżeli napisanie kilka razy dziennie słowa <em>final</em> w kodzie jest zbyt ciężką pracą - można i tak&hellip; Można też stwierdzić, że to jest szum w kodzie, zbędna informacja, że przy prawidłowo napisanych metodach mieszczących się na ekranie bez przewijania, jest to zbędne. Niekoniecznie. Zamiast czytać całą metodę w celu ustalenia czy podmieniamy ten parametr czy nie, wystarczy zerknąć na listę parametrów i mieć tę informację od razu. Jakież to szczęście, że w moim obecnym projekcie mamy konwencję, która wymusza na nas używanie final w parametrach.</p>
@@ -500,35 +609,20 @@ Przy takim podejściu łatwiej również przestawić się na programowanie funkc
 <p>Idąc krok dalej, zacząłem się zastanawiać czy nie warto używać final do pól w klasie. Wszystkich pól. I myślę, że to także jest dobry pomysł, funkcjonujący pod nazwą <em>immutable objects</em>. Obiekt po utworzeniu nie może zmienić swojego stanu. Przykładami takich obiektów jest np. <em>String</em>, <em>BigDecimal</em>. Pojawia się pytanie - jak ustawiać pola w takich obiektach? Jeżeli jest dużo parametrów - będzie potrzebny wielki konstruktor, jeżeli część danych nie jest wymagana - mogą powstawać konstruktory teleskopowe. A co w przypadku, kiedy część danych nie jest dostępna od razu, ale trzeba je pobrać z innego miejsca systemu? Rozwiązaniem problemu jest wzorzec builder. Implementowanie tego wzorca dla każdego nowego obiektu DTO możemy być uciążliwe, dlatego warto skorzystać z automatycznego generowania buildera przez IDE. Jednak tutaj przy zmianie DTO, należy go ręcznie edytować lub jeszcze raz wygenerować. Alternatywą jest biblioteka <em>Lombok</em>, która w momencie kompilacji kodu na podstawie annotacji w kodzie generuje dodatkowy kod,
 taki jak np. gettery, settery, toString czy też kod buildera. Korzystanie z <em>Lombok</em> sprawia, że w kodzie nie mamy zbędnego <em>boilerplate</em> tylko faktyczną logikę biznesową. Oto prosty przykład połączenia <em>Lombok</em> i niemutowalnego obiektu:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Builder</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Account</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">AccountType</span> <span class="n">type</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">number</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Currency</span> <span class="n">currency</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Account</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">number</span><span class="o">(</span><span class="s">&quot;865423&quot;</span><span class="o">)</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">type</span><span class="o">(</span><span class="n">AccountType</span><span class="o">.</span><span class="na">RO2</span><span class="o">)</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">amount</span><span class="o">(</span><span class="k">new</span> <span class="nf">BigDecimal</span><span class="o">(</span><span class="s">&quot;0&quot;</span><span class="o">))</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">currency</span><span class="o">(</span><span class="n">Currency</span><span class="o">.</span><span class="na">CHF</span><span class="o">)</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Builder</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Account</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">AccountType</span> <span class="n">type</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">number</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Currency</span> <span class="n">currency</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="n">Account</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">number</span><span class="o">(</span><span class="s">&quot;865423&quot;</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">type</span><span class="o">(</span><span class="n">AccountType</span><span class="o">.</span><span class="na">RO2</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">amount</span><span class="o">(</span><span class="k">new</span> <span class="nf">BigDecimal</span><span class="o">(</span><span class="s">&quot;0&quot;</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">currency</span><span class="o">(</span><span class="n">Currency</span><span class="o">.</span><span class="na">CHF</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span></code></pre></div>
 
 
 <p>Bez pisania kodu buildera możemy stopniowo wypełniać danymi obiekty, które później nie zmienią swojego stanu i będą bardziej przewidywalne. Dodatkowo takie obiekty ułatwią
@@ -540,39 +634,22 @@ Czy nie zaczyna to jednak za bardzo przypominać innego języka jvm-a&hellip;?</
 <p>Na koniec chciałbym opowiedzieć o tym jak zemścił się na mnie brak niemutowalnych obiektów. Napisałem test jednostkowy do null pointera, o którym wspomniałem na początku.
 Test wyglądał mniej więcej tak:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Test</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">shouldNotFailedWhenDateIsNull</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="c1">// given</span>
-</span><span class='line'>    <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">FluentIterable</span>
-</span><span class='line'>                                    <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">Mock</span><span class="o">.</span><span class="na">items</span><span class="o">)</span>
-</span><span class='line'>                                    <span class="o">.</span><span class="na">transform</span><span class="o">(</span> <span class="n">item</span> <span class="o">=&gt;</span> <span class="o">{</span>
-</span><span class='line'>                                        <span class="n">item</span><span class="o">.</span><span class="na">setDate</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
-</span><span class='line'>                                        <span class="k">return</span> <span class="n">item</span><span class="o">;</span>
-</span><span class='line'>                                    <span class="o">})</span>
-</span><span class='line'>                                    <span class="o">.</span><span class="na">toList</span><span class="o">();</span>
-</span><span class='line'>    <span class="c1">//when </span>
-</span><span class='line'>    <span class="n">someService</span><span class="o">.</span><span class="na">sortByDate</span><span class="o">(</span><span class="n">items</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">//then</span>
-</span><span class='line'>    <span class="n">Assert</span><span class="o">.....</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">shouldNotFailedWhenDateIsNull</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// given</span>
+    <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">FluentIterable</span>
+                                    <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">Mock</span><span class="o">.</span><span class="na">items</span><span class="o">)</span>
+                                    <span class="o">.</span><span class="na">transform</span><span class="o">(</span> <span class="n">item</span> <span class="o">=&gt;</span> <span class="o">{</span>
+                                        <span class="n">item</span><span class="o">.</span><span class="na">setDate</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+                                        <span class="k">return</span> <span class="n">item</span><span class="o">;</span>
+                                    <span class="o">})</span>
+                                    <span class="o">.</span><span class="na">toList</span><span class="o">();</span>
+    <span class="c1">//when </span>
+    <span class="n">someService</span><span class="o">.</span><span class="na">sortByDate</span><span class="o">(</span><span class="n">items</span><span class="o">);</span>
+
+    <span class="c1">//then</span>
+    <span class="n">Assert</span><span class="o">.....</span>
+<span class="o">}</span></code></pre></div>
 
 
 <p>Bardzo prosty test, w którym pobieram listę jakiś obiektów z mocka, ustawiam datę jako null, wywołuję metodę, gdzie był błąd <em>NullPointerException</em>
@@ -681,65 +758,35 @@ dowolne elementy.</p>
 <p>Wadą takich natywnych komponentów jest brak elastycznego mechanizmu do definiowania widoku html dla komponentu oraz łączenia go z logiką biznesową zawartą w klasie js.
 I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym js pozwalającym definiować html komponentu bezpośrednio w js. W praktyce komponent <em>Hello world</em> napisany w React wygląda tak:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kr">import</span> <span class="nx">logo</span> <span class="nx">from</span> <span class="s1">&#39;./logo.svg&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kr">import</span> <span class="s1">&#39;./App.css&#39;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kr">class</span> <span class="nx">App</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">username</span><span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="p">};</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze</span>
-</span><span class='line'>  <span class="nx">handleChange</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">username</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">});</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">(</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;center-align&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="nx">header</span><span class="o">&gt;</span>
-</span><span class='line'>          <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">logo</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;App-logo&quot;</span> <span class="o">/&gt;</span>
-</span><span class='line'>          <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="err">/header&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;row&quot;</span> <span class="nx">style</span><span class="o">=</span><span class="p"></span><span class="o">&gt;</span>
-</span><span class='line'>          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'>    <span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">logo</span> <span class="nx">from</span> <span class="s1">&#39;./logo.svg&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="s1">&#39;./App.css&#39;</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">App</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">username</span><span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="c1">// uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze</span>
+  <span class="nx">handleChange</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">username</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;center-align&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">header</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">logo</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;App-logo&quot;</span> <span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
+        <span class="o">&lt;</span><span class="err">/header&gt;</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;row&quot;</span> <span class="nx">style</span><span class="o">=&gt;</span>
+          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="err">/div&gt;</span>
+      <span class="o">&lt;</span><span class="err">/div&gt;</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
 
 
 <p>Komponent React to zwykła klasa dziedzicząca po Reactowym <em>Component</em>. W metodzie <em>render</em> zwracamy kod html zapisany za pomocą JSX. Jak widać zawiera on odwołania

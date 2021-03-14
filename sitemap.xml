@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/</loc>
+<lastmod>2021-03-07T21:31:32+01:00</lastmod>
+</url>
+<url>
+<loc>http://klolo.github.io/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/</loc>
+<lastmod>2021-03-07T00:38:50+01:00</lastmod>
+</url>
+<url>
 <loc>http://klolo.github.io/blog/2018/02/18/dependency-injection-w-js/</loc>
 <lastmod>2018-02-18T10:22:30+01:00</lastmod>
 </url>
@@ -65,16 +73,16 @@
 <lastmod>2017-08-04T20:25:49+02:00</lastmod>
 </url>
 <url>
-<loc>http://klolo.github.io/</loc>
-</url>
-<url>
 <loc>http://klolo.github.io/blog/archives/</loc>
 </url>
 <url>
-<loc>http://klolo.github.io/lodz/</loc>
+<loc>http://klolo.github.io/</loc>
 </url>
 <url>
 <loc>http://klolo.github.io/about/</loc>
+</url>
+<url>
+<loc>http://klolo.github.io/lodz/</loc>
 </url>
 <url>
 <loc>http://klolo.github.io/blog/categories/methodology/</loc>
@@ -84,5 +92,8 @@
 </url>
 <url>
 <loc>http://klolo.github.io/blog/categories/typescript/</loc>
+</url>
+<url>
+<loc>http://klolo.github.io/blog/categories/javascript/</loc>
 </url>
 </urlset>

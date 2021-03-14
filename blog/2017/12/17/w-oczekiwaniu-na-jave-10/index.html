@@ -26,6 +26,9 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -132,65 +135,40 @@ typie znajduje się również w nazwie zmiennej. Jest to niedogodność względe
 się bez podania typów. Piszemy <em>var</em> i na poziomie runtime określany jest typ danych, jakie są przechowywane w zmiennej. Pisząc w javie wiele osób narzeka na boilerplate
 jaki powstaje w tym języku. Przykładowa bardziej zaawansowana deklaracja mapy w Javie 1.6 wygląda tak:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span>
-</span><span class='line'>                            <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;();</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span>
+                            <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;();</span></code></pre></div>
 
-
-<p></p>
 
 <p>Wychodzi nam porządny jamnik. Java 1.7 upraszcza ten zapis wprowadzając operator <em>diamond</em>, dzięki któremu typ generyka zostaje określony
 na podstawie deklaracji zmiennej:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">dataMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span></code></pre></div>
 
-
-<p></p>
 
 <p>Już jest lepiej. Ale co w przypadku kiedy chcę wyjąć z mapy jakiś element i przypisać do zmiennej? Znów trzeba podać typ elementu. I dostaję coś takiego:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div>
 
-
-<p></p>
 
 <p>Nie mamy możliwości skrócenia takiego zapisu. Z drugiej strony, typ zmiennej mógłby być z powodzeniem określony na podstawie typu zmiennej <em>dataMap</em>.
 Twórcy javy chcą ułatwić nam życie i dodać do języka możliwość określania typu zmiennej lokalnej na podstawie tego, co do niej przypisujemy. Planowane jest wykorzystanie
 w tym celu słówka kluczowego <em>var</em>. Zamiast podawać typ zmiennej, który kompilator sam za nas określi, będzie można napisać:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">var</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">var</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div>
 
-
-<p></p>
 
 <p>Taka instrukcja wygląda dużo prościej niż ta z generykiem. Jednak podejrzewam, że może prowadzić do sytuacji kiedy trzeba będzie się chwilę zastanowić jakiego typu
 obiekt mamy w zmiennej. Oczywiście będą też przypadki, w których kompilator nie domyśli się za nas jakiego typu ma być ta zmienna. Przykładowo próbując przypisać
 lambdę reprezentującą <em>Runnable</em> dostaniemy błąd:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">var</span> <span class="n">runable</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{};</span> <span class="c1">// error: cannot infer type for local variable</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">var</span> <span class="n">runable</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{};</span> <span class="c1">// error: cannot infer type for local variable</span></code></pre></div>
 
-
-<p></p>
 
 <p>Deklaracje zmiennych lokalnych, gdzie moglibyśmy uprościć zapis korzystając z <em>var</em> to według twórców Javy ponad 90% kodu. Co ciekawe, jako alternatywę dla <em>var</em>
 podano możliwość rozbudowy wyrażenia diament, tak żeby można było wykorzystać go z lewej strony operatora przypisania. I dawałoby to taki zapis:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Map</span><span class="o">&lt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;&gt;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">dataMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span></code></pre></div>
 
-
-<p></p>
 
 <h2>Po co czekać skoro jest Lombok</h2>
 
@@ -206,30 +184,19 @@ do języka w ramach <em>JEP 286</em> to <em>Lombok</em> z pewnością usunie ją
 <p>Jeżeli chodzi o mutowalności <em>var</em> w javie 18.3 - architekci nadal dyskutują. Oczekując na kolejny release javy możemy ściągnąć <em>Lomboka</em>
 i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego podejścia, kiedy już wejdzie oficjalnie do języka. Na koniec przykład wykorzystania <em>Lomboka</em>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">lombok.val</span><span class="o">;</span>
-</span><span class='line'><span class="o">...</span>
-</span><span class='line'>    <span class="n">val</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
-</span><span class='line'>    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="s">&quot;zero&quot;</span><span class="o">);</span>
-</span><span class='line'>    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="s">&quot;five&quot;</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">val</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;%d: %s\n&quot;</span><span class="o">,</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">...</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">lombok.val</span><span class="o">;</span>
+<span class="o">...</span>
+    <span class="n">val</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="s">&quot;zero&quot;</span><span class="o">);</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="s">&quot;five&quot;</span><span class="o">);</span>
+    
+    <span class="k">for</span> <span class="o">(</span><span class="n">val</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;%d: %s\n&quot;</span><span class="o">,</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">...</span></code></pre></div>
 
 
-<p></p>
+
 </div>
 
 
@@ -298,6 +265,14 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/">[spring boot] Wystawianie endpointów na wielu portach</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2021/03/07/java-zwiezle-deklarowanie-beanow/">Java: zwięzłe deklarowanie beanów</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/02/18/dependency-injection-w-js/">Dependency injection w js</a>
       </li>
     
@@ -327,14 +302,6 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
     
       <li class="post">
         <a href="/blog/2017/08/28/java-stream-api-darmowy-kurs/">Java stream API - darmowy kurs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/08/28/typescript-wprowadzenie-czesc-1/">Typescript wprowadzenie - część 1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/08/15/intellij-live-templates-szybsze-programowanie/">Intellij live templates - szybsze programowanie</a>
       </li>
     
   </ul>
@@ -470,7 +437,7 @@ i poeksperymentować z <em>val/var</em>, tak żeby znać wady i zalety tego pode
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2018 - Kamil Lolo <br/>
+  Copyright &copy; 2021 - Kamil Lolo <br/>
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>, customized with <a href="https://github.com/mjhea0/whiterspace">whiterspace</a>.</span>
 </p>
 

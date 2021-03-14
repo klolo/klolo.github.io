@@ -4,7 +4,7 @@
   <title><![CDATA[Category: typescript | Łódzki programista]]></title>
   <link href="http://klolo.github.io/blog/categories/typescript/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2018-02-18T13:38:01+01:00</updated>
+  <updated>2021-03-07T21:42:42+01:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -81,36 +81,35 @@ dowolne elementy.</p>
 <p>Wadą takich natywnych komponentów jest brak elastycznego mechanizmu do definiowania widoku html dla komponentu oraz łączenia go z logiką biznesową zawartą w klasie js.
 I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym js pozwalającym definiować html komponentu bezpośrednio w js. W praktyce komponent <em>Hello world</em> napisany w React wygląda tak:</p>
 
-<pre><code class="javascript ">import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+<p><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">react</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+<span class="kr">import</span> <span class="nx">logo</span> <span class="nx">from</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="o">/</span><span class="nx">logo</span><span class="p">.</span><span class="nx">svg</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+<span class="kr">import</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="o">/</span><span class="nx">App</span><span class="p">.</span><span class="nx">css</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { username: '' };
-  }
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kr">class</span> <span class="nx">App</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">username</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span> <span class="p">};</span>
+  <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 
-  // uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze
-  handleChange = event =&gt; { 
-    this.setState({username: event.target.value});
-  }
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="c1">// uwaga: jeżeli nie używasz Arrow function to musisz zbindować this w konstruktorze</span>
+  <span class="nx">handleChange</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">username</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">});</span>
+  <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 
-  render() {
-    return (
-      &lt;div className="center-align"&gt;
-        &lt;header&gt;
-          &lt;img src={logo} className="App-logo" /&gt;
-          &lt;h2&gt;Welcome {this.state.username}&lt;/h2&gt;
-        &lt;/header&gt;
-        &lt;div className="row" style=&gt;
-          &lt;input placeholder="Enter your name" onChange={this.handleChange} /&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    );
-  }
-}
-</code></pre>
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;center-align&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">header</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">logo</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;App-logo&quot;</span> <span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Welcome</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">username</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
+        <span class="o">&lt;</span><span class="err">/header&gt;</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;row&quot;</span> <span class="nx">style</span><span class="o">=&gt;</span>
+          <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your name&quot;</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="err">/div&gt;</span>
+      <span class="o">&lt;</span><span class="err">/div&gt;</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div></p>
 
 <p>Komponent React to zwykła klasa dziedzicząca po Reactowym <em>Component</em>. W metodzie <em>render</em> zwracamy kod html zapisany za pomocą JSX. Jak widać zawiera on odwołania
 do zmiennych js, może również posiadać osadzony dowolny kod js. Należy jednak pamiętać, że nie jest to zwykły html i nie wszystko, co jest prawidłowym html, będzie poprawnym
