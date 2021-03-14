@@ -4,7 +4,7 @@
   <title><![CDATA[Łódzki programista]]></title>
   <link href="http://klolo.github.io/atom.xml" rel="self"/>
   <link href="http://klolo.github.io/"/>
-  <updated>2021-03-14T16:14:57+01:00</updated>
+  <updated>2021-03-14T20:06:46+01:00</updated>
   <id>http://klolo.github.io/</id>
   <author>
     <name><![CDATA[Kamil Lolo]]></name>
@@ -15,13 +15,72 @@
   
   <entry>
     
-    <title type="html"><![CDATA[spring boot: Wystawianie endpointów na wielu portach]]></title>
+    <title type="html"><![CDATA[spring boot: Wystawianie endpointów jednej aplikacji na wielu portach]]></title>
     <link href="http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach/"/>
     
     <updated>2021-03-07T21:31:32+01:00</updated>
     <id>http://klolo.github.io/blog/2021/03/07/spring-boot-wystawianie-endpointow-na-wielu-portach</id>
     
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>Standardem jest tworzenie aplikacji webowych, gdzie wystawiamy usługi na jednym wybranym porcie.
+Czasami jednak życie może nas zmusić do stworzenia jednej aplikacji słuchającej na większej ilości portów.</p>
+
+<!--more-->
+
+
+<p>Przykładem może być sytuacja, gdy chcemy publiczne api mieć na innym porcie niż api przeznaczone do wykorzystywania wewnątrz firmy.
+Idealnym rozwiązaniem z punktu widzenia bezpieczeństwa byłoby uruchomienie dwóch różnych instancji aplikacji, gdzie ta przeznaczona dla ruchu publicznego nie udostępniałaby usług wewnętrznych.
+Gdy jednak z jakichś powodów np. chęć uproszczenia infrastruktury na środowisku testowym, chcemy mieć jedną aplikację z różnymi
+zestawami usług na różnych portach, to możemy to dość prosto to skonfigurować&hellip;.ale mała uwaga w tym miejscu: <strong>poniższy sposób
+zakłada, że Tomcat jest używanym przez spring boot-a serwerem</strong>. Dla innych serwerów konfiguracja ta może inaczej wyglądać lub nie być możliwa.
+Alternatywą jest bardziej skomplikowane rozwiązanie, jakim jest uruchomienie osobnego kontekstu aplikacji na osobnym porcie.
+Rozwiązanie takie używane jest używane przez spring-a, kiedy ustawimy properte <code>management.server.port</code> na inną wartość niż port, na którym uruchamiamy aplikację.
+Ciekawskim mogę polecić klasę w kodach Actuatora: <code>ManagementContextAutoConfiguration.java</code>.</p>
+
+<p>Zabierzmy się zatem za skonfigurowanie aplikacji tak, żeby na porcie 8080 były wystawione usługi publiczne, a na porcie 5555 usługi wewnętrzne.
+Spring boot pozwala nam skonfigurować uruchamiany serwer poprzez dedykowane property w konfiguracji, niestety te tutaj są niewystarczające. Drugim sposobem na dokonfigurowanie
+ serwera jest implementacje interfejsu <a href="https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/reference/html/howto-embedded-web-servers.html#howto-configure-webserver"><code>WebServerFactoryCustomizer</code></a>,
+ gdzie uzyskujemy dostęp do klasy <code>WebServerFactory</code>. Ten sposób właśnie wykorzystałem do rejestracji dodatkowego connectora Tomcat-a, słuchającego na dedykowanym porcie:</p>
+
+<div class="highlight"><pre><code class="language-kotlin" data-lang="kotlin"><span class="n">@Configuration</span>
+<span class="k">class</span> <span class="nc">DemoConfiguration</span> <span class="p">:</span> 
+        <span class="n">WebServerFactoryCustomizer</span><span class="p">&lt;</span><span class="n">TomcatServletWebServerFactory</span><span class="p">&gt;</span> <span class="p">{</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">customize</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">TomcatServletWebServerFactory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">val</span> <span class="py">connector</span> <span class="p">=</span> <span class="n">Connector</span><span class="p">(</span><span class="n">Http11NioProtocol</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">simpleName</span><span class="p">)</span>
+        <span class="n">connector</span><span class="p">.</span><span class="n">scheme</span> <span class="p">=</span> <span class="s">&quot;http&quot;</span>
+        <span class="n">connector</span><span class="p">.</span><span class="n">port</span> <span class="p">=</span> <span class="m">5555</span>
+        <span class="n">factory</span><span class="p">.</span><span class="n">addAdditionalTomcatConnectors</span><span class="p">(</span><span class="n">connector</span><span class="p">)</span>
+    <span class="p">}</span>
+
+<span class="p">}</span></code></pre></div>
+
+
+<p>Dzięki takiej konfiguracji serwer uruchomi się na domyślnym porcie <code>8080</code> oraz na <code>5555</code>. Jedna oba porty obsłużą
+wszystkie requesty, czego byśmy nie chcieli. W celu uniemożliwienia wywoływania wewnętrznych usług na porcie nieprzeznaczonym do tego
+możemy oprócz konfiguracji spring security dodać również prosty filtr, który będzie wycinał ruch na podstawie ścieżki do usługi:</p>
+
+<div class="highlight"><pre><code class="language-kotlin" data-lang="kotlin"><span class="n">@Component</span>
+<span class="k">class</span> <span class="nc">IntegrationApiAccessFilter</span> <span class="p">:</span> <span class="n">Filter</span> <span class="p">{</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">doFilter</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">ServletRequest</span><span class="p">,</span> 
+                          <span class="n">response</span><span class="p">:</span> <span class="n">ServletResponse</span><span class="p">,</span> <span class="n">chain</span><span class="p">:</span> <span class="n">FilterChain</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">val</span> <span class="py">isInternalService</span> <span class="p">=</span> 
+                <span class="p">(</span><span class="n">request</span> <span class="k">as</span> <span class="n">RequestFacade</span><span class="p">).</span><span class="n">requestURI</span><span class="p">.</span><span class="n">startsWith</span><span class="p">(</span><span class="s">&quot;/internal&quot;</span><span class="p">)</span>
+        <span class="k">val</span> <span class="py">incorrectPortForInternal</span><span class="p">=</span> <span class="n">request</span><span class="p">.</span><span class="n">serverPort</span><span class="p">.</span><span class="n">toString</span><span class="p">()</span> <span class="p">!=</span> <span class="m">5555</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">isInternalService</span> <span class="p">&amp;&amp;</span> <span class="n">incorrectPortForIntegration</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">response</span> <span class="k">as</span> <span class="n">ResponseFacade</span><span class="p">).</span><span class="n">sendError</span><span class="p">(</span><span class="m">404</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+
+        <span class="n">chain</span><span class="p">.</span><span class="n">doFilter</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+    <span class="p">}</span>
+
+<span class="p">}</span></code></pre></div>
+
+
+<p>To wszystko, mamy aplikację wystawiającą na dwóch różnych portach, różne zestawy endpointów. Pamiętaj, jednak że taka konfiguracja nie jest czymś standardowym
+i należy się dobrze zastanowić czy na pewno problem należy tak właśnie rozwiązać.</p>
 ]]></content>
     
   </entry>
