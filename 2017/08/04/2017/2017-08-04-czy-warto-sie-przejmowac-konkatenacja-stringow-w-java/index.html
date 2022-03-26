@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Czy warto się przejmować konkatenacją stringów w Java? | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Czy warto się przejmować konkatenacją stringów w Java?</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 4, 2017&nbsp;&nbsp;20:37:42</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Używasz StringBuilder do łączenia Stringów? Pewnie większość z Was spotkała się ze stwierdzeniem mówiącym, że w celu optymalizacji operacji łączenia stringów należy używać StringBuilder bądź też StringBuffer bezpiecznego wielowątkowo. Czy na pewno słusznie?</p>
+<span id="more"></span>
+
+<p>Co daje StringBuilder? Jak wiadomo string jest obiektem niezmiennym, nie da się dopisać do niego kolejnych znaków. Za każdym razem kiedy trzeba napisać dłuższy ciąg znaków tworzony jest nowy obiekt. StringBuilder przechowuje poszczególne znaki w tablicy, do której podczas każdej operacji append dodawane są nowe dane. Dopiero w momencie wywołania metody toString zostaje utworzony finalny string zawierające wszystkie znaki z tymczasowej tablicy. Jeżeli konkatenacja wykonywana jest w pętli, jak tutaj:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(<span class="keyword">final</span> String... args)</span> &#123;</span><br><span class="line">      <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">          result += i + <span class="string">&quot; &quot;</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      System.out.println(result);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>to za każdym obiegiem pętli tworzymy w pamięci niepotrzebny obiekt coraz dłuższego Stringa. To oczywiście zajmuje nie tylko pamięć ale również czas na alokacje danych i ich usuwanie przez gc. Dlatego pewnie doskonale wiecie, że taka pętla powinna wyglądać mniej więcej tak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(<span class="keyword">final</span> String... args)</span> &#123;</span><br><span class="line">      <span class="type">StringBuilder</span> <span class="variable">builder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">          builder.append(i).append(<span class="string">&quot; &quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      System.out.println(builder.toString());</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Dzięki użyciu StringBuilder optymalizujemy kod. Jednak takie rozwiązanie wymaga troszkę więcej pisania i czasami może zaciemniać kod. Czy na pewno musimy taki kod pisać? Otóż nie! Dokumentacja mówi:</p>
+<blockquote>
+<p>An implementation (of compiler) may choose to perform conversion and concatenation in one step to avoid creating and then discarding an intermediate String object. To increase the performance of repeated string concatenation, a Java compiler may use the StringBuffer class or a similar technique to reduce the number of intermediate String objects that are created by evaluation of an expression. For primitive types, an implementation may also optimize away the creation of a wrapper object by converting directly from a primitive type to a string.</p>
+</blockquote>
+<p>Ciekawe tylko dlaczego ten zapis jest mały literami..? :P Wynika z tego, że kompilator potrafi sam wstawić StringBuilder w miejsce konkatenacji stringów. Sprawdźmy! Do zdekompilowaniu kodu z listingu 1 poleceniem javap -c Demo.class dostaje:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(java.lang.String...)</span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: ldc           #<span class="number">2</span> <span class="comment">// String</span></span><br><span class="line">       <span class="number">2</span>: astore_1</span><br><span class="line">       <span class="number">3</span>: iconst_0</span><br><span class="line">       <span class="number">4</span>: istore_2</span><br><span class="line">       <span class="number">5</span>: iload_2</span><br><span class="line">       <span class="number">6</span>: bipush        <span class="number">100</span></span><br><span class="line">       <span class="number">8</span>: if_icmpge     <span class="number">41</span></span><br><span class="line">      <span class="number">11</span>: <span class="keyword">new</span>           #<span class="number">3</span> <span class="comment">// class java/lang/StringBuilder</span></span><br><span class="line">      <span class="number">14</span>: dup</span><br><span class="line">      <span class="number">15</span>: invokespecial #<span class="number">4</span> <span class="comment">// Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">      <span class="number">18</span>: aload_1</span><br><span class="line">      <span class="number">19</span>: invokevirtual #<span class="number">5</span> <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">22</span>: iload_2</span><br><span class="line">      <span class="number">23</span>: invokevirtual #<span class="number">6</span> <span class="comment">// Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">26</span>: ldc           #<span class="number">7</span> <span class="comment">// String</span></span><br><span class="line">      <span class="number">28</span>: invokevirtual #<span class="number">5</span> <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">31</span>: invokevirtual #<span class="number">8</span> <span class="comment">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span></span><br><span class="line">      <span class="number">34</span>: astore_1</span><br><span class="line">      <span class="number">35</span>: iinc          <span class="number">2</span>, <span class="number">1</span></span><br><span class="line">      <span class="number">38</span>: goto          <span class="number">5</span></span><br><span class="line">      <span class="number">41</span>: getstatic     #<span class="number">9</span> <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">44</span>: aload_1</span><br><span class="line">      <span class="number">45</span>: invokevirtual #<span class="number">10</span> <span class="comment">// Method java/io/PrintStream.println:(Ljava/lang/String;)V</span></span><br><span class="line">      <span class="number">48</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Faktycznie w wygenerowanym byte code pojawił się magicznie string builder. A jak w takim razie wygląda kod z listingu 2 gdzie jawnie użyłem StringBuildera?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(java.lang.String...)</span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: <span class="keyword">new</span>           #<span class="number">2</span> <span class="comment">// class java/lang/StringBuilder</span></span><br><span class="line">       <span class="number">3</span>: dup</span><br><span class="line">       <span class="number">4</span>: invokespecial #<span class="number">3</span> <span class="comment">// Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">       <span class="number">7</span>: astore_1</span><br><span class="line">       <span class="number">8</span>: iconst_0</span><br><span class="line">       <span class="number">9</span>: istore_2</span><br><span class="line">      <span class="number">10</span>: iload_2</span><br><span class="line">      <span class="number">11</span>: bipush        <span class="number">100</span></span><br><span class="line">      <span class="number">13</span>: if_icmpge     <span class="number">33</span></span><br><span class="line">      <span class="number">16</span>: aload_1</span><br><span class="line">      <span class="number">17</span>: iload_2</span><br><span class="line">      <span class="number">18</span>: invokevirtual #<span class="number">4</span> <span class="comment">// Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">21</span>: ldc           #<span class="number">5</span> <span class="comment">// String</span></span><br><span class="line">      <span class="number">23</span>: invokevirtual #<span class="number">6</span> <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">26</span>: pop</span><br><span class="line">      <span class="number">27</span>: iinc          <span class="number">2</span>, <span class="number">1</span></span><br><span class="line">      <span class="number">30</span>: goto          <span class="number">10</span></span><br><span class="line">      <span class="number">33</span>: getstatic     #<span class="number">7</span> <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">36</span>: aload_1</span><br><span class="line">      <span class="number">37</span>: invokevirtual #<span class="number">8</span> <span class="comment">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span></span><br><span class="line">      <span class="number">40</span>: invokevirtual #<span class="number">9</span> <span class="comment">// Method java/io/PrintStream.println:(Ljava/lang/String;)V</span></span><br><span class="line">      <span class="number">43</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Kod w obu przypadkach wygląda podobnie. Ale, w przypadku kodu w którym jawnie użyłem string buildera obiekt typu StringBuilder jest tworzony tylko raz. Natomiast w przypadku kodu zooptymalizowanego przez kompilator jest on tworzony przy każdym obiektu pętli. Tak więc nie dość że przy każdym obiegu pętli tworzy się nie potrzebny string w pamięci to w dodatku tworzy się również zbędny obiekt StringBuildera. Pokazuje to nam że nie wolno bezgranicznie ufać kompilatorowi. Warto czasami zagłębić się byte code i zastanowić się czy napisany kod faktycznie jest optymalny.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/08/04/2017/2017-08-04-czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/">https://klolo.github.io/2017/08/04/2017/2017-08-04-czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/08/04/2017/2017-08-04-programistycze-kata/">Programistyczne kata</a>
+            
+            
+            <a class="next" rel="next" href="/2017/08/04/2017/2017-08-04-wstep-do-programowania-funkcyjnego/">Wstęp do programowania funkcyjnego</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

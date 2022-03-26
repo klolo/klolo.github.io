@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Kotlin zamiast Javy w 2022... Czy nadal warto? | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Kotlin zamiast Javy w 2022... Czy nadal warto?</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 27, 2022&nbsp;&nbsp;22:31:32</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/KOTLIN/">KOTLIN</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Po kilku latach przerwy od pisania w Kotlinie zastanawiam czy nadal język ten jest wart rozważenia jako zamiennik Javy, przecież ta cały czas się rozwija i co kilka miesięcy mamy nowe wydania. Może Java ma już to wszystko, czym Kotlin górował nad nią kilka lat temu? Porównajmy zatem kilka nowych mechanizmów Javy do tego, co oferuje Kotlin.</p>
+<h2 id="Pattern-matching"><a href="#Pattern-matching" class="headerlink" title="Pattern matching"></a>Pattern matching</h2><p>Release Javy 18 przyniósł przeniesienie JEP-420 w faze second preview. Propozycja zmiany kryjąca się pod tym numerkiem to nic innego jak pattern matching i ulepszony switch. Nie miałem jeszcze okazji pracować z tym mechanizmem, bo projekt, który rozwijam nadal jest na jvm 11 i podbicie wersji mamy dopiero w planach. Jednak to, co widzę w dokumentacji Javy wygląda jak…kopia tego, co oferuje Kotlin. Składnia i możliwości tego, co daje Java wygląda bardzo podobnie. Ciężko mi wskazać jakieś istotne różnice. Na pewno nie jest to jeden z powodów, dla których warto wybrać jeden jęxyk zamiast drugiego. Dla porównania składnia nowego switcha z Javy:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> String <span class="title function_">formatterPatternSwitch</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">switch</span> (o) &#123;</span><br><span class="line">            <span class="keyword">case</span> Integer i -&gt; String.format(<span class="string">&quot;int %d&quot;</span>, i);</span><br><span class="line">            <span class="keyword">case</span> Long l    -&gt; String.format(<span class="string">&quot;long %d&quot;</span>, l);</span><br><span class="line">            <span class="keyword">case</span> Double d  -&gt; String.format(<span class="string">&quot;double %f&quot;</span>, d);</span><br><span class="line">            <span class="keyword">case</span> String s  -&gt; String.format(<span class="string">&quot;String %s&quot;</span>, s);</span><br><span class="line">            <span class="keyword">default</span>        -&gt; o.toString();</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Oraz Kotlin:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">formatter</span><span class="params">(o: <span class="type">Any</span>)</span></span> =</span><br><span class="line">    <span class="keyword">when</span> (o) &#123;</span><br><span class="line">        <span class="keyword">is</span> <span class="built_in">Int</span> -&gt; String.format(<span class="string">&quot;int %d&quot;</span>, o)</span><br><span class="line">        <span class="keyword">is</span> <span class="built_in">Long</span> -&gt; String.format(<span class="string">&quot;long %d&quot;</span>, o)</span><br><span class="line">        <span class="keyword">is</span> <span class="built_in">Double</span> -&gt; String.format(<span class="string">&quot;double %f&quot;</span>, o)</span><br><span class="line">        <span class="keyword">else</span> -&gt; <span class="string">&quot;unknown&quot;</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Records"><a href="#Records" class="headerlink" title="Records"></a>Records</h2><p>Bardzo często programując tworzymy klasy, które są niczym więcej jak tylko workiem na jakieś dane. Takie klasy wymagają od nas zdefiniowania boilerplate, takiego jak gettery, settery, toString(), equals(), hashcode(). Żeby radzić sobie z takim brzydkim kodem w projekcie w którym pracuje używa się Lomboka. Za pomocą kilku adnotacji możemy automatycznie wygenerować kod, na który nie chcemy patrzeć a tym bardziej pisać go. Nowe wydania Javy wprowadzają mechanizm, który częściowo rozwiązuje ten problem, przynajmniej dla prostych DTO. Są to rekordy, czyli nie mutowalne pudełka na dane, dla których Java wygeneruje podstawowe metody. Przykład deklaracji takiego rekordu w Javie:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">SomeData</span><span class="params">(String key, String value)</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Kotlin oferował bardzo podobny mechanizm, już kilka lat wcześniej, są to <code>data class</code>. Przykład deklaracji:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">SomeData</span></span>(<span class="keyword">val</span> key: String, <span class="keyword">val</span> value: String)</span><br></pre></td></tr></table></figure>
+
+<p>Znów wygląda to bardzo podobnie. Gdzie tkwi różnica? </p>
+<ul>
+<li>Na pewno w tym, co się dzieje pod spodem, z jakich mechanizmów jvm korzystają oba rozwiązania. Jednak pominę ten aspekt celowo, chce się skupić na tym, co widzi developer. </li>
+<li>W przypadku Kotlina możemy mieć pola, które są mutowalne oraz możemy definiować pola w takiej klasie, daje to większe możliwości. </li>
+<li>Idąc dalej, Kotlin generuje dla nas metodę <code>copy</code>, która pozwala stworzyć kopię obiektu modyfikując przy okazji wybrane pola.  </li>
+<li>Mechanizm w Javie do utworzonej klasy dodaje dziedziczenie po klasie <code>Record</code>, przez co rekord nie może dziedziczyć po innej klasie.</li>
+</ul>
+<p>Oba języki oferują podobne możliwości w tym zakresie, jednak mechanizm z Kotlin-a wydaje się tutaj odrobinę bardziej elastyczny.</p>
+<h2 id="Multiline-string"><a href="#Multiline-string" class="headerlink" title="Multiline string"></a>Multiline string</h2><p>Temat wydaje się prosty. Kotlin miał wielolinijkowe Stringi, teraz Java go dogoniła i niczym mu nie ustępuje…No nie do końca…Diabeł tkwi w szczegółach. Jak w takim bloku tekstu odwołać się do zmiennej, wykonać wyrażenie? Niestety w Javie nie da się. Można próbować skorzystać z funkcji <code>format</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Example</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">foo</span><span class="params">(String type)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">code</span> <span class="operator">=</span> String.format(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                public void print(%s o) &#123;</span></span><br><span class="line"><span class="string">                    System.out.println(Objects.toString(o));</span></span><br><span class="line"><span class="string">                &#125;</span></span><br><span class="line"><span class="string">                &quot;&quot;&quot;</span>, type);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Nie wygląda to zbyt pięknie. Do porównania blok tekstu w Kotlinie, gdzie możemy odwołać się do jakieś zmiennej lub nawet wykonać wyrażenie:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> a = <span class="number">5</span></span><br><span class="line">    <span class="keyword">val</span> b = <span class="number">6</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> myString = <span class="string">&quot;&quot;&quot; Some example:</span></span><br><span class="line"><span class="string">    |<span class="subst">$&#123;if (a &gt; b) a else b&#125;</span></span></span><br><span class="line"><span class="string">    |end of example</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    println(<span class="string">&quot;Larger number is: <span class="subst">$&#123;myString.trimMargin()&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Sealed-class"><a href="#Sealed-class" class="headerlink" title="Sealed class"></a>Sealed class</h2><p>Jest to mechanizm, który pozwala określić nam kto będzie dziedziczył po naszej klasie. Dzięki czemu kompilator jest w stanie sprawdzić, czy uwzględniliśmy wszystkie podtypy w instrukcji switch. Oba języki oferują aktualnie ten mechanizm. Podobnie jak w przypadku pattern matching i switch, ciężko mi tutaj wskazać jakieś istotne różnice w obu językach. Nie jest to element, który powinien wpływać na decyzję, który język wybrać.  </p>
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Java nie przespała kilku ostatnich lat i ciągle się rozwija. Widać, że nadrobiła kilka braków względem Kotlin, ale co jeszcze pozostało do poprawienia?</p>
+<ul>
+<li><strong>składnia</strong> — Java posiada barokową składnię, która wymaga dużo większej ilości kodu niź Kotlin. Brałem udział w projekcie, który przenosiliśmy z Javy na Kotlin i okazało się, że około 40% znikło podczas tej migracji. A jak wiadomo mniej kodu to czytelniejszy kod i lepsze jego zrozumienie.</li>
+<li><strong>null save</strong> — Zrobić NullPointerException w Kotlinie jest dość ciężko, trzeba tego chcieć. W Javie natomiast musimy dodawać brzydkie if-y i kompilator nam nie pomaga w walce z tym powszechnym błędem. Jedyne co tutaj się poprawiło to informacja o tym, co jest nullem w stacktrace, no ale to nie kwestia języka a jvm. Do dyspozycji w Javie mamy jeszcze Optional… uważam, jednak że to marna namiastka tego bezpieczeństwa, jakie daje Kotlin. </li>
+<li><strong>funkcje extension</strong> — Kotlin pozwala deklarować dodatkowe funkcje do istniejących klas, nawet tych z bibliotek czy jdk. Funkcje te nie rozszerzają faktycznie tamtych klas, ale możemy je wywoływać tak jakby w tych klasach były. Bardzo przydatne, pozwala uniknąć pisania utily.</li>
+<li><strong>coroutine</strong> — zestaw narzędzi ułatwiających pisanie czytelnego kodu asynchronicznego. Nie miałem okazji używać, wiem, że są i mogą ułatwić życie.</li>
+<li><strong>inline class</strong> — pisząc kod domenowy często potrzebujemy prostych małych klas, żeby opakować np. String który jest jakimś id. Dzięki temu mamy dużo bardziej bezpieczny kod z pomocą kompilatora, który sprawdza, czy przekazujemy prawidłowe dane. Jest to dużo bardziej eleganckie podejście niż przekazywanie wszędzie stringów. Problem pojawia się natomiast gdy takich klas mamy bardzo dużo, może to wpłynąć na wydajność aplikacji. Kotlin przychodzi nam tutaj z pomocą i pozwala takie klasy mieć tylko na poziomie źródeł a później w runtime korzysta z typów, które opakowujemy. </li>
+<li><strong>delegation</strong> — alternatywa do dziedziczenia, która otwiera nowe techniki, wzorce do wykorzystania w kodzie.</li>
+<li><strong>aliasy</strong> — jeżeli mamy jakąś długą skomplikowaną nazwę np. z powodu użycia typów generycznych, możemy stworzyć dla niej alias przez co kod staje się czytelniejszy. Korzystałem wielokrotnie i naprawdę pomaga to zwiększyć czytelność. </li>
+<li>etykiety używane razem z return — pozwalają łatwiej wyjść z zagnieżdżonego bloku kodu</li>
+<li>programowanie funkcyjne — dzięki prostszej składni jest nie porównywalnie <strong>lepiej pisać funkcyjnie w Kotlinie niż w Javie</strong>. Dodatkowo w Kotlinie możemy tworzyć funkcje, które nie są osadzone w żadnej z klas, co otwiera drzwi do pisania w bardzo funkcyjny sposób. </li>
+<li><strong>strumienie</strong> — co tu dużo mówić, Kotlin oferuje sporo więcej metod i w połączeniu z bardziej nowoczesną składnią jest czytelniejszy. Jeżeli mamy jeden parametr w lambdzie to nawet nie musimy pisać nazwy parametru (no chyba że chcemy) i używamy domyślnego <code>it</code>. Dzięki takim szczegółom kod staje się bardzo zwięzły.</li>
+<li>możliwości podbijania wersji języka bez konieczności aktualizacji jvm, co znacznie ułatwia bycie up to date.</li>
+<li>dodatkowe możliwości kompilatora, takie jak <strong>kompilacja do js</strong> czy do <strong>kodu natywnego uruchamianego bez jvm</strong>.</li>
+</ul>
+<p>Nie poruszyłem tutaj bardzo wielu innych aspektów, ale juź widać, że mimo starań, Java nadal jest językiem, który bardzo ustępuje Kotlinowi. Biorąc pod uwagę niski prób wejścia, jestem zwolennikiem tego, żeby Kotlin był językiem pierwszego wyboru na jvm.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2022/03/27/2022/2022-03-27-kotlin-2022-czy-nadal-warto/">https://klolo.github.io/2022/03/27/2022/2022-03-27-kotlin-2022-czy-nadal-warto/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2021/03/07/2021/2021-03-07-spring-boot-wystawianie-endpointow-na-wielu-portach/">spring boot: Wystawianie endpointów jednej aplikacji na wielu portach</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

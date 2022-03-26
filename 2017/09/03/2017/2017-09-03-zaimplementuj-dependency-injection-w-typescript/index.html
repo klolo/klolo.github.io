@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Zaimplementuj dependency injection w Typescript | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Zaimplementuj dependency injection w Typescript</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 3, 2017&nbsp;&nbsp;15:39:30</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/TYPESCRIPT/">TYPESCRIPT</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Typescript jest nadzbiorem javascriptu oferującym statyczne typowanie oraz możliwość programowania obiektowego w dużo bardziej wygodnej formie niż prototypy dostępne w ES5. Dzięki wykorzystaniu dekoratorów język ten miejscami przypomina bardzo Javę, w której możemy używać adnotacji. Patrząc jednak na wygenerowany przez kompilator kod, podobieństwa do Javy już nie znajdziemy. Znajdziemy za to zwykły Javascript wykorzystujący prototypy. Pokażę dziś jak zaimplementować mechanizm,<br>który będzie pozwalał na wstrzykiwanie zależności w podobny do Springa sposób. Będzie to znakomita okazja, żeby poznać praktyczne zastosowanie dekoratorów Typescriptu.</p>
+<span id="more"></span>
+
+<h2 id="Czym-sa-dekoratory"><a href="#Czym-sa-dekoratory" class="headerlink" title="Czym są dekoratory?"></a>Czym są dekoratory?</h2><p>Zacznijmy od wyjaśnienia, czym tak w ogóle w Ts jest dekorator. Jest to mechanizm bardzo podobny do wzorca “Dekorator” znanego z programowania obiektowego. Dekorator jest funkcją, która na wejściu dostaje inną funkcję&#x2F;właściwość i dekoruje ją dodatkową logiką. Jak to wygląda w praktyce? Zobaczmy to na przykładzie dekoratora o nazwie Deprecated, którego zadaniem będzie wypisywanie na ekranie informacji o tym, że wywołano właśnie przestarzałą metodę. Stwórzmy klasę, w której znajdzie się taki dekorator:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    public <span class="attr">userName</span>: string;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">userName?: string</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">userName</span> = userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Deprecated</span></span><br><span class="line">    <span class="title function_">setUserName</span>(<span class="attr">userName</span>: string): <span class="keyword">void</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">userName</span> = userName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Klasa bardzo prosta. Zawiera konstruktor i setter. Z jakiś powodów setter został oznaczony dekoratorem Deprecated. Użycie dekoratora przypomina tutaj do złudzenia użycie adnotacji w Java, mimo że mechanizm bardzo się od niej różni. Adnotacje w Javie służą do oznaczania pól czy metod, nie modyfikują jednak działania tych elementów, są tylko informacją dla logiki umieszczonej w innym miejscu o tym, że należy wykonać jakąś dodatkową operację na adnotowanym polu&#x2F;metodzie. W Ts dekoratory bezpośrednio modyfikują elementy klasy, nad którymi zostały umieszczone. Dekoratorów użytych do oznaczenia metody w klasie może byc więcej. Nie musimy ograniczać się nawet do samych metod, możemy oznaczać w ten sposób również pola, parametry metod, a nawet całe klasy. W końcu klasa w wygenerowanym przez kompilator Ts kodzie to również funkcja. Dla klasy <em>User</em> wygenerowany kod będzie miał taką postać:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">User</span> = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">User</span>(<span class="params">userName</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">userName</span> = userName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title class_">User</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">setUserName</span> = <span class="keyword">function</span> (<span class="params">userName</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">userName</span> = userName;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="title function_">__decorate</span>([</span><br><span class="line">        <span class="title class_">Deprecated</span>,</span><br><span class="line">        <span class="title function_">__metadata</span>(<span class="string">&quot;design:type&quot;</span>, <span class="title class_">Function</span>),</span><br><span class="line">        <span class="title function_">__metadata</span>(<span class="string">&quot;design:paramtypes&quot;</span>, [<span class="title class_">String</span>]),</span><br><span class="line">        <span class="title function_">__metadata</span>(<span class="string">&quot;design:returntype&quot;</span>, <span class="keyword">void</span> <span class="number">0</span>)</span><br><span class="line">    ], <span class="title class_">User</span>.<span class="property"><span class="keyword">prototype</span></span>, <span class="string">&quot;setUserName&quot;</span>, <span class="literal">null</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">User</span>;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Deprecated</span>(<span class="params">target, key, descriptor</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">value</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> args = [];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> _i = <span class="number">0</span>; _i &lt; <span class="variable language_">arguments</span>.<span class="property">length</span>; _i++) &#123;</span><br><span class="line">                args[_i] = <span class="variable language_">arguments</span>[_i];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">&quot;Using deprecated API: &quot;</span> + target.<span class="property">constructor</span>.<span class="property">name</span> + <span class="string">&quot;.&quot;</span> + key);</span><br><span class="line">            <span class="keyword">return</span> descriptor.<span class="property">value</span>.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Brrr…To, co wygenerowało się z tak prostej klasy wygląda na pierwszy rzut oka na bardzo skomplikowany kod. Jest to dobry przykład na to, jak wiele daje kompilator Ts. Nie musimy pisać tak zawiłych konstrukcji, tylko tworzymy klasy w sposób do jakiego przywykliśmy w językach takich jak np. Java, C#. Wracając do przykładu z Deprecated, mamy klasę z metodą oznaczoną dekoratorem. Dekorator to tak naprawdę funkcja, która ma na celu rozszerzenie działania innej funkcji. W tym przypadku funkcja taka przyjmuje 3 parametry:</p>
+<ul>
+<li>target - funkcja w której został użyty dekorator. W powyższym przykładzie będzie to funkcja reprezentująca klasę <em>User</em></li>
+<li>key - nazwa metody, którą oznaczyliśmy adnotacją (<em>setUserName</em>)</li>
+<li>descriptor - wynik wywołania funkcji <em>Object.getOwnPropertyDescriptor()</em> zwracający podstawowe informacje o polu które zostało oznaczone dekoratorem.<br>  Przykładowo: <em>{“writable”:true,”enumerable”:true,”configurable”:true}</em></li>
+</ul>
+<p>Mając te wszystkie informacje możemy napisać dekorator, który będzie informował o użyciu przestarzałej metody:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Deprecated</span>(<span class="params">target: any, key: string, descriptor: any</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">value</span>: <span class="keyword">function</span> (<span class="params">...args: any[]</span>) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">`Using deprecated API: <span class="subst">$&#123;target.constructor.name&#125;</span>.<span class="subst">$&#123;key&#125;</span>`</span>);</span><br><span class="line">            <span class="keyword">return</span> descriptor.<span class="property">value</span>.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Wartość zwrócona z dekoratora zastąpi deskryptor metody <em>setUserName</em>, a dokładnie pole <em>value</em> w tym deskryptorze. Krótko mówiąc nadpiszemy funkcję własną implementacją. Dekorator po wylogowaniu na konsoli odpowiedniego ostrzeżenia wywołuje pierwotną metodę korzystając z <em>apply</em>, parametrów wywołania i zmiennej this. Jak widać logikę metody, nad którą<br>został wstawiony dekorator możemy dowolnie modyfikować, dekorować o kolejną logikę. Daje nam to potężny mechanizm do zmniejszenia ilości powielanego kodu i otwiera drogę do budowania<br>bardziej abstrakcyjnych mechanizmów.</p>
+<h2 id="Wymagania"><a href="#Wymagania" class="headerlink" title="Wymagania"></a>Wymagania</h2><p>Przedstawiona za chwilę implementacja Typescriptowej wersji Springa będzie wyjątkowo prosta. Będzie się ona składać z dekoratora @Bean, który to pozwoli automatycznie tworzyć obiekty klas i wstrzykiwać je w pola, które będą miały dekorator @Inject. Przeanalizujmy zatem prosty przypadek użycia takiego narzędzia. Tworzymy klasę <em>User</em>, która będzie odpowiadać za przechowywanie danych zalogowanego użytkownika. Dla uproszczenia będzie to tylko login:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Bean</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    public <span class="attr">login</span>: string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Kolejną klasą będzie <em>Transfer</em> odpowiedzialny za wykonanie przelewu dla zalogowanego użytkownika. Obiekt użytkownika będzie wstrzykiwany przez dekorator <em>Inject</em>, bez konieczności ręcznego ustawiania pola. Dodatkowo pole w klasie będzie miało ustawiony modyfikator dostępu private, tak żeby nikomu nie przyszło do głowy próbować go ustawiać ręcznie.<br>Obiekt ten będzie singletonem przechowywanym przez omawianą implementację Springa.</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Bean</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Transfer</span> &#123;</span><br><span class="line">    @<span class="title class_">Inject</span></span><br><span class="line">    private <span class="attr">user</span>: <span class="title class_">User</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">makeTransfer</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Create transfer for: &#x27;</span> + <span class="variable language_">this</span>.<span class="property">user</span>.<span class="property">login</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Ostatnią klasą będzie <em>Application</em>, mająca wstrzykniętą instancję obiektu <em>User</em> oraz <em>Transfer</em>.</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Inject</span></span><br><span class="line">    private <span class="attr">transfer</span>: <span class="title class_">Transfer</span>;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Inject</span></span><br><span class="line">    private <span class="attr">user</span>: <span class="title class_">User</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">login</span>(<span class="attr">userName</span>: string): <span class="keyword">void</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">user</span>.<span class="property">login</span> = userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">sendTransfer</span>(): <span class="keyword">void</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">transfer</span>.<span class="title function_">makeTransfer</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">app</span>: <span class="title class_">Application</span> = <span class="keyword">new</span> <span class="title class_">Application</span>();</span><br><span class="line">app.<span class="title function_">login</span>(<span class="string">&#x27;Kamil&#x27;</span>);</span><br><span class="line">app.<span class="title function_">sendTransfer</span>();</span><br></pre></td></tr></table></figure>
+
+<p>Podczas wywołania metody <em>login</em>, imię aktualnie zalogowanego użytkownika przekazywane jest do obiektu klasy <em>User</em>. Tak się składa, że ten sam obiekt został wstrzyknięty również do obiektu Transfer. Omawiany mechanizm tworzy tylko jedną instancję obiektu i wszędzie ją wstrzykuje. Po wywołaniu metody <em>makeTransfer</em>, obiekt <em>Transfer</em> prawidłowo wypisuje komunikat: <em>Create transfer for: Kamil</em>. Tak więc, bez konieczności martwienia się o utworzenie i ustawienie obiektu <em>User</em> i <em>Transfer</em> mamy możliwość korzystania z tych obiektów w dowolnym miejscu aplikacji.</p>
+<h2 id="Implementacja"><a href="#Implementacja" class="headerlink" title="Implementacja"></a>Implementacja</h2><p>Przejdźmy teraz do właściwiej części, czyli do omówienia jak to działa. Pierwszym elementem jest moduł, za pomocą którego są przechowywane utworzone&#x2F;wstrzykiwane obiekty. Dlaczego moduł? Żeby np. nie brudzić przestrzeni nazw, mieć możliwość importu go w dowolnym miejscu aplikacji. Oto jak może wyglądać taki moduł:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span> <span class="title class_">ApplicationContext</span> &#123;</span><br><span class="line">    interface <span class="title class_">IRegister</span> &#123;</span><br><span class="line">        [<span class="attr">key</span>: string]: any;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="attr">beanRegistry</span>: <span class="title class_">IRegister</span> = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">registerBean</span>(<span class="params">name: string, value: <span class="built_in">Object</span></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!beanRegistry[name]) &#123;</span><br><span class="line">            <span class="keyword">const</span> <span class="attr">lowerCaseName</span>: string = name.<span class="title function_">toLowerCase</span>();</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Register: <span class="subst">$&#123;lowerCaseName&#125;</span>`</span>);</span><br><span class="line">            beanRegistry[lowerCaseName] = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getBean</span>(<span class="params">name: string</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="attr">result</span>: any = beanRegistry[name.<span class="title function_">toLowerCase</span>()];</span><br><span class="line">        <span class="keyword">if</span> (!result) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Bean <span class="subst">$&#123;name.toLowerCase()&#125;</span> not found`</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Moduł składa się z tablicy przechowującej utworzone obiekty. Tablica ta została zadeklarowana za pomocą interfejsu w celu umożliwienia odwoływania sie do elementów tablicy poprzez klucz-string. Bez tego interfejsu moglibyśmy wyciągać obiekty tylko poprzez indeks. Moduł oprócz tablicy zawiera funkcję, która zapisuje nowe obiekty w tablicy pod przekazaną nazwą.<br>Nazwa jest zamieniana na małe litery, podobnie jak w dalszej części kodu. Jest to rozwiązanie bardzo proste, jednak posiada tą wadę, że w przypadku gdy pole oznaczone <em>Inject</em> będzie się nazywać inaczej niż nazwa klasy pisana małymi literami, to mechanizm nie znajdzie obiektu. W przypadku gdy obiekt istnieje już w tablicy nic nie zostanie zrobione. Warto tutaj się pokusić o wyrzucenie błędu z informacją: <em>multiple bean definition found</em>. Druga metoda modułu wyciąga z tablicy utworzony obiekt i go zwraca. W przypadku braku obiektu wyrzucany jest błąd.</p>
+<p>Zajmijmy się teraz dekoratorem odpowiedzialnym za rejestrowanie komponentów w <em>beanRegistry</em>:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Bean</span>(<span class="params"></span>): any &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">target: any</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> original = target;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">function</span> <span class="title function_">construct</span>(<span class="params">constructor: any, args: any, </span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> <span class="attr">c</span>: any = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> constructor.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args);</span><br><span class="line">            &#125;</span><br><span class="line">            c.<span class="property"><span class="keyword">prototype</span></span> = constructor.<span class="property"><span class="keyword">prototype</span></span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title function_">c</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> <span class="attr">result</span>: any = <span class="title function_">construct</span>(original, []);</span><br><span class="line">        <span class="title class_">ApplicationContext</span>.<span class="title function_">registerBean</span>(target.<span class="property">name</span>, result);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> <span class="attr">f</span>: any = <span class="keyword">function</span> (<span class="params">...args: any[]</span>) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;create:&#x27;</span> + target.<span class="property">name</span>.<span class="title function_">toLowerCase</span>());</span><br><span class="line">            <span class="keyword">let</span> <span class="attr">result</span>: any = <span class="title function_">construct</span>(original, args);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        f.<span class="property"><span class="keyword">prototype</span></span> = original.<span class="property"><span class="keyword">prototype</span></span>;</span><br><span class="line">        <span class="keyword">return</span> f;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Dekorator <em>Bean</em> tworzy funkcję <em>f</em>, która zastępuje konstruktor klasy oznaczonej tym dekoratorem. Funkcja ta odpowiada za wywołanie oryginalnego konstruktora, zapisanie utworzonego obiektu w tablicy <em>beanRegistry</em> za pomocą funkcji <em>registerBean</em> oraz zwrócenie instancji obiektu obiektu. Mamy mechanizm rejestrowania komponentów, spójrzmy teraz jak działa wstrzykiwanie tych komponentów:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Inject</span>(<span class="params">target: any, key: any</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> _val = <span class="variable language_">this</span>[key];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> getter = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_val) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;create:&#x27;</span> + key.<span class="title function_">toLowerCase</span>());</span><br><span class="line">            _val = <span class="title class_">ApplicationContext</span>.<span class="title function_">getBean</span>(key);</span><br><span class="line">            <span class="variable language_">this</span>[key] = _val;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Get: <span class="subst">$&#123;key&#125;</span> =&gt; <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(_val)&#125;</span>`</span>);</span><br><span class="line">        <span class="keyword">return</span> _val;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">delete</span> <span class="variable language_">this</span>[key]) &#123;</span><br><span class="line">        <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(target, key, &#123;</span><br><span class="line">            <span class="attr">get</span>: getter,</span><br><span class="line">            <span class="attr">enumerable</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">configurable</span>: <span class="literal">true</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Główną rzeczą jaką robi ten dekorator jest nadpisywanie gettera dla właściwości, z którą został użyty. Podczas odwoływania się do takiego pola, zostaje uruchomiony zdefiniowany tutaj getter. Zwraca on instancję obiektu o nazwie takiej, jak nazwa pola gdzie został użyty <em>Inject</em>. Nazwa ta musi oczywiście odpowiadać nazwie klasy, którą chcemy wstrzyknąć. Ot, to cała magia kryjąca się za wstrzykiwaniem zależności.</p>
+<h2 id="Quo-vadis"><a href="#Quo-vadis" class="headerlink" title="Quo vadis?"></a>Quo vadis?</h2><p>Za pomocą dekoratorów stworzyliśmy bardzo prosty mechanizm DI. Nic nie stoi na przeszkodzie, żeby go rozbudować i korzystać z niego w np. aplikacjach serwerowych pisanych w Node.js. Jak to mówią, <em>sky is the limit</em>. Jednak żeby stworzone tutaj rozwiązanie było w pełni wartościowe, należy zatroszczyć się o kilka rzeczy:</p>
+<ul>
+<li>możliwość definiowania sposobu tworzenia komponentów. Obecnie zawsze jest to singleton i nie ma możliwości tworzenia kolejnych obiektów za pomocą tego mechanizmu</li>
+<li>usuwanie obiektów z rejestru, kiedy zostaje usunięty ostatni obiekt korzystający z komponentu. Pozwoli to uniknąć wycieków pamięci. Może warto dodać jakiś licznik w rejestrze?</li>
+<li>definiowanie dowolnej nazwy komponentu, w tej formie zawsze nazwa pola musi pokrywać się z nazwą klasy</li>
+<li>w przypadku obsługi wielu użytkowników w aplikacji, rejestr powinien być związany z sesją użytkownika.</li>
+</ul>
+<p>Zachęcam do samodzielnej próby rozbudowy tego mechanizmu, kto wie, może to Twoja implementacja będzie w przyszłości popularnym DI dla Node.js ;)</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/09/03/2017/2017-09-03-zaimplementuj-dependency-injection-w-typescript/">https://klolo.github.io/2017/09/03/2017/2017-09-03-zaimplementuj-dependency-injection-w-typescript/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/09/17/2017/2017-09-17-typescript-wprowadzenie-czesc-2/">Typescript wprowadzenie - część 2</a>
+            
+            
+            <a class="next" rel="next" href="/2017/08/28/2017/2017-08-28-java-stream-api-darmowy-kurs/">Java stream API - darmowy kurs</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

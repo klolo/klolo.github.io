@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Pierwsze spotkanie z React | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Pierwsze spotkanie z React</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 14, 2017&nbsp;&nbsp;18:58:19</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/TYPESCRIPT/">TYPESCRIPT</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Jako programista full stack używający na froncie Angularjs i poznający dobrodziejstwa Angular 4, byłem przekonany o wyższości tych frameworków nad innymi. Nie byłem w stanie przyjąć do wiadomości, że na froncie w dzisiejszych czasach można użyć czegoś innego niż Angulara, aby stworzyć nowoczesną aplikację SPA. Dziś jednak ten pogląd runął i moim oczom ukazał się stwór o nazwie React. </p>
+<span id="more"></span>
+<p>Zanim jednak zagłębię się w szczegóły Reacta, pokazując jego prostotę, chcę wspomnieć o moim pierwszym spotkaniu z Reactem. Uczestniczyłem w warsztatach zorganizowanych przez Łódzki <a target="_blank" rel="noopener" href="https://nodeschool.io/lodz/">NodeSchool</a>. Spędziłem pół dnia z osobami, które doskonale znają tę technologię, poznając idee towarzyszącą React, sposób jego działania oraz pułapki, na jakie można wpaść przy pisaniu w React. Wszystkim mogę zdecydowanie polecić spotkania w tym pozytywnym gronie. Jest to jedna z lepszych okazji, żeby w darmowy sposób rozwinąć swoją wiedzę. </p>
+<h2 id="Czym-jest-React"><a href="#Czym-jest-React" class="headerlink" title="Czym jest React?"></a>Czym jest React?</h2><p>Jest to biblioteka do budowania interfejsów użytkownika. Nie jest to framework, czyli magiczna machina, która sprawia że<br>aplikacja działa, wywołując czasami kawałek napisanego kodu. Jest to biblioteka, której używamy żeby z małych kawałków, jakimi są komponenty  zbudować kompletny system w możliwie najprostszy sposób. Podejście komponentowe do budowania aplikacji staje się obecnie standardem. Tak naprawdę zawsze było: nawet w takich technologiach jak jsp dało się tworzyć reużywalne tagi, z których potem można było skleić całą stronę. To, co z tego wychodziło w praktyce, to już inna rzecz ;)<br>We współczesnych rozwiązaniach opartych o komponenty używałem do tej pory głównie Angular 1&#x2F;4, jednak ten okazuje się być gigantyczną machiną dodającą bardzo dużą warstwę abstrakcji do wszystkiego, co dzieje się w przeglądarce. Oczywiście ma to swoje plusy, takie jak np. zarządzanie zależnościami. Czasami jednak jest to mechanizm tak trudny do zrozumienia,<br>że nie obejdzie się bez wczytania w dokumentację bądź ogromne ilości kodu. Sam fakt, że Angular 4 ma swój kompilator, który może działać jako JIT oraz AOT (ahead of time - kompilacja komponentów jeszcze przed wysyłaniem do przeglądarki) podkreśla złożoność Angulara. Kilkakrotnie spotkałem się z opinią, że Angular to overengineering i powoli zaczynam zgadzać się z tym stwierdzeniem. React przy Angularze sprawia wrażenie wyjątkowo nieskomplikowanego. Trochę czystego js, idea Web components i małe API pozwalają szybko zbudować aplikację. </p>
+<h2 id="Web-components"><a href="#Web-components" class="headerlink" title="Web components"></a>Web components</h2><p>Idea stojąca za React to komponenty, zbliżone do Web components. Mechanizm dostępny natywnie w HTML od wersji 5. Tak, natywnie. Co oznacza również, że można tworzyć aplikację zbudowaną z komponentów bez użycia jakiegokolwiek dodatkowego frameworku, biblioteki. Oto przykład takiego natywnego komponentu: </p>
+<figure class="highlight javascript"><figcaption><span>html %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">class</span> <span class="title class_">MyNativeComponent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">HTMLElement</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">	<span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">	    <span class="variable language_">super</span>();</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">	    <span class="keyword">var</span> shadow = <span class="variable language_">this</span>.<span class="title function_">attachShadow</span>(&#123;<span class="attr">mode</span>: <span class="string">&#x27;open&#x27;</span>&#125;);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">	    <span class="keyword">var</span> p = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;p&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">	    p.<span class="property">innerText</span> = <span class="string">&#x27;Hello World from component&#x27;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">	    shadow.<span class="title function_">appendChild</span>(p);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">	&#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="variable language_">window</span>.<span class="property">customElements</span>.<span class="title function_">define</span>(<span class="string">&#x27;my-native&#x27;</span>, <span class="title class_">MyNativeComponent</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">	<span class="tag">&lt;<span class="name">my-native</span> <span class="attr">name</span>=<span class="string">&quot;Anita&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">my-native</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Wszystko co trzeba zrobić żeby klasa ES6 stała się komponentem, to odziedziczenie po klasie HTMLElement, a następnie korzystając z shadow DOM można renderować dynamicznie dowolne elementy. </p>
+<h2 id="Komponenty-React"><a href="#Komponenty-React" class="headerlink" title="Komponenty React"></a>Komponenty React</h2><p>Wadą takich natywnych komponentów jest brak elastycznego mechanizmu do definiowania widoku html dla komponentu oraz łączenia go z logiką biznesową zawartą w klasie js. I tutaj z pomocą przychodzi React razem z JSX, czyli rozszerzeniem składniowym js pozwalającym definiować html komponentu bezpośrednio w js. W praktyce komponent <em>Hello world</em> napisany w React wygląda tak:</p>
+<figure class="highlight javascript"><figcaption><span>javascript %&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; <span class="title class_">Component</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> logo <span class="keyword">from</span> <span class="string">&#x27;./logo.svg&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./App.css&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">App</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Component</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">props</span>) &#123;</span><br><span class="line">    <span class="variable language_">super</span>(props);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">state</span> = &#123; <span class="attr">username</span>: <span class="string">&#x27;&#x27;</span> &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// uwaga: jeżeli nie używasz Arrow function </span></span><br><span class="line">  <span class="comment">// to musisz zbindować this w konstruktorze</span></span><br><span class="line">  handleChange = <span class="function"><span class="params">event</span> =&gt;</span> &#123; </span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">username</span>: event.<span class="property">target</span>.<span class="property">value</span>&#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;center-align&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">header</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#123;logo&#125;</span> <span class="attr">className</span>=<span class="string">&quot;App-logo&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Welcome &#123;this.state.username&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;row&quot;</span> <span class="attr">style</span>=<span class="string">&#123;&#123;margin:</span> &#x27;<span class="attr">0</span> <span class="attr">20</span>% <span class="attr">0</span> <span class="attr">20</span>%&#x27;&#125;&#125;&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;Enter your name&quot;</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">                 <span class="attr">onChange</span>=<span class="string">&#123;this.handleChange&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Komponent React to zwykła klasa dziedzicząca po Reactowym <em>Component</em>. W metodzie <em>render</em> zwracamy kod html zapisany za pomocą JSX. Jak widać zawiera on odwołania do zmiennych js, może również posiadać osadzony dowolny kod js. Należy jednak pamiętać, że nie jest to zwykły html i nie wszystko, co jest prawidłowym html, będzie poprawnym JSX. Przykładowo: nie możemy używać słowa <em>class</em> do dołączania styli ponieważ jest to słowo kluczowe zarezerwowane przez js. Zamiast tego należy dołączać style poprzez <em>className</em>. Również sposób używania stylów inline różni się od tego znanego z html, ponieważ do atrybutu style należy przekazać kod js zwracający obiekt definiujący styl. Kod js w JSX załącza się w znaczniku <em>{}</em>, natomiast druga para klamer w przykładzie pochodzi od obiektu js. Tak zapisany kod JSX zostanie przetranspilowany do wywołań funkcji Reacta tworzących wynikowy kod html. </p>
+<p>W powyższym przykładzie pojawił się jeszcze jeden element wymagający wyjaśnienia. Jest to <em>state</em>. Obiekt <em>state</em> odpowiada za przekazywanie danych do Reacta, na podstawie których będzie renderowany widok. React nie śledzi jednak zmian w obiekcie <em>state</em>, w przeciwieństwie do Angular, który tworzy watchersy do obiektów w scope. React dowie się, że coś w obiekcie <em>state</em> uległo zmianie, dopiero kiedy zostanie wywołana asynchroniczna funkcja <em>setState</em>, która spowoduje wywołanie funkcji <em>render</em> i w rezultacie ponowne narysowanie komponentu wraz ze zaktualizowanymi danymi.</p>
+<h2 id="Jak-zaczac-przygode-z-React"><a href="#Jak-zaczac-przygode-z-React" class="headerlink" title="Jak zacząć przygodę z React?"></a>Jak zacząć przygodę z React?</h2><p>Żeby stworzyć pierwszą aplikację wystarczy kilka prostych kroków:</p>
+<ul>
+<li>Zainstalować node i npm</li>
+<li>Zainstalować generator pustego projektu: <em>npm install -g create-react-app</em></li>
+<li>Utworzyć pusty projekt: <em>create-react-app jakas-dowolna-nazwa</em></li>
+<li>W katalogu projektu uruchomić aplikację: <em>npm start</em></li>
+</ul>
+<p>Tak stworzony projekt ma minimum konfiguracji, automatycznie wczytuje zmiany w kodzie do przeglądarki i składa się tylko w kilku plików. Wszystkie dalsze informacje potrzebne do nauki, znajdują się <a target="_blank" rel="noopener" href="https://reactjs.org/docs/installation.html">na oficjalnej stronie</a></p>
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Kod z poprzedniego przykładu wyświetli taki prosty komponent składający się z pola tekstowego oraz etykiety, która się będzie zmianiać wraz z wpisywaniem tekstu:</p>
+<p><img src="/images/react.png" alt="GitHub Logo"></p>
+<p>Podczas wpisywania tekstu w polu tekstowym do metody zostanie wysłany event html-a onChange, który ustawi nową wartość w state. Mechanizm bardzo prosty, nie ma tutaj dodatkowych watchy, który śledzą zmiany i automatycznie odświeżają widok. Do dyspozycji mamy również mechanizm przekazywania danych między komponentami. Do tego właśnie służy parametr konstruktora <em>props</em>. Może on zawierać dane z nadrzędnego komponentu. Oczywiście w nietrywialnych aplikacjach nie zawsze dane są przekazywane bezpośrednio od rodzica do dziecka, stąd też w aplikacjach korzystających z React korzysta się często z Redux. Jest to kontener przechowujący dane aplikacji, które łatwo można przekazywać do dowolnego miejsca aplikacji. React można również połączyć z Typescript, dzięki czemu do dyspozycji mamy typowanie, interfejsy, dekoratory i wiele innych<br>przydatnych rzeczy. Wszystko w React jest bardzo proste, a zarazem wystarczające, żeby budować duże systemy. Mimo że na co dzień używam Angular co zapewne nieszybko się zmieni, z pewnością jednak moje pierwsze spotkanie z React nie będzie ostatnim. </p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/10/14/2017/2017-10-14-pierwsze-spotkanie-z-react/">https://klolo.github.io/2017/10/14/2017/2017-10-14-pierwsze-spotkanie-z-react/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/10/17/2017/2017-10-17-dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/">Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów</a>
+            
+            
+            <a class="next" rel="next" href="/2017/09/17/2017/2017-09-17-typescript-wprowadzenie-czesc-2/">Typescript wprowadzenie - część 2</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

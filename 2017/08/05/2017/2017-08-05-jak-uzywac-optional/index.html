@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Jak prawidłowo używać Optional w Java? | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Jak prawidłowo używać Optional w Java?</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 5, 2017&nbsp;&nbsp;19:57:49</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Jeśli programujesz w Java 8, to pewnie zdarzyło Ci sie użyć klasy Optional. Czy zrobiłeś to we właściwy sposób?</p>
+<span id="more"></span>
+
+<p>Razem z JDK 8 dostaliśmy w ręce, strumienie i możliwość programowania funkcyjnego. Pojawił się również twór dzięki któremu mieliśmy już nie być tak często męczeni przez NullPointerException. Tym tworem jest klasa Optional. Dla nie wtajemniczonych jest to generyczny pojemnik a zmienną dowolnego typu, która może mieć wartość null. Poprzez szereg metod dostępnych w klasie powinniśmy być w stanie zabezpieczyć się przed przypadkowym odwołaniem do null referencji. Przyjrzyjmy się jakie błędy można popełnić używając Optional.</p>
+<h2 id="Bledne-uzycie-isPresent-x2F-get"><a href="#Bledne-uzycie-isPresent-x2F-get" class="headerlink" title="Błędne użycie isPresent&#x2F;get"></a>Błędne użycie isPresent&#x2F;get</h2><p>Jednak zanim przejdziemy do tych metod, spójrzmy w jaki sposób tworzy się obiekty Optional. Można to zrobić za pomocą<br>jeden z metod:</p>
+<ul>
+<li><em>empty()</em> - tworzy pusty Optional z wartością null w środku.</li>
+<li><em>of(T value)</em> - tworzy Optional z podaną wartością. W przypadku przekazania null dostaniemy nullPointerException.</li>
+<li><em>ofNullable(T value)</em> - również tworzy Optional z podaną wartością, ale w przypadku przekazania null nie zostanie zgłoszony wyjątek.</li>
+<li><em>Optional(T value)</em> - konstruktor rzucający błąd w przypadku przekazania wartości null.</li>
+</ul>
+<p>Dobrze, wiemy już jak utworzyć Optional to teraz pytanie jak go użyć? Zacznijmy od dwóch najczęściej używanych metod, często również nie poprawnie. Są to:</p>
+<ul>
+<li><em>isPresent()</em> - zwraca boolean mówiący czy w środku znajduje się jakaś wartość czy też null.</li>
+<li><em>get()</em> - pobranie przechowywanego obiektu. Jeżeli takiego nie dostaniemy: <em>NoSuchElementException</em></li>
+</ul>
+<p>No dobra, ja zatem może wyglądać użycie tych metod?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">saveTrim</span><span class="params">(<span class="keyword">final</span> Optional&lt;String&gt; input)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(input.isPresent()) &#123;</span><br><span class="line">        <span class="keyword">return</span> input.get().trim();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>No i tutaj mamy przykład jak nie używać Optional. Czy taki kod nie jest prościej zastąpić zwykłym warunkiem sprawdzającym czy przekazany String nie jest nullem? Tak klasycznie, jak to się<br>robi w Javie od lat 90, bez dodatkowego narzutu jakim jest Optional?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">saveTrim</span><span class="params">(<span class="keyword">final</span> String input)</span> &#123;</span><br><span class="line">   <span class="type">return</span> <span class="variable">input</span> <span class="operator">=</span>= <span class="literal">null</span> ? <span class="string">&quot;&quot;</span> : input.trim();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Oczywiście można i tak, jednak Optional powstał po to żebyśmy nie musieli umieszczać w kodzie warunków sprawdzających czy referencja ma wartość null. Wykorzystajmy zatem<br>Optional w odpowiedni sposób i napiszmy kod bardziej funkcyjny:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">saveTrim</span><span class="params">(<span class="keyword">final</span> Optional&lt;String&gt; input)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Optional.ofNullable(input)</span><br><span class="line">                    .map(String::trim)</span><br><span class="line">                    .orElse(<span class="string">&quot;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>W powyższym przykładzie korzystamy z metody fabrykującej która nie wyrzuci wyjątku w przypadku przekazania null-a, następnie uruchamiamy metodę map która dla wartości null również zachowa się stosownie i zwróci pusty Optional. No i na końcu mamy metodę orElse która zwróci nam domyślną wartość jeżeli Optional będzie przechowywał null.</p>
+<h2 id="Przyklad-poprawnego-wykorzystania-Optional"><a href="#Przyklad-poprawnego-wykorzystania-Optional" class="headerlink" title="Przykład poprawnego wykorzystania Optional"></a>Przykład poprawnego wykorzystania Optional</h2><p>Jeżeli poprzedni trywialny przykład was nie przekonał to spójrzmy na bardziej rozbudowaną logikę pełną zabezpieczeń przed nullem:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">getCompanyFirstUserName1</span><span class="params">(<span class="keyword">final</span> Holding holding)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (holding != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">final</span> <span class="type">Company</span> <span class="variable">company</span> <span class="operator">=</span> holding.getCompanies().get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">if</span> (company != <span class="literal">null</span> &amp;&amp; company.getUsers() != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">final</span> <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> company.getUsers().get(<span class="number">0</span>);</span><br><span class="line">                <span class="keyword">if</span> (user != <span class="literal">null</span> &amp;&amp; user.getFirstName() != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">final</span> <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> user.getFirstName();</span><br><span class="line">                    <span class="keyword">if</span> (result.length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="keyword">return</span> result;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;not found&quot;</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Taki kod można zapisać za pomocą Optional w takiej formie:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">getCompanyFirstUserName2</span><span class="params">(<span class="keyword">final</span> Holding holding)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(holding)</span><br><span class="line">                .map(Holding::getCompanies)</span><br><span class="line">                .map(Vector::firstElement)</span><br><span class="line">                .map(Company::getUsers)</span><br><span class="line">                .map(Vector::firstElement)</span><br><span class="line">                .map(User::getFirstName)</span><br><span class="line">                .filter(name -&gt; name.length() &gt; <span class="number">0</span>)</span><br><span class="line">                .orElse(<span class="string">&quot;not found&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Czyż taka wersja nie jest czytelniejsza? Krótsza? No i nie musieliśmy skorzystać z niebezpiecznej metody get, która może rzucić wyjątek.</p>
+<h2 id="Niebezpieczna-metoda-get"><a href="#Niebezpieczna-metoda-get" class="headerlink" title="Niebezpieczna metoda get"></a>Niebezpieczna metoda get</h2><p>Sam pomysłodawca i współ autor rozwiązania jakim jest Optional <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/26327957/should-java-8-getters-return-optional-type/26328555#26328555">żałuje</a> że nie nazwał tej metody np. getOrElseThrowNoSuchElementException_, tak żeby każdy zawsze miał świadomość że może ona wyrzucić wyjątek i nie powinna być używana bez uprzedniego sprawdzenia w czy Optional jest jakaś wartość.</p>
+<h2 id="Gdzie-nie-uzywac-Optional"><a href="#Gdzie-nie-uzywac-Optional" class="headerlink" title="Gdzie nie używać Optional?"></a>Gdzie nie używać Optional?</h2><p>Kolejnym problemem jaki pojawia się tam gdzie używamy Optional jest nadużywanie go. W szczególności pola w klasach DTO nie powinny być deklarowane jako Optional, ponieważ może to doprowadzić do takich dziwnych zapisów:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// private HashMap&lt;String, Integer&gt; data;</span></span><br><span class="line">   <span class="keyword">private</span> Optional&lt;HashMap&lt;String, Integer&gt;&gt; data;</span><br></pre></td></tr></table></figure>
+
+<p>Jest to bardzo nie czytelne i nie potrzebne. Co w takim razie zrobić kiedy chcemy użyć Optional do zabezpieczenia naszego kodu? Możemy go utworzyć w getterze:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Optional&lt;HashMap&lt;String, Integer&gt;&gt; <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Optional.ofNullable(data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Ta sama zasada dotyczy również przekazywania Optionali do kontruktorów i do metod. Nic nam nie dają oprócz zaciemniania kodu. Lepszym rozwiązaniem jest przekazywać zwykły obiekt i w środku metody zamieniać go na Optional. A! No i należy pamiętać o tym że Optional nie jest serializowany i nie powinien być używany w obiektach domenowych…No jest troszkę tych zapaszków (ang. code smells) związanych z kontrowersyjnym Optional. Na koniec przytoczę wyjaśnienie twórcy Optional-a do czego powstał Optional.</p>
+<blockquote>
+<p>Our intention was to provide a limited mechanism for library method return types where there needed to be a clear way to represent “no result”, and using null for such was overwhelmingly likely to cause errors.</p>
+</blockquote>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/08/05/2017/2017-08-05-jak-uzywac-optional/">https://klolo.github.io/2017/08/05/2017/2017-08-05-jak-uzywac-optional/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/08/08/2017/2017-08-08-mantra-architektoniczna/">Mantra architektoniczna</a>
+            
+            
+            <a class="next" rel="next" href="/2017/08/04/2017/2017-08-04-programistycze-kata/">Programistyczne kata</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

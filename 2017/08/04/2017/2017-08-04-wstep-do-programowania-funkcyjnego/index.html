@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Wstęp do programowania funkcyjnego | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Wstęp do programowania funkcyjnego</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 4, 2017&nbsp;&nbsp;20:25:49</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/METHODOLOGY/">METHODOLOGY</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Ten wpis ma na celu wyjaśnienie czym jest programowanie funkcyjne oraz przedstawienie podstawowych zasad panujących w świecie programowania funkcyjnego.</p>
+<span id="more"></span>
+
+<h2 id="Programowanie-deklaratywne-vs-imperatywne"><a href="#Programowanie-deklaratywne-vs-imperatywne" class="headerlink" title="Programowanie deklaratywne vs imperatywne"></a>Programowanie deklaratywne vs imperatywne</h2><p>Wprowadzenie do programowania funkcyjnego zacznę od przypomnienia czym jest paradygmat programowania deklaratywnego. Jest to podejście, w którym tworząc<br> kod skupiamy na się na tym co ma zostać wykonane, a nie w jaki sposób. Szczegóły implementacji pozostawiamy np. bibliotece, odwracając w ten sposób<br>  kontrolę nad kodem. W końcu wszyscy lubią odwracanie kontroli (inversion of control) ;). Tak napisany kod jest bardziej zwięzły i czytelniejszy z powodu<br>  mniejszej ilości zbędnego szumu. Pewnie setki razy zdarzyło Ci się napisać: for(int i&#x3D;0; i&lt;… Czy nie uważasz, że w większości przypadków<br>  tak napisany kod jest złem koniecznym, niezbędnym do osiągnięcia określonego działania aplikacji? Podejście, w którym wykorzystywane są instrukcje sterujące<br>   kodem nazywane jest programowaniem imperatywnym. Jest to przeciwieństwo programowania deklaratywnego, gdzie nie tylko trzeba martwić się co ma robić kod,<br>    ale również w jaki sposób to osiągnąć. Programowanie funkcyjne idzie w parze z programowaniem deklaratywnym, dzięki czemu kod będzie krótszy niż ten klasyczny<br>    obiektowo imperatywny.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> List&lt;String&gt; users = Arrays.asList(<span class="string">&quot;Ewa&quot;</span>, <span class="string">&quot;Bartek&quot;</span>, <span class="string">&quot;Adam&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. imperatywnie</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; users.size(); i++) &#123;</span><br><span class="line">    System.out.println(users);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. deklaratywnie</span></span><br><span class="line">users.forEach(System.out::print);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Co-to-jest-programowanie-funkcyjne"><a href="#Co-to-jest-programowanie-funkcyjne" class="headerlink" title="Co to jest programowanie funkcyjne?"></a>Co to jest programowanie funkcyjne?</h2><p>Programowanie funkcyjne to programowanie, w którym najważniejszą rolę pełnią funkcje. Możesz śmiało zaprotestować: Zaraz, zaraz…Czy czasami mój obiektowy kod nie składa się<br>również z funkcji? Ależ tak! Jednak zasadnicza równica jest taka, że w FP (ang. Functional programming) funkcje służą do opisu przepływu sterowania i operacji - a nie<br> tak jak to ma miejsce w przypadku programowania obiektowego - do zmiany stanu obiektów. Z tego założenia wynika również jedna z cech programowania obiektowego - niezmienność obiektów.<br> Czym jeszcze charakteryzuje się FP? O tym w dalszej części.</p>
+<h2 id="Czyste-funkcje"><a href="#Czyste-funkcje" class="headerlink" title="Czyste funkcje"></a>Czyste funkcje</h2><p>Czyste funkcje to funkcje bez efektów ubocznych. Są one elementem, bez którego nie da się pisać funkcyjnie. Nie zależą one od żadnych zmienny zewnętrznych np. pól w<br>klasie, a wszystkie dane są przekazywane jako parametry. Dlatego też dla podanego zestawu danych czysta funkcja zawsze zwróci taki sam wynik. Zaburzeniem tego może być<br>również wykorzystanie w funkcji instrukcji random, w której wynik operacji nie jest stały dla danych parametrów. Czyste funkcje również nie modyfikują stanów zewnętrznych<br>np. pól w klasie, lecz każdy wynik jest zwracany jako wynik funkcji.</p>
+<h2 id="Funkcje-jako-obywatele-pierwszej-klasy"><a href="#Funkcje-jako-obywatele-pierwszej-klasy" class="headerlink" title="Funkcje jako obywatele pierwszej klasy"></a>Funkcje jako obywatele pierwszej klasy</h2><p>Pod tym pojęciem kryje się zdolność języka do traktowania funkcji na równi z obiektami klas tzn. funkcje można przekazywać jako parametry do metod, można je przypisywać<br>do zmiennych oraz tworzyć wewnątrz funkcji. Przed Java 8, język nie był wyposażony w elementy, które na to pozwalały. Jak to zrealizować w Java 8 pokazuje poniższy przykład.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="type">double</span> <span class="variable">PI</span> <span class="operator">=</span> <span class="number">3.14</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Przypisanie funkcji do zmiennej</span></span><br><span class="line"><span class="keyword">final</span> Function&lt;Double, Double&gt; circleArea = r -&gt; r * r * PI;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Przekazanie funkcji do metody</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">showCalculatedArea</span><span class="params">(Function&lt;Double, Double&gt; algorithm, <span class="type">double</span> r)</span> &#123;</span><br><span class="line">    System.out.println(algorithm.apply(r));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Niezmiennosc-obiektow"><a href="#Niezmiennosc-obiektow" class="headerlink" title="Niezmienność obiektów"></a>Niezmienność obiektów</h2><p>Jest to cecha FP związana z czystymi funkcjami. W językach czysto funkcyjnych często nie istnieje pojęcie zmiennej, tak więc wszystkie tworzone obiekty są niezmienne. Dzięki<br>takiemu podejściu nie ma możliwości zmiany stanów ani przekazanych do funkcji parametrów, jak i pól w klasie, trudniej jest w funkcji wykonać efekt uboczny. W związku z czym<br>final jest zawsze mile widziany. Jak ułatwić sobie życie w takim kodzie? Polecam bardzo buildery, czy to te implementowane przez Ciebie, czy też te generowane automatycznie<br>np. za pomocą Lombok-a. Builder ma dwie zasadnicze zalety. Pierwsza to to że nie musimy używać konstruktorów z wieloma parametrami gdzie oraz to, że mimo użycia tylko<br>stałych pól w klasie możemy utworzyć obiekt w kilku krokach. Jak wygląda najprostszy builder?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">User</span><span class="params">(<span class="keyword">final</span> String name, <span class="keyword">final</span> <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> UserBuilder <span class="title function_">builder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">UserBuilder</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">UserBuilder</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> UserBuilder <span class="title function_">age</span><span class="params">(<span class="keyword">final</span> <span class="type">int</span> age)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.age = age;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> UserBuilder <span class="title function_">name</span><span class="params">(<span class="keyword">final</span> <span class="type">int</span> name)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.name = name;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> User <span class="title function_">build</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>(name, age);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Jak widać wszystkie pola w klasie User są stałe i nie mamy potrzeby eksponować na zewnątrz <em>brzydkiego</em> konstruktora z wszystkimi polami. Dodatkowo w metodzie build możemy<br>umieścić logikę walidującą stan danych przed utworzeniem obiektu. Przykładowe użycie buildera wygląda następująco:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="type">UserBuilder</span> <span class="variable">builder</span> <span class="operator">=</span> User.builder();</span><br><span class="line">builder</span><br><span class="line">        .age(<span class="number">18</span>)</span><br><span class="line">        .name(<span class="string">&quot;Frank&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Dzięki wykorzystaniu wzorca fluent interface mamy możliwość łączenia metod w ciąg wywołań.</p>
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Dzięki temu, że funkcje nie mają efektów ubocznych, wynik działania jest łatwiejszy zarówno do przewidzenia jak i do przetestowania. Dodatkowo czysta funkcja dla podanych parametrów zawsze zwróci ten sam wynik, dlatego można z łatwością wykorzystać cache w celu optymalizacji aplikacji. Dzięki używaniu czystych funkcji znikną również największe problemy<br>z wielowątkowością, takie jak jednoczesna modyfikacja wspólnych danych przez kilka wątków. Możemy skupić się również na tym co mają robić nasze funkcje, a nie w jaki sposób implementować np. pętle lub warunek. Łatwiej jest nam również reużywać napisany wcześniej kod. Jakie są natomiast zalety tego, że obiekty są niezmienne? Łatwiej przewidzieć co się w nich znajduje, dzięki czemu można szybciej zdiagnozować i poprawić ewentualne błędy.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/08/04/2017/2017-08-04-wstep-do-programowania-funkcyjnego/">https://klolo.github.io/2017/08/04/2017/2017-08-04-wstep-do-programowania-funkcyjnego/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/08/04/2017/2017-08-04-czy-warto-sie-przejmowac-konkatenacja-stringow-w-java/">Czy warto się przejmować konkatenacją stringów w Java?</a>
+            
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

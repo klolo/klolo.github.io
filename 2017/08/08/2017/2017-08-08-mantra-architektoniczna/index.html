@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Mantra architektoniczna | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Mantra architektoniczna</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 8, 2017&nbsp;&nbsp;20:54:53</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/METHODOLOGY/">METHODOLOGY</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Skąd nowe osoby w Waszym zespole zdobywają wiedzę na temat działania systemu? Z nieaktualnej dokumentacji? Czy bardziej doświadczony programista poświęca swój czas na przybliżenie wszystkich elementów systemu? Jak często widzisz kod, który znalazł się w nieodpowiednim miejscu Twojej aplikacji?</p>
+<span id="more"></span>
+
+<blockquote>
+<p><b>UWAGA.</b> Tekst z nutą kpiny, zakrapiany moim poczuciem humoru. Wrażliwych programistów uprasza się o nieczytanie tego porywającego wpisu.</p>
+</blockquote>
+<h2 id="Akt-I"><a href="#Akt-I" class="headerlink" title="Akt I"></a>Akt I</h2><p>Czytając kod czasami ma się wrażenie, że ktoś pisał go w pośpiechu bez żadnego przemyślenia. Dlaczego logika biznesowa znajduje sie w DAO? Dlaczego zwykły obiekt DTO ma w środku w getterze jakiś rozbudowany algorytm? Dlaczego ta klasa ma 10 tysięcy linii? Za co ta klasa tak w ogóle odpowiada!? Takich bólów w programistycznych kościach można wymieniać bez końca. Jakie jest panaceum na te bóle? Rzucić wszystko i wyjechać w Bieszczady. A tak na poważnie, jak rozpropagować w całym zespole wiedzę tajemną, o tym jak wygląda architektura systemu, do której dążymy? W końcu architektura nie jest czymś, co architekt przygotowuje w białej wieży i zrzuca zwykłym programistom jako gotowy dizajn. Architektura jest czymś, co ciągle ulega zmianie, razem z wymaganiami klienta, coś, co ciągle możemy ulepszać, zmieniać tak, żeby zarówno programista był zadowolony z tego, że pracuje w projekcie, jak i również PM, któremu będzie zgadzać się kasa. W końcu dobra architektura i czysty kod powinny zapewnić możliwość wprowadzania szybko zmian w systemie, za które klient zapłaci. Żeby ta architektura zmieniała się na lepsze i w jednym kierunku, a nie w tylu kierunkach, ilu jest developerów w zespole, każdy musi wiedzieć za co odpowiada nawet najmniejszy element tej układanki. Można to osiągnąć poprzez ciągle powtarzanie tych informacji, aż każdy, nawet stażysta załapie jak to działa.</p>
+<h2 id="Ale-o-co-chodzi"><a href="#Ale-o-co-chodzi" class="headerlink" title="Ale o co chodzi?"></a>Ale o co chodzi?</h2><p>Takim ciągłym powtarzaniem informacji o systemie, definiowaniem na nowo każdej warstwy i cegiełki naszego systemu jest właśnie <em>mantra architektoniczna</em>. Co tak w ogóle oznacza słowo mantra? Definicja z wiki mówi ot tyle:</p>
+<blockquote>
+<p>Mantra – w buddyzmie, hinduizmie i ezoteryce formuła, werset lub sylaba, która jest elementem praktyki duchowej. Jej powtarzanie ma pomóc w opanowaniu umysłu, zaktywizowaniu określonej energii, uspokojeniu, oczyszczeniu go ze splamień. Szczególnie istotną sprawą jest bezpośredni przekaz z ust wykwalifikowanego nauczyciela (guru), gdyż tylko wtedy mantra uzyskuje właściwą moc.</p>
+</blockquote>
+<p>Definicja ta mówi o dwóch bardzo ważnych kwestiach, które również mają odniesienie do mantry architektonicznej. Pierwsza rzecz to to, że mantra składa się z tylko jednego wersetu lub sylaby, a co za tym idzie jest bardzo krótka. Taka również powinna być mantra architektoniczna. W moim zespole mantra zazwyczaj trwa jedynie 20 minut. Myślę, że jest to czas jaki każdy PM może zaakceptować jako sposób na utrzymanie systemu w lepszej formie. Druga kwestia to powtarzanie mantry. Zrobienie jednorazowego spotkania nic nie da, ponieważ niedoskonały człowiek bardzo upodobał sobie zapominanie różnych rzeczy. Żeby mantra miała sens musi być powtarzana regularnie przez dłuższy czas. Z doświadczenia wiem że spotkanie raz w tygodniu absolutnie wystarczy, jednak nie powinno dojść do sytuacji, kiedy w danym tygodniu nie ma mantry, bo mamy akurat pożar na produkcji, albo klient domaga się kilku nowych funkcjonalności na wczoraj. Lepiej żeby mantra miała stałą godzinę, o której zespół spotyka się bez względu na aktualną sytuację w projekcie. W podjęciu decyzji o spotkaniu mimo<br>trudnej sytuacji pomoże na pewno fakt, że mantra jest krótkim spotkaniem. Może byc zrobiona jako przerwa od ciągłego patrzenia w monitor, będzie to kilka minut kiedy programista zobaczy innego programistę siedzącego obok, być może nawet odezwie się do niego i na chwilę oderwie od zadania, jakie realizuje od kilku godzin nie zważając na pełny pęcherz i brak batoników do zjedzenia.</p>
+<h2 id="Jak-to-robic"><a href="#Jak-to-robic" class="headerlink" title="Jak to robić?"></a>Jak to robić?</h2><p>Mantra ma być jak napad na bank, szybka i konkretna. Siadamy w kółku na czym sie tylko da - krzesła, podłoga, pośladki - i zaczynamy nakreślać z jakich warstw składa się system. Możecie zacząć od samego dołu, lub od samej góry, nie ma to znaczenia. My zaczynamy od warstwy widoku, od tego klient widzi w swojej przeglądarce. W końcu robię aplikacje webowe,<br>czasami coś w tej przeglądarce, oszpecone css-em uda się zaprezentować. Po omówieniu widoku idziemy dalej - usługi, serwisy, baza danych - każdy kolejny element systemu. Przy omawianiu danej warstwy wypisujemy na whiteboardzie za co dana warstwa odpowiada, co powinno się tu robić, w jaki  sposób, z czego korzystać, oraz to czego nie powinno tutaj być. Przy omawianiu tego, jakie są ciemne strony danej warstwy zdarzy się, że któryś z programistów obleje się rumieńcem, taki rodzaj blame w realu. Oprócz omówienia tego, jak jest i jak powinno być, na spotkaniu ustalamy również kierunek działania. Umawiamy się czego pozbyć się z danej warstwy, co zrefaktorować, jaka konwencja panuje w danej warstwie. Bardzo ważne jest żeby na takich spotkaniach angażować wszystkich członków zespołu, może tego prowadzić tylko jednak osoba. Każdy powinien się wypowiadać o systemie, tak żeby można było ewentualnie prostować jego światopogląd jeżeli może nam to zrobić<br>bałagan w systemie.</p>
+<p>Bardzo przydatna podczas spotkania jest tablica, na której wszystko wizualizujemy. Prawie nigdy jej nie ścieramy, cięgle coś zmieniamy dopisujemy, ale bardzo rzadko usuwamy coś co już zostało napisane. Tablica jest w pokoju, gdzie siedzi cały zespół i często widuje się programistów zajadających kanapkę i spacerujących w zamyśleniu obok tablicy. Sprawiają wtedy wrażenie jakby studiowali, co na niej się znajduje. Na takiej tablicy czasami wiszą również wydrukowane fragmenty kodu przedstawiające wzorcowe implementacje poszczególnych klocków aplikacji.</p>
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Mantra jest krótkim spotkaniem przeprowadzanym w zespole w celu omówienia budowy systemu, strategii dostosowania architektury do zmieniających się wymagań klienta. Uczestnictwo w takim spotkaniach jest również jedną z najkrótszych sposobów na wdrożenie nowego członka zespołu. Zanim narobi bałaganu w systemie już będzie wiedział gdzie, co powinno się znajdować. Nie mając spisanej dokumentacji do systemu mantra stanowi jakiś nośnik wiedzy. Wypisane informacje na tablicy można sfotografować i to już jest jakaś forma dokumentacji. Jeżeli mamy nieaktualną to taka będzie dużo lepiej opowiadać o systemie i zawsze będzie aktualna. Jeżeli nie próbowałeś nigdy tego w swoim zespole, spróbuj, zwołaj zebranie i zapytaj każdego o odpowiedzialności poszczególnych elementów systemu. Zdziwisz się jak wiele różnych odpowiedzi dostaniesz, jak bardzo różną wizję mogą mieć programiści. Podczas takiego spotkania pojawiają się również pytania, na które odpowiedź powinien znać każdy, a niekoniecznie tak jest.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/08/08/2017/2017-08-08-mantra-architektoniczna/">https://klolo.github.io/2017/08/08/2017/2017-08-08-mantra-architektoniczna/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/08/09/2017/2017-08-09-stream-reduce-vs-collect/">Java stream reduce vs collect</a>
+            
+            
+            <a class="next" rel="next" href="/2017/08/05/2017/2017-08-05-jak-uzywac-optional/">Jak prawidłowo używać Optional w Java?</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

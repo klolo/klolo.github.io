@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Typescript wprowadzenie - część 1 | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Typescript wprowadzenie - część 1</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 28, 2017&nbsp;&nbsp;22:11:51</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/TYPESCRIPT/">TYPESCRIPT</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Jesteś programistą javascript chcącym pisać aplikację z wykorzystaniem Typescript? Chcesz nauczyć się Angular 2&#x2F;4? Jesteś programistą Javy, który próbuje tworzyć frontend?<br>Doskonale trafiłeś. W serii kilku wpisów postaram się przybliżyć Ci ten język. Dzisiaj opowiem o tym czym jest ts, jak zacząć z nim pracę oraz jakie podstawowe typy<br>są dostępne w tym języku.</p>
+<span id="more"></span>
+
+<h2 id="Co-to-jest-typescript"><a href="#Co-to-jest-typescript" class="headerlink" title="Co to jest typescript?"></a>Co to jest typescript?</h2><p>Krótko mówiąc Typescript jest nadzbiorem języka javascript stworzonym przez Microsoft w celu dodania do js takich elementów jak statyczne typowanie. Jest to rozszerzenie języka<br>javascript, stąd też każdy prawidłowy kod języka js jest również prawidłowym kodem ts. Nie działa to jednak w drugą stronę, ponieważ ts nie jest obsługiwany przez silnik js wbudowany<br>np. w przeglądarkę. Ts przed uruchomieniem musi zostać zamieniony na js przez specjalny kompilator o nazwie <em>tsc</em>. Proces przepisywania kodu napisanego w jednym języku na inny nosi<br>nazwę transpilacji.</p>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><p>W celu rozpoczęcia zabawy z ts należy zainstalować Node.js i za pomocą managera pakietów npm zainstalować kompilator:</p>
+<blockquote>
+<p>npm install -g typescript</p>
+</blockquote>
+<p>Po wykonaniu polecenie będziemy mogli uruchomić hello world zapisane w pliku demo.ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getHello</span>(<span class="params">userName: string</span>): string &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`Hello <span class="subst">$&#123;userName&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="attr">hello</span>: string = <span class="title function_">getHello</span>(<span class="string">&#x27;Kamil&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(hello);</span><br></pre></td></tr></table></figure>
+
+<p>W celu skompilowania kodu ts do js uruchamiamy polecenia:</p>
+<blockquote>
+<p>tsc .&#x2F;demo.ts &amp;&amp; node .&#x2F;demo.js</p>
+</blockquote>
+<p>Jak widać w powyższym poleceniu, zostanie wygenerowany plik js, który będzie zawierał wygenerowany kod js:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getHello</span>(<span class="params">userName</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Hello &quot;</span> + userName;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> hello = <span class="title function_">getHello</span>(<span class="string">&#x27;Kamil&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(hello);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Wszystkie fragmenty kodu związane z ts, nie będące poprawnym js zniknęły. Środowisko, w którym będziemy uruchamiać taki kod nie będzie miało żadnej informacji o tym, że kod był tworzony w ts.</p>
+<h2 id="Statyczne-typowanie"><a href="#Statyczne-typowanie" class="headerlink" title="Statyczne typowanie"></a>Statyczne typowanie</h2><p>Jak wiadomo js jest językiem dynamicznie typowanym, co oznacza, że informacja o tym, jakiego typu obiekt jest przechowywany w zmiennej, określany jest w trakcie działania aplikacji. Do zmiennej możemy w jednej linijce przypisać jakiś string, a w następnej obiekt całkowicie innego typu:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> user = <span class="string">&#x27;Karol&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(user);</span><br><span class="line"></span><br><span class="line">user = &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Karol&#x27;</span>,</span><br><span class="line">    <span class="attr">age</span>: <span class="number">18</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(user);</span><br></pre></td></tr></table></figure>
+
+<p>Nie ma tutaj żadnego mechanizmu, który sprawdzi czy w zmiennej jest obiekt prawidłowego typu, jaki jest wymagany w danej funkcji. Jest to mechanizm, który sprawia, że js jest bardzo elastyczny, ekspresyjny ale zarazem jest to przyczyna wielu błędów, często trudnych do wychwycenia. Typescript daje programiście możliwość definiowania typów zmiennych, parametrów funkcji dzięki czemu kompilator w czasie transpilacji kodu ma możliwość weryfikacji czy nie popełniliśmy błędu i nie próbujemy użyć błędnego typu w danym miejscu aplikacji. Sposób wykorzystania typów w ts przedstawia również przykład z <em>hello world</em>. Składnia ts wymaga od nas jedynie podania po nazwie zmiennej dwukropka po którym będzie stać typ zmiennej. W celu określenia typu zwracanego z metody należy dwukropek i typ zwracany podać miedzy nawiasem zamykającym listę argumentów a klamrą otwierającą ciało funkcji.</p>
+<h2 id="Typy-proste"><a href="#Typy-proste" class="headerlink" title="Typy proste"></a>Typy proste</h2><p>Do dyspozycji mamy podstawowe typu danych znane z js:</p>
+<ul>
+<li>boolean - true&#x2F;false</li>
+<li>number - liczba zmiennoprzecinkowa</li>
+<li>string - ciąg znaków</li>
+<li>null - brak wartości zmiennej, która została zainicjalizowana</li>
+<li>undefined - wartość domyślna zmiennych, mówiąca o tym że zmienna nie została zainicjalizowana</li>
+</ul>
+<p>Przy korzystaniu z typów prostych takich jak np. string należy jednak zwracać uwagę czy nie piszemy nazwy typu z dużej litery. Obiekty, do których byśmy się wtedy odwoływali są wrapperami na typy proste. Jest to mechanizm podobny do tego w Java. Używanie wrapperów zamiast typów prostych sprawi, że nasz kod będzie mniej wydajny.</p>
+<p>Dodatkowo typescript dodaje możliwość korzystania z kilku dodatkowych typów, które warto wyjaśnić.</p>
+<h2 id="any"><a href="#any" class="headerlink" title="any"></a>any</h2><p>Przechodząc z js na ts możemy robić to stopniowo, nie musimy przepisywać od razu całej aplikacji. Może się jednak pojawić problem z tym, że istniejący kod zwraca obiekty jakiegoś typu i ts nie może zweryfikować co to za typ. W takich przypadkach przydatny jest specjalny typ <em>any</em> pozwalający przypisać do zmiennej obiekt dowolnego typu, bez walidowania<br>tego typu. Nasuwa się pytanie dlaczego nie można wykorzystać <em>Object</em> jako typu dla danych, które przechodzą z jakiejś np. biblioteki? Świetnie to wyjaśnia przykład kodu wprost z dokumentacji ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">notSure</span>: any = <span class="number">4</span>;</span><br><span class="line">notSure.<span class="title function_">ifItExists</span>(); <span class="comment">// okay, ifItExists might exist at runtime</span></span><br><span class="line">notSure.<span class="title function_">toFixed</span>(); <span class="comment">// okay, toFixed exists (but the compiler doesn&#x27;t check)</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">let</span> <span class="attr">prettySure</span>: <span class="title class_">Object</span> = <span class="number">4</span>;</span><br><span class="line">prettySure.<span class="title function_">toFixed</span>(); <span class="comment">// Error: Property &#x27;toFixed&#x27; doesn&#x27;t exist on type &#x27;Object&#x27;.</span></span><br></pre></td></tr></table></figure>
+
+<p>Oczywiście należy pamiętać o tym, żeby zmiennych typu <em>any</em> w kodzie było jak najmniej, a nawet żeby ich nie było w ogóle. Ponieważ korzystając z <em>any</em> tracimy dobrodziejstwa statycznego typowania jakie daje nam ts. Kompilator można uruchomić z flagą, która sprawi, że kod który zawiera <em>any</em> nie skompiluje się.</p>
+<h2 id="void"><a href="#void" class="headerlink" title="void"></a>void</h2><p>Typ ten jest wykorzystywany do informowania kompilatora o tym, że funkcja nie będzie nic zwracać. Zachowanie analogiczne do tego znanego z np. Javy. Możemy użyć instrukcji return, ale tylko gdy nie będzie ona zawierać żadnych danych które mają zostać zwrócone. Funkcja może zwracać jedynie null, undefined bądź nic. Używanie void w ts zabezpiecza nas przed przypadkowym zwróceniem jakiejś wartości z funkcji, bądź próbą przypisania wyniku takiej funkcji do zmiennej typu innego niż void.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">voidFun</span>(<span class="params"></span>): <span class="keyword">void</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>; <span class="comment">// ewentualnie undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="attr">x</span>: <span class="keyword">void</span> = <span class="title function_">voidFun</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(x);</span><br></pre></td></tr></table></figure>
+
+<h2 id="never"><a href="#never" class="headerlink" title="never"></a>never</h2><p>Never jest bardzo ciekawym typem prostym wbudowanym w ts. Oznacza się nim funkcje, które nic nie mogą zwrócić. Jednak w przeciwieństwie do void, taka funkcja nie może ani posiadać instrukcji return ani się kończy w prawidłowy sposób. Metody oznaczone jako never mogą w środku zawierać jedynie nieskończone pętle, bądź też wyrzucać wyjątek, zamiast normalnego wyjścia z metody.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">neverFun</span>(<span class="params"></span>): never &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">neverFunWithThrow</span>(<span class="params"></span>): never &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;neverFunWithThrow&#x27;</span>);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;this is never enging function&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="tuples"><a href="#tuples" class="headerlink" title="tuples"></a>tuples</h2><p>Jest to konstrukcja pozwalająca w tablicy umieścić pewną ilość zmiennych, których typ jest znany podczas definiowania tablicy. Semantycznie wygląda to tak, że deklarujemy tablice podając typ każdego z elementów tej tablicy. Kompilator sprawdzi za nas czy w poszczególne komórki tablicy przypisujemy prawidłowe typy oraz czy wyciągnięte dane z tablicy są prawidłowo użyte.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="attr">tupleUser</span>: [string, number] = [<span class="string">&#x27;Kamil&#x27;</span>, <span class="number">18</span>];</span><br><span class="line">tupleUser[<span class="number">0</span>] = <span class="number">1</span>; <span class="comment">// error</span></span><br><span class="line">tupleUser[<span class="number">0</span>] = <span class="string">&#x27;Bartek&#x27;</span>; <span class="comment">// ok</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">userName</span>: string = tupleUser[<span class="number">0</span>].<span class="title function_">toLowerCase</span>();</span><br><span class="line"><span class="keyword">const</span> <span class="attr">user</span>: string = tupleUser[<span class="number">1</span>]; <span class="comment">// error</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="enum"><a href="#enum" class="headerlink" title="enum"></a>enum</h2><p>Często zdarza się, że w aplikacji mamy kilka stałych, które mają pewien wspólny kontekst. W czystym js można było je zgrupować za pomocą np. odpowiednich nazw, bądź jako statyczne pola użyte razem z konstruktorem:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Color</span>(<span class="params"></span>) &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Color</span>.<span class="property">RED</span> = <span class="string">&#x27;RED&#x27;</span>;</span><br><span class="line"><span class="title class_">Color</span>.<span class="property">GREEN</span> = <span class="string">&#x27;GREEN&#x27;</span>;</span><br><span class="line"><span class="title class_">Color</span>.<span class="property">BLUE</span> = <span class="string">&#x27;BLUE&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Wadą takiego rozwiązania jest to, że wartości tych stałych mogą się zmienić dynamicznie w trakcie działania aplikacji. Oczywiście js pozwala nam obejść ten problem za pomocą bardziej zaawansowanych technik, jednak rozwiązania takie będą już skomplikowane. Ts pozwala używać enumów, dzięki którym możemy zgrupować zmienne bez obawy przed tym że ich wartość<br>zmieni się w trakcie działania aplikacji. Dodatkowo kompilator sprawdzi, czy w miejsce gdzie ma być przekazana stała z enuma przekazujemy poprawną wartość. Wartościom stałych można ustawiać dowolne wartości. Jeżeli pominiemy ustawianie wartości, to stałe w enum będą miały wartości kolejno: 0, 1, 2 itd.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">enum <span class="title class_">ColorRGB</span> &#123;</span><br><span class="line">    <span class="variable constant_">RED</span> =  <span class="string">&#x27;red&#x27;</span>,</span><br><span class="line">    <span class="variable constant_">GREEN</span> = <span class="string">&#x27;green&#x27;</span>,</span><br><span class="line">    <span class="variable constant_">BLUE</span> = <span class="string">&#x27;blue&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">ColorRGB</span>.<span class="property">RED</span> = <span class="string">&#x27;green&#x27;</span>; <span class="comment">// error</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">red</span>: <span class="title class_">ColorRGB</span> = <span class="title class_">ColorRGB</span>.<span class="property">RED</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Typescript jest językiem programowania bazującym na javascript, który pozwala w bardziej bezpieczny sposób implementować aplikację. Statyczne typowanie, zapewni że to właśnie kompilator znajdzie błędne użycie typów w momencie kompilacji, a nie klient na środowisku produkcyjnym. Ts jest językiem obiektowym, pozwalającym używać wbudowanych typów oraz definiować nowe. Jak to robić, opiszę dla Was w kolejnym wpisie.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/08/28/2017/2017-08-28-typescript-wprowadzenie-czesc-1/">https://klolo.github.io/2017/08/28/2017/2017-08-28-typescript-wprowadzenie-czesc-1/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/08/28/2017/2017-08-28-java-stream-api-darmowy-kurs/">Java stream API - darmowy kurs</a>
+            
+            
+            <a class="next" rel="next" href="/2017/08/15/2017/2017-08-15-intellij-live-templates-szybsze-programowanie/">Intellij live templates - szybsze programowanie</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

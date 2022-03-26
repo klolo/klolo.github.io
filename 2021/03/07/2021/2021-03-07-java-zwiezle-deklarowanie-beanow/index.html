@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>java: zwięzłe deklarowanie beanów | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">java: zwięzłe deklarowanie beanów</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 7, 2021&nbsp;&nbsp;0:38:50</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <span id="more"></span>
+
+<p>Projekt bankowości korporacyjnej w jakim uczestniczę musi sprostać bardzo różnorodnym wymaganiom wielu klientów. Niesie to ze sobą konieczność wykorzystania w projekcie szerokiego zakresu technologii. Odizolowanie aspektów czysto technicznych od biznesu jest w takim przypadku koniecznością. Kto chciałby mieć domenę biznesową ubrudzoną adnotacjami i zależnościami do różnych frameworków? Takie zależności to prosta droga, żeby elastyczny system zmieniał się w kod legacy.</p>
+<p>Wiele warstw systemu i oddzielenie domeny od infrastruktury nie jest jednak czymś, co możemy dostać za darmo. W przypadku naszego projektu, w którym wykorzystujemy framework Spring, konieczne okazało się dodanie w warstwie infrastruktury konfiguracji, która zamieni zwykłe klasy Javy w komponenty Spring, później wstrzykiwanych jako zależności. Jeszcze parę lat temu, na początku tego projektu, konfiguracja taka mogła zostać napisana na dwa różne sposoby: za pomocą XML lub w formie klas Javy zawierających konfigurację beanów z wykorzystaniem adnotacji Spring. Wykorzystaliśmy ten drugi sposób. Przykładowy kod definiujący komponenty w naszym przypadku wyglądał tak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EventFactoryConfiguration</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> AccountsBalancesSynchronizationEventFactory <span class="title function_">accountsBalancesSynchronizationEventFactory</span><span class="params">(</span></span><br><span class="line"><span class="params">            InterfaceNameResolver interfaceNameResolver,</span></span><br><span class="line"><span class="params">            AccountRepository accountRepository,</span></span><br><span class="line"><span class="params">            BalanceProvider balanceProvider)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AccountsBalancesSynchronizationEventFactory</span>(</span><br><span class="line">                        interfaceNameResolver,accountRepository, balanceProvider</span><br><span class="line">                    );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> AccountSynchronizationEventFactory <span class="title function_">accountSynchronizationEventFactory</span><span class="params">(</span></span><br><span class="line"><span class="params">            InterfaceNameResolver interfaceNameResolver)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AccountSynchronizationEventFactory</span>(interfaceNameResolver);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> StopAccountDispositionSynchronizationEventFactory <span class="title function_">stopAccountDispositionSynchronizationEventFactory</span><span class="params">(</span></span><br><span class="line"><span class="params">            InterfaceNameResolver interfaceNameResolver)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">StopAccountDispositionSynchronizationEventFactory</span>(interfaceNameResolver);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> AccountBalancesSynchronizationEventFactory <span class="title function_">accountBalancesSynchronizationEventFactory</span><span class="params">(</span></span><br><span class="line"><span class="params">            InterfaceNameResolver interfaceNameResolver)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AccountBalancesSynchronizationEventFactory</span>(interfaceNameResolver); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Czy ten kod nie wygląda jak zwykły boilerplate? Wygląda. A w 99% przypadków jest czymś, z czym Spring potrafiłby sobie sam poradzić, ale jako świadomi programiści zdecydowaliśmy się nie wpuszczać adnotacji @Component do naszej domeny. Dodatkową wadą takich deklaracji oprócz tego, że w dużym projekcie zajmują setki a nawet tysiące linii kodu jest fakt, że kiedy dodajemy w klasie nowy parametr konstruktora, konieczne okazuje się również dodanie go w klasie z konfiguracją. A o tym programista często przypomina sobie dopiero w momencie kompilowania projektu.</p>
+<p>Jak żyć zatem? Czy trzeba kupić wygodną mechaniczną klawiaturę i pisać setki linii kodu z konfiguracją? Otóż nie! Od wersji 5, Spring daje alternatywę w formie dodatkowych metod do rejestrowania beanów. Dokumentacja pokazuje przykład definicji beana za pomocą takiej metody:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">GenericApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GenericApplicationContext</span>();</span><br><span class="line">context.registerBean(Foo.class);</span><br><span class="line">context.registerBean(Bar.class, () -&gt; <span class="keyword">new</span></span><br><span class="line">    <span class="title class_">Bar</span>(context.getBean(Foo.class))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>Wystarczy podać jakiej klasy beana rejestrujemy, a resztą zajmie się Spring. Nie musimy jawnie przekazywać zależności. No chyba że chcemy, wtedy również mamy taką możliwość. Proste, a zarazem potężne narzędzie. Otwiera to nowe możliwości pisania kodu w paradygmacie funkcyjnym. Połączenie tego podejścia i języka takiego jak na przykład Kotlin, zaowocowało powstaniem DSL-a do rejestrowania beanów. Osobiście uważam, że jest to najbardziej efektywny sposób pracy z Springiem. Ale co gdy z jakichkolwiek przyczyn nie możemy użyć Kotlina? W takim przypadku pozostaje użycie funkcyjnego sposobu deklaracji beanów z poziomu Javy, co również pozwoli usunąć bardzo dużo kodu konfiguracji. Mogą to być nawet dziesiątki tysięcy linii kodu, jak w naszym przypadku. Chciałbym skupić się teraz na takim właśnie przypadku i pokazać jak wpleść funkcyjny sposób konfiguracji z istniejącym projektem Spring Boot w Javie.</p>
+<p>Zacznijmy od zebrania komponentów, które chcemy zarejestrować w formie jakiegoś rejestru. Dobrze jest w jakiś sposób pogrupować te deklaracje od razu. Ja przyjmę grupowanie layer-first, ale nic nie stoi na przeszkodzie, żeby użyć feature-first. Klasa z definicjami beanów z poprzedniego przykładu będzie wyglądać tak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EventFactoryBeans</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> List&lt;Class&lt;?&gt;&gt; eventFactories = Arrays.asList(</span><br><span class="line">        AccountsBalancesSynchronizationEventFactory.class,</span><br><span class="line">        AccountSynchronizationEventFactory.class,</span><br><span class="line">        StopAccountDispositionSynchronizationEventFactory.class,</span><br><span class="line">        AccountBalancesSynchronizationEventFactory.class</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Czyż nie jest to czytelniejszy zapis? Większość kodu stało się niepotrzebne. Warto zauważyć, że podaję listę konkretnych klas, a nie np. interfejsów. Mimo to nadal jest możliwość wstrzykiwania za pomocą interfejsu, który klasa implementuje.<br>Żeby jednak ta lista klas została zamieniona na beany Springa w runtime potrzebuję jeszcze wywołać gdzieś metodę registerBean. W tym celu dodam implementację interfejsu ApplicationContextInitializer:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContextInitializer;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.GenericApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BeanRegistrationContextInitializer</span> <span class="keyword">implements</span> </span><br><span class="line">    <span class="title class_">ApplicationContextInitializer</span>&lt;GenericApplicationContext&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Set&lt;Class&lt;?&gt;&gt; allBeans = Arrays.asList(</span><br><span class="line">        EventFactoryBeans.eventFactories</span><br><span class="line">        <span class="comment">// miejsce na reszte deklaracji komponentów</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">initialize</span><span class="params">(GenericApplicationContext context)</span> &#123;</span><br><span class="line">          allBeans.forEach(bean -&gt; context.registerBean(bean));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">overrideBean</span><span class="params">(Class&lt;?&gt; oldBean, Class&lt;?&gt; newBean)</span> &#123;</span><br><span class="line">        allBeans.remove(oldBean);</span><br><span class="line">        allBeans.add(newBean);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(Class&lt;?&gt; newBean)</span> &#123;</span><br><span class="line">        allBeans.add(newBean);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Jak widać rejestracja beanów sprowadza się do wywołania metody registerBean. Spring nie musi już skanować pakietów w poszukiwaniu adnotacji, przekazujemy mu jawnie jakie komponenty ma utworzyć. Pozwoli to również zmniejszyć czas uruchamiania aplikacji. Na koniec pozostaje jeszcze kwestia, dlaczego w powyższym kodzie pojawiły się metody overrideBean oraz register? Ułatwią one nam życie, w momencie kiedy tworzymy produkt dla kilku różnych klientów i pracujemy na jednym branchu. W taki przypadku kiedy dla jakiegoś klienta (nazwijmy go roboczo X) pojawia się konieczność wprowadzenia customizacji możemy stworzyć dodatkowy initializer:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BeanRegistrationContextInitializerX</span> <span class="keyword">extends</span></span><br><span class="line">    <span class="title class_">BeanRegistrationContextInitializer</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BeanRegistrationContextInitializerX</span><span class="params">()</span> &#123;</span><br><span class="line">        overrideBean(AccountFileRepository.class, AccountFileRepositoryX.class);</span><br><span class="line"></span><br><span class="line">        register(CustomerTypeToCustomerConverterX.class);</span><br><span class="line">        register(CustomerHttpEndpointX.class);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Jak widać możemy dowolne fragmenty procesów biznesowych nadpisywać specyficznym dla klienta kodem. Pozostaje jeszcze pytanie jak powiadomić Spring Boota o tym, że ma uruchomić initializer:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(<span class="keyword">final</span> String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">SpringApplicationBuilder</span>(Application.class)</span><br><span class="line">                .initializers(<span class="keyword">new</span> <span class="title class_">BeanRegistrationContextInitializer</span>())</span><br><span class="line">                .run(args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Natomiast w testach integracyjnych możemy skorzystać z adnotacji: @ContextConfiguration(initializers &#x3D; BeanRegistrationContextInitializer.class)</p>
+<p>Dodatkową zaletą powyższego sposobu konfiguracji jest to, że możemy wprowadzać go stopniowo. Kod zawierający konfigurację z wykorzystaniem adnotacji @Bean będzie nadal uruchamiany i możemy ciągle z niego korzystać. Jeżeli w Twoim projekcie nadal jest dużo kodu, w którym deklarujesz komponenty z wykorzystaniem adnotacji @Bean, zachęcam Cię do spróbowania alternatywy w formie DSLa w języku Kotlin, bądź też w formie prostego mechanizmu jaki przedstawiłem.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2021/03/07/2021/2021-03-07-java-zwiezle-deklarowanie-beanow/">https://klolo.github.io/2021/03/07/2021/2021-03-07-java-zwiezle-deklarowanie-beanow/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/03/07/2021/2021-03-07-spring-boot-wystawianie-endpointow-na-wielu-portach/">spring boot: Wystawianie endpointów jednej aplikacji na wielu portach</a>
+            
+            
+            <a class="next" rel="next" href="/2018/02/18/2018/2018-02-18-dependency-injection-w-js/">Dependency injection w js</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

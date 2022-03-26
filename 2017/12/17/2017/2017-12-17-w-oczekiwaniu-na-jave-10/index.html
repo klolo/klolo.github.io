@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>W oczekiwaniu na Java 10 | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">W oczekiwaniu na Java 10</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 17, 2017&nbsp;&nbsp;13:39:22</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>We wrześniu mieliśmy premierę Javy 9 oraz zapowiedź zmiany cyklu wydawniczego tego języka. Teraz nowe wersje będą pojawiać się co pół roku. W marcu oraz we wrześniu. Zmianie ulegnie również wersjonowanie kolejnych wydań. Na stronie Oracle kolejne wydania Javy mają oznaczenie <em>rok.miesiąc</em>. Tak więc za kilka miesięcy zamiast Javy 10 zobaczymy Javę 18.3. Zastanawialiście się już jakie nowości mogą trafić do tej wersji Javy?</p>
+<span id="more"></span>
+
+<h2 id="Zmiany-w-18-3"><a href="#Zmiany-w-18-3" class="headerlink" title="Zmiany w 18.3"></a>Zmiany w 18.3</h2><p>Java 18.3 zaoferuje nam oprócz bug fixów, zaledwie 12 większych nowości. W porównaniu z Java 9, gdzie lista nowości obejmowała prawie 100 pozycji, nie jest to aż tak rewolucyjne wydanie. W końcu przy półrocznym cyklu wydawniczym nie ma sensu oczekiwać zbyt wielu nowinek w języku. W tych zapowiedzianych przez <a target="_blank" rel="noopener" href="http://openjdk.java.net/projects/jdk/10/">OpenJDK</a> nowościach (OpenJDK jest wzorcową dla Oracle implementacją jvm) tylko jedna, moim zdaniem, będzie miała znaczący wpływ na to, jak programujemy. Ale o tym za chwilę, najpierw zobaczmy, czym są pozostałe zapowiedziane zmiany:</p>
+<ul>
+<li>Przez lata kod źródłowy jdk podzielony był na kilka repozytoriów. Dla Javy 9 było ich aż 9, teraz planowane jest umieszczenie wszystkiego w jednym miejscu. </li>
+<li>Zmiany w G1 wprowadzające wielowątkowe odśmiecanie oraz modularność kodu GC.</li>
+<li>Rozbudowa mechanizmu współdzielenia metadanych pomiędzy różnymi procesami Javy. Polega on na tym, że podczas ładowania klasy, jvm najpierw sprawdza czy<br>  metadane klas znajdują się w cache, a dopiero później próbuje je wczytać. Feature ten pojawił się również w jdk-8u40 jako eksperymentalny. Można go uruchomić za pomocą<br>  flagi <code>-XX:+UseAppCDS</code>. Jak podano na stronie OpenJDK mechanizm pozwoli przyspieszyć start aplikacji o 20-30% oraz zmniejszyć zużycie pamięci o kilka procent. </li>
+<li>Optymalizacja zarządzania wątkami przez jvm.</li>
+<li>Usunięcie narzędzia <em>javah</em> służącego do generowania nagłówków i kodu metod natywnych w C. Od jdk 1.8 zajmuje się tym kompilator javy, stąd też dodatkowe<br>  narzędzie nie jest już potrzebne. </li>
+<li>Obsługa nieulotnej pamięci RAM: <a target="_blank" rel="noopener" href="http://searchstorage.techtarget.com/definition/NVDIMM-Non-Volatile-Dual-In-line-Memory-Module">NV-DIMM</a>.<br>  Oferuje ona wolniejszy dostęp dla danych stosu niż <em>DRAM</em>, ale za to korzystając z niej możemy szybszą pamięć zostawić ważniejszym procesom.<br>  Jako parametr jvma będzie można podać w jakiej pamięci ma być alokowany stos. </li>
+<li>W jdk 9 pojawił się eksperymentalny feature - kompilacja <em>ahead of time</em>. Dzięki skompilowaniu kodu Javy bezpośrednio do kodu natywnego na danej platformie,<br>  podczas runtime nie ma potrzeby spowalniać aplikacji kompilacją JIT, która uruchamiana jest dopiero po wykonaniu dużej liczby wywołań danego fragmentu kodu<br>  (tzw. rozgrzanie javy) i nie daje gwarancji, że cały byte code zostanie skompilowany do C. Kompilacja AOT możliwa jest za pomocą polecenia <em>jaotc</em> i wykorzystuje kompilator<br>  o nazwie <em>Graal</em>. Został on napisany w Javie i w jdk 18.3 będzie można go wykorzystać nie tylko do AOT, ale również do JIT. Oczywiście są to mechanizmy, których<br>  nie powinniśmy dodawać jeszcze do naszych projektów, z powodu bardzo wczesnego etapu prac nad nimi.</li>
+</ul>
+<h2 id="Wisienka-na-torcie"><a href="#Wisienka-na-torcie" class="headerlink" title="Wisienka na torcie"></a>Wisienka na torcie</h2><p>Java jako język statycznie typowany zawsze wymagała podawania jakiego typu będzie zmienna. Dodatkowo często zdarza się, że informacja o typie znajduje się również w nazwie zmiennej. Jest to niedogodność względem języków dynamicznie typowanych takich jak np. javascript, gdzie zmienne deklaruje się bez podania typów. Piszemy <em>var</em> i na poziomie runtime określany jest typ danych, jakie są przechowywane w zmiennej. Pisząc w javie wiele osób narzeka na boilerplate jaki powstaje w tym języku. Przykładowa bardziej zaawansowana deklaracja mapy w Javie 1.6 wygląda tak: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;BigDecimal, Map&lt;String, LinkedList&lt;String&gt;&gt;&gt; dataMap</span><br><span class="line">                            = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;BigDecimal, HashMap&lt;String, LinkedList&lt;String&gt;&gt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>Wychodzi nam porządny jamnik. Java 1.7 upraszcza ten zapis wprowadzając operator <em>diamond</em>, dzięki któremu typ generyka zostaje określony na podstawie deklaracji zmiennej:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;BigDecimal, Map&lt;String, LinkedList&lt;String&gt;&gt;&gt; dataMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>Już jest lepiej. Ale co w przypadku kiedy chcę wyjąć z mapy jakiś element i przypisać do zmiennej? Znów trzeba podać typ elementu. I dostaję coś takiego:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, LinkedList&lt;String&gt;&gt; value = dataMap.get(amount);</span><br></pre></td></tr></table></figure>
+
+<p>Nie mamy możliwości skrócenia takiego zapisu. Z drugiej strony, typ zmiennej mógłby być z powodzeniem określony na podstawie typu zmiennej <em>dataMap</em>. Twórcy javy chcą ułatwić nam życie i dodać do języka możliwość określania typu zmiennej lokalnej na podstawie tego, co do niej przypisujemy. Planowane jest wykorzystanie w tym celu słówka kluczowego <em>var</em>. Zamiast podawać typ zmiennej, który kompilator sam za nas określi, będzie można napisać: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">value</span> <span class="operator">=</span> dataMap.get(amount);</span><br></pre></td></tr></table></figure>
+
+<p>Taka instrukcja wygląda dużo prościej niż ta z generykiem. Jednak podejrzewam, że może prowadzić do sytuacji kiedy trzeba będzie się chwilę zastanowić jakiego typu obiekt mamy w zmiennej. Oczywiście będą też przypadki, w których kompilator nie domyśli się za nas jakiego typu ma być ta zmienna. Przykładowo próbując przypisać lambdę reprezentującą <em>Runnable</em> dostaniemy błąd:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">runable</span> <span class="operator">=</span> () -&gt; &#123;&#125;; <span class="comment">// error: cannot infer type for local variable</span></span><br></pre></td></tr></table></figure>
+
+<p>Deklaracje zmiennych lokalnych, gdzie moglibyśmy uprościć zapis korzystając z <em>var</em> to według twórców Javy ponad 90% kodu. Co ciekawe, jako alternatywę dla <em>var</em> podano możliwość rozbudowy wyrażenia diament, tak żeby można było wykorzystać go z lewej strony operatora przypisania. I dawałoby to taki zapis:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;&gt; value = dataMap.get(amount);</span><br></pre></td></tr></table></figure>
+<h2 id="Po-co-czekac-skoro-jest-Lombok"><a href="#Po-co-czekac-skoro-jest-Lombok" class="headerlink" title="Po co czekać skoro jest Lombok"></a>Po co czekać skoro jest Lombok</h2><p>Rozwiązanie pozwalające pomijać podawanie typów podczas deklaracji zmiennych oferuje obecnie biblioteka <em>Lombok</em>. Oferuje ona dwa typy:</p>
+<ul>
+<li><em>val</em> - zmienna final, której typ określany jest podczas kompilacji. Obecnie w wersji stabilnej biblioteki (od 0.10). </li>
+<li><em>var</em> - zmienna mutowalna,  której typ określany jest podczas kompilacji. Obecnie jeszcze jako eksperymentalny feature. Jeżeli <em>var</em> wejdzie<br>   do języka w ramach <em>JEP 286</em> to <em>Lombok</em> z pewnością usunie ją. Dostępna od wersji 1.16.12.</li>
+</ul>
+<p>Jeżeli chodzi o mutowalności <em>var</em> w javie 18.3 - architekci nadal dyskutują. Oczekując na kolejny release javy możemy ściągnąć <em>Lomboka</em> i poeksperymentować z <em>val&#x2F;var</em>, tak żeby znać wady i zalety tego podejścia, kiedy już wejdzie oficjalnie do języka. Na koniec przykład wykorzystania <em>Lomboka</em>:   </p>
+<pre><code class="java">import lombok.val;
+    ...
+    val map = new HashMap&lt;Integer, String&gt;();
+    map.put(0, &quot;zero&quot;);
+    map.put(5, &quot;five&quot;);
+    
+    for (val entry : map.entrySet()) &#123;
+      System.out.printf(&quot;%d: %s\n&quot;, entry.getKey(), entry.getValue());
+    &#125;
+    ...    
+</code></pre>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/12/17/2017/2017-12-17-w-oczekiwaniu-na-jave-10/">https://klolo.github.io/2017/12/17/2017/2017-12-17-w-oczekiwaniu-na-jave-10/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/02/18/2018/2018-02-18-dependency-injection-w-js/">Dependency injection w js</a>
+            
+            
+            <a class="next" rel="next" href="/2017/10/28/2017/2017-10-28-dlugie-metody-w-kodzie-udany-przepis-na-bledy/">Długie metody w kodzie – udany przepis na błędy</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

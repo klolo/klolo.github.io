@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Długie metody w kodzie – udany przepis na błędy | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Długie metody w kodzie – udany przepis na błędy</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 28, 2017&nbsp;&nbsp;20:25:09</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Każdy programista, i to bardzo wcześnie, dowiaduje się, że metody powinny być krótkie. Jednak czytając kody systemów z jakimi pracujemy, znajdujemy często metody ciągnące się przez setki, a nawet tysiące linii. Skąd w takim razie pochodzi taki paskudny kod, skoro teoretycznie wszyscy wiedzą, że długie metody są złe? A może jednak, przez zwykłe lenistwo, nie zastanawiamy się nad tym czy pisana metoda powinna zostać zrefaktorowana? A może nie wiemy jaka długość jest dopuszczalna i kiedy metodę należy rozbić na mniejsze?</p>
+<span id="more"></span>
+
+<h2 id="Najwieksze-grzechy-dlugich-metod"><a href="#Najwieksze-grzechy-dlugich-metod" class="headerlink" title="Największe grzechy długich metod"></a>Największe grzechy długich metod</h2><p>Zanim zastanowimy się jaką długość mają dobre metody, omówmy najważniejsze problemy jakie wynikają z przerośniętych funkcji:</p>
+<h3 id="Sa-trudne-do-czytania"><a href="#Sa-trudne-do-czytania" class="headerlink" title="Są trudne do czytania"></a>Są trudne do czytania</h3><p>Długie metody mają często bardzo wiele poziomów wcięć, przez co łatwo się zgubić i zastanawiać czy <em>if</em>, kilkanaście linijek wcześniej został już domknięty. Do tego dochodzi masa przeróżnych zmiennych deklarowanych gdzie popadnie. Czytając taki kod należy skakać po metodzie niczym kangur, sprawdzając jaka wartość jest przypisana do zmiennej i czy przypadkiem nie jest to parametr wejściowy.</p>
+<h3 id="Trudne-do-zapamietania"><a href="#Trudne-do-zapamietania" class="headerlink" title="Trudne do zapamiętania"></a>Trudne do zapamiętania</h3><p>W przypadku przerośniętej metody po dokładnym przeanalizowaniu kodu możemy mieć tylko ogólny pogląd tego czego można się po niej spodziewać. Z pewnością nie będziemy pamiętać każdego detalu logiki, jaka się tam znajduje. Może to potem skutkować pojawieniem się błędu w jakimś przypadku, którego nie przetestowaliśmy.</p>
+<h3 id="Trudne-do-testowania"><a href="#Trudne-do-testowania" class="headerlink" title="Trudne do testowania"></a>Trudne do testowania</h3><p>Wielki kawał kodu wymaga często długiego <em>mockowania</em> oraz bardzo trudno stwierdzić bez zaglądania w raport pokrycia czy napisany test obejmuje każdy <em>case</em>. Dodatkowo duża liczba parametrów wejściowych jakie należy spreparować w teście może zniechęcić do pisania jakiegokolwiek testu.</p>
+<h3 id="Sprzyjaja-duplikacji-kodu"><a href="#Sprzyjaja-duplikacji-kodu" class="headerlink" title="Sprzyjają duplikacji kodu"></a>Sprzyjają duplikacji kodu</h3><p>Z podowu dużej ilości zmiennych czy parametrów, ze źle napisanych metod trudniej jest wydzielać mniejsze metody. W tym przypadku kusi możliwość pójścia na łatwiznę i skopiowania istniejącej logiki. Łatwo też nie zauważyć, że jakaś logika już jest dostępna w kodzie, ponieważ zaszyła się głęboko w jakiejś funkcji.</p>
+<h3 id="Wiele-powodow-do-zmiany"><a href="#Wiele-powodow-do-zmiany" class="headerlink" title="Wiele powodów do zmiany"></a>Wiele powodów do zmiany</h3><p>Długie metody nigdy nie robią tylko jednej rzeczy. Robią bardzo dużo, przez co nie da się wręcz uniknąć złamania reguły <em>open&#x2F;close</em>. Reguła ta mówi o tym, że dobrze zaimplementowana jednostka kodu jest zamknięta na modyfikację, ale jednocześnie otwarta na rozszerzanie. Oznacza to tyle, że w celu dodania nowej funkcjonalności nie modyfikujemy istniejącej funkcji, lecz piszemy nową, która wywoła tą starą i dodatkowo wykona nową logikę. Natomiast w przypadku klas powinniśmy skorzystać z polimorfizmu w celu rozbudowy aplikacji o nową funkcjonalność. W długiej metodzie zawsze będzie istnieć wiele powodów do zmiany zawartości i bardzo trudno będzie nie zmodyfikować jej wnętrza. Metody takie są często gorącym miejscem aplikacji. Co kilka tygodni, miesięcy ktoś coś tam zmienia. Jeżeli taki kod nie ma testów jednostkowych, to aż sami się prosimy o błędy.</p>
+<h3 id="Trudnosc-debugowania"><a href="#Trudnosc-debugowania" class="headerlink" title="Trudność debugowania"></a>Trudność debugowania</h3><p>Stawiasz breakpoint w środku długiej metody, uruchamiasz funkcję i okazuje się, że debugger nie zatrzymał się tam gdzie chciałeś. Zaczynasz więc wczytywać się w kod i analizować, bądź przechodzisz na debuggerze linijka po linijce. Znajome? Debugując metodę mającą 100+ linii można się czuć jak ofiara i zadawać sobie pytania: Dlaczego ja!? Czasami nawet okazuje się, że taka metoda jest zbyt wielka, a żeby ją zrozumieć trzeba prześledzić jej działanie na debuggerze.</p>
+<h3 id="Zbyt-duzo-oczywistych-komentarzy"><a href="#Zbyt-duzo-oczywistych-komentarzy" class="headerlink" title="Zbyt dużo oczywistych komentarzy"></a>Zbyt dużo oczywistych komentarzy</h3><p>Jako fan czystego kodu zgadzam się ze stwierdzeniem, że komentarze nie są potrzebne w kodzie. Co więcej widziałem i rozwijałem aplikacje, gdzie komentarzy nie było. No, może z paroma wyjątkami: tam gdzie intencja autora nie była jasna pojawiało się wyjaśnienie, dlaczego coś działa w taki, a nie inny sposób. W systemach tych nikt nie pisał w komentarzach jak działa dany fragment kodu. Metody, klasy były na tyle małe, że stwierdzenie co robią było równie szybkie jak przeczytanie komentarza, który zresztą zawsze może być nieaktualny, bądź niezrozumiale napisany. Nikt w tych systemach nie używał komentarzy, a w kodzie nie było zbędnego szumu, który przeszkadzałby w czytaniu. Nigdy w tych aplikacjach nie spotkałem się z stwierdzeniem, że przydałyby się obowiązkowe komentarze. Komentarze natomiast widywałem w systemach legacy, o bardzo długich metodach. Programiści pisali je mimo że nie mieli takiego obowiązku wynikającego z przyjętych zasad. Często wyglądało to tak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// some comment</span></span><br><span class="line">…code…</span><br><span class="line"></span><br><span class="line"><span class="comment">// some comment</span></span><br><span class="line">…code…</span><br></pre></td></tr></table></figure>
+
+<p>Czytając funkcje, w której fragmenty kodu są poprzedzone komentarzem aż się prosi, żeby powydzielać mniejsze metody, których nazwa będzie mówić dokładnie to samo co komentarz. Może autorzy kodu próbowali oczyścić sumienie i myśleli, że chociaż w taki sposób ułatwią kolejnym programistom życie?</p>
+<h2 id="Inne-problemy"><a href="#Inne-problemy" class="headerlink" title="Inne problemy"></a>Inne problemy</h2><p>Problemów z długimi metodami jest oczywiście dużo więcej. Można chociażby jeszcze wspomnieć o dużej liczbie zależności, ścisłym powiązaniach w kodzie (<em>coupling</em>), trudności z optymalizacją. Myślę jednak, że wymienione wyżej problemy są argumentem za tym, że metody powinny być krótkie.</p>
+<h2 id="Jak-dluga-powinna-byc-metoda"><a href="#Jak-dluga-powinna-byc-metoda" class="headerlink" title="Jak długa powinna być metoda?"></a>Jak długa powinna być metoda?</h2><p>Pojawia się jednak pytanie jak krótka powinna być funkcja? Czy 100 lini to za dużo? Czy 25 to maksimum? Niektórzy twierdzą, że dobra metoda powinna mieścić się w całości na ekranie. Można wtedy zadać pytanie o rozmiar czcionki i rozdzielczość. Clean code wspomina o tym, że dobra metoda powinna wykonywać tylko jedną rzecz, ale za to dobrze. Kiedy spojrzymy jednak na np. strumienie w Java 8, to dzięki podejściu deklaratywnym w kilku linijkach możemy zrobić bardzo wiele rzeczy. Dzieje się to dzięki temu, że deklarujemy, co kod ma robić, a nie w jaki sposób. Trudno sobie wyobrazić funkcje pracujące na strumieniach i robiące tylko jedną rzecz. Musiałyby składać się z 2,3 linijek. Tak duża granularność metod może również prowadzić do problemów z czytaniem kodu i wprowadza zbędną złożoność. Nie wspomnę już o wydajności. JVM zamiast wykonywać faktyczny algorytm, spędza więcej czasu na kolejnych wyołaniach. Czynniki te są oczywiście ważne i należy o nich pamiętać, jest jednak jeszcze jedna zasada określająca czy metoda wymaga rozbicia. Są to poziomy abstrakcji. Nigdy nie powinno się ich mieszać. Co to oznacza w praktyce? Spójrzmy na poniższą wymyśloną metodę. Mimo że jest ona krótka, robi zdecydowanie za dużo, mieszając przy tym poziomy abstrakcji:</p>
+<p>Uwaga: W kodzie pojawia się doklejanie danych z parametru do zapytania bazodanowego. Nie rób tak, narażasz się na sql injection.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Metoda pobiera itemy z bazy i wysyla je do innego systemu.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">someBusinessLogic</span><span class="params">(Input in)</span> &#123;</span><br><span class="line">       <span class="keyword">if</span> (in.getSth() == <span class="literal">null</span>) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           <span class="comment">// pobranie danych z bazy</span></span><br><span class="line">           <span class="type">Connection</span> <span class="variable">con</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Connection</span>(<span class="string">&quot;127.0.0.1:1521&quot;</span>);</span><br><span class="line">           List&lt;Item&gt; items = (List&lt;Item&gt;) con.makeQuery(<span class="string">&quot;select * from items where sth=&quot;</span> + in.getSth());</span><br><span class="line">           </span><br><span class="line">           List&lt;ItemForSend&gt; itemsForSend = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">           <span class="comment">// pobranie szczegółów dla każdego elementu</span></span><br><span class="line">           <span class="keyword">for</span> (Item i : items) &#123;</span><br><span class="line"></span><br><span class="line">               <span class="comment">// przefiltrowanie danych, uzupelnienie o szczegóły</span></span><br><span class="line">               <span class="keyword">if</span> (i.isSomething(in)) &#123;</span><br><span class="line">                   <span class="type">ItemDetails</span> <span class="variable">details</span> <span class="operator">=</span> (ItemDetails) con.makeQuery(<span class="string">&quot;select * from details where id = &quot;</span> + i.id);</span><br><span class="line">                   itemsForSend.add(<span class="keyword">new</span> <span class="title class_">ItemForSend</span>(details));</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="comment">// wysłanie daych do innego systemu</span></span><br><span class="line">           <span class="type">String</span> <span class="variable">connectorInput</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">           <span class="keyword">for</span> (ItemForSend itemForSend : itemsForSend) &#123;</span><br><span class="line">               connectorInput += itemForSend.toJson();</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           connectorInput = connectorInput.trim() + in.getAdditionalData();</span><br><span class="line">           <span class="type">AnotherSystemConnector</span> <span class="variable">connector</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnotherSystemConnector</span>();</span><br><span class="line">		connector.send(connectorInput);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">catch</span> (SomeException e) &#123;</span><br><span class="line">           handle();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Powyższy pseudo kod, oprócz potencjalnych problemów z <em>sql injection</em> pokazuje pomieszanie poziomów abstrakcji. W jednej metodzie mamy zarówno logikę biznesową jak i operacje niższego poziomu (np. pobranie danych z bazy danych) oraz operacje o jeszcze niższym poziomie abstrakcji takie jak sklejanie danych wejściowych do wywołania usługi jakiegoś zewnętrznego systemu oraz obsługę błedów. Za każdym razem kiedy zmienią się wymagania biznesowe funkcja ta będzie zmieniana. Bo jak inaczej np. zmienić dane wejściowe do zewętrznego systemu w ostatnich linijkach <em>someBusinessLogic</em>?</p>
+<p>Metoda z przykładu powinna zostać podzielona względem poziomów abstrakcji i w jej wnętrzu powinny zostać praktycznie tylko wywołania innych metod. Dodatkowo każdy z bloków funkcji realizujących jedną rzecz został opatrzony komentarzem, który po podziale na mniejsze funkcje nie będzie potrzebny. Nawet komentarz nad metodą jest zdeaktualizowany, ponieważ nie zawiera informacji o tym, że dla każdego elementu pobierane są dodatkowo szczegóły. Zrefaktorowany kod mógłby wyglądać tak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">someBusinessLogic</span><span class="params">(Input in)</span> <span class="keyword">throws</span> SomeException &#123;</span><br><span class="line">    List&lt;Item&gt; items = filterItems(getItems(in), in);</span><br><span class="line">    List&lt;ItemForSend&gt; itemsForSend = convertToItemToSend(items);</span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">connectorInput</span> <span class="operator">=</span> getConnectorInput(itemsForSend, in);</span><br><span class="line">    sendToAnotherSystem(connectorInput);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">List&lt;Item&gt; <span class="title function_">filterItems</span><span class="params">(List&lt;Item&gt; items, Input in)</span> &#123;</span><br><span class="line">    List&lt;Item&gt; result = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Item i : items) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i.isSomething(in)) &#123;</span><br><span class="line">            result.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">List&lt;Item&gt; <span class="title function_">getItems</span><span class="params">(Input in)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (List&lt;Item&gt;) con.makeQuery(<span class="string">&quot;select * from items where sth=&quot;</span> + in.getSth());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">List&lt;ItemForSend&gt; <span class="title function_">convertToItemToSend</span><span class="params">(List&lt;Item&gt; items)</span> &#123;</span><br><span class="line">    List&lt;ItemForSend&gt; result = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Item i : items) &#123;</span><br><span class="line">        <span class="type">ItemDetails</span> <span class="variable">details</span> <span class="operator">=</span> getItemDetails(i);</span><br><span class="line">        result.add(<span class="keyword">new</span> <span class="title class_">ItemForSend</span>(details));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ItemDetails <span class="title function_">getItemDetails</span><span class="params">(Item i)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (ItemDetails) con.makeQuery(<span class="string">&quot;select * from details where id = &quot;</span> + i.id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">String <span class="title function_">getConnectorInput</span><span class="params">(List&lt;ItemForSend&gt; itemsForSend, Input in)</span> <span class="keyword">throws</span> SomeException &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">connectorInput</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (ItemForSend itemForSend : itemsForSend) &#123;</span><br><span class="line">        connectorInput += itemForSend.toJson();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> connectorInput.trim() + in.getAdditionalData();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">sendToAnotherSystem</span><span class="params">(String input)</span> &#123;</span><br><span class="line">    <span class="type">AnotherSystemConnector</span> <span class="variable">connector</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnotherSystemConnector</span>();</span><br><span class="line">    connector.send(input);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Walidacja i obsługa wyjatków została przeniesiona do metody nadrzędnej. Nieaktualny komentarz opisujący działanie został usunięty, zamiast tego jest krótki kod, który łatwo zrozumieć. Mówi on dokładnie co biznesowo robi metoda bez wchodzenia w szczegóły techniczne. Mamy odseparowany wysoki poziom abstrakcji, reprezentujący logikę biznesową. Połaczenie do bazy zostało wyniesione na zewnątrz metody, dzieki czemu możemy być reużywane. Jest to przy okazji optymalizacja wydajności. Każda z utworzonych metod jest krótka, łatwo ją reużyć, przetestować. Jeżeli zmienią się wymagania biznesowe możemy dopisać nową funkcję i wpiąć ją w dowolne miejsce procesu bez konieczności modyfikacji istniejących metod.</p>
+<p>Na pierwszy rzut oka widać, że kod znacznie sie wydłużył. Mimo to łatwo zrozumieć co robi, a jeżeli skorzystamy z strumieni Javy 8 i wykonany refactoring, skrócimy go znacznie.</p>
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Wiemy już dlaczego długie metody są złe oraz jak powinno się je dzielić. Nie pozostaje teraz nic innego jak pisać kod, który będzie można łatwiej zrozumieć, utrzymywać, a w dodatku nie bedzie powodem do wstydu.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/10/28/2017/2017-10-28-dlugie-metody-w-kodzie-udany-przepis-na-bledy/">https://klolo.github.io/2017/10/28/2017/2017-10-28-dlugie-metody-w-kodzie-udany-przepis-na-bledy/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/12/17/2017/2017-12-17-w-oczekiwaniu-na-jave-10/">W oczekiwaniu na Java 10</a>
+            
+            
+            <a class="next" rel="next" href="/2017/10/17/2017/2017-10-17-dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/">Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

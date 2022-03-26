@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Dlaczego obiekty niezmienne w projekcie to błogosławieństwo i o tym jak nie pisać testów</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 17, 2017&nbsp;&nbsp;20:31:09</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Dostałem ostatnio drobną poprawkę do wykonania w kodzie. Zwykły null pointer spowodowany tym, że na bazie nie ma części danych. Nie ma, bo nie ma, nie są obligatoryjne. Na backend leci więc podstępny null, pojawia się w polu, gdzie powinna być data. Ten null, w funkcji, która ma posortować listę obiektów po dacie, powoduje exception, krwisto czerwony niczym stek. Sprawa prosta, piszę test jednostkowy, żeby zreplikować problem, robię prosty null save, buduję projekt, przechodzę code review, push na serwer i zapominam o całej sprawie. Nic z tych rzeczy. Poprawka powróciła do mnie niczym owczarek szkocki w jednym z familijnych filmów i srogo się zemściła. Zanim jednak opowiem, jako przestroga, o tym na jaką pułapkę natrafiłem wyjaśnijmy czym jest <em>immutability</em> i niezmienne obiekty</p>
+<span id="more"></span>
+
+<h2 id="Niezmienne-parametry"><a href="#Niezmienne-parametry" class="headerlink" title="Niezmienne parametry"></a>Niezmienne parametry</h2><p>Do tej pory miałem (nie)przyjemność analizować problemy produkcyjne spowodowane tym, że ktoś w długiej metodzie podmieniał parametr wejściowy, a ktoś inny oczekiwał, że parametr wejściowy się nie zmieni. Wyglądało to mniej więcej tak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">makeFoo</span><span class="params">(Input input)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;Input: &#123;&#125;&quot;</span>, input);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...jakis kod ~100 lini...</span></span><br><span class="line">    input = makeBoo();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... jakis kod ~100 lini...</span></span><br><span class="line">    input.performSomeOperation(); <span class="comment">// exeption</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>W obiekcie input dostaje komplet danych potrzebnych do wykonania <em>performSomeOperation</em>, jednak w połowie funkcji <em>makeFoo</em> ktoś podmienia parametr wejściowy na jakiś inny, nie mający już kompletu danych. W rezultacie dostaje gdzieś dalej w kodzie wyjątek. Analiza loggera na początku metody <em>makeFoo</em> wskazuje, że na wejściu był komplet danych. Szukam zatem w <em>performSomeOperation</em> oraz w dalszych metodach. Czas mija, produkcja stoi, telefon dzwoni, stres maksymalny. Sytuacji, o dziwo, wcale nie ułatwia fakt, że jest to system legacy bez testów jednostkowych, metoda <em>makeFoo</em> ciągnie się jak jamnik na sterydach i wygląda na stęsknioną ostrego refactoringu. Mijały godziny zanim zauważyłem w czym jest błąd. Problem z oczami wykluczam, bo nie analizowałem kodu sam. Identyczną sytuację miałem od tamtego czasu jeszcze jakieś 3 razy. Po tych przykrych doświadczenia pokochałem słowo <em>final</em>. Dzięki niemu nie można podmienić parametru wejściowego do metody. Jest to już jakieś zabezpieczenie. Niektórzy powiedzą, że jest to więcej pisania, za dużo roboty. Jeżeli napisanie kilka razy dziennie słowa <em>final</em> w kodzie jest zbyt ciężką pracą - można i tak… Można też stwierdzić, że to jest szum w kodzie, zbędna informacja, że przy prawidłowo napisanych metodach mieszczących się na ekranie bez przewijania, jest to zbędne. Niekoniecznie. Zamiast czytać całą metodę w celu ustalenia czy podmieniamy ten parametr czy nie, wystarczy zerknąć na listę parametrów i mieć tę informację od razu. Jakież to szczęście, że w moim obecnym projekcie mamy konwencję, która wymusza na nas używanie final w parametrach.</p>
+<h2 id="Niezmienne-zmienne-lokalne"><a href="#Niezmienne-zmienne-lokalne" class="headerlink" title="Niezmienne zmienne lokalne"></a>Niezmienne zmienne lokalne</h2><p>Po dłuższym zastanowieniu da się odkryć, że <em>final</em> w parametrach to czasami za mało. Zamiast podmiany parametru można w końcu podmienić zmienną deklarowaną na początku funkcji i oczekiwać pierwotnej wartości gdzieś dalej w kodzie. Po co kusić los? Uważam, że zmienne deklarowane w metodach również powinny być <em>final</em>, dzięki czemu kod staje się bardziej przewidywalny, jest mniej zmiany stanów, łatwiej go analizować i testować. Początkowo mogą pojawić się zarzuty - że blokujemy możliwość przypisania czegoś do zmiennej, że nie da się tak programować. Ano da się. Kiedy przyjrzałem się klasom w różnych systemach, które rozwijam ze zdziwieniem stwierdziłem, że jakieś 90% zmiennych po zadeklarowaniu nie ulega zmianie, 5% można tak napisać, żeby się nie zmieniały, a tylko kilka procent kodu faktycznie wymaga zmiennej z różnymi stanami, bo tak jest dużo prościej. Dla mnie sprawa z deklarowaniem zmiennych jako <em>final</em> jest prosta. Sprawia to, że tworzony kod jest mnniej <em>bugogenny</em>. Przy takim podejściu łatwiej również przestawić się na programowanie funkcyjne, gdzie czyste funkcje nie modyfikują stanu zmiennych.</p>
+<h2 id="Niezmienne-obiekty"><a href="#Niezmienne-obiekty" class="headerlink" title="Niezmienne obiekty"></a>Niezmienne obiekty</h2><p>Idąc krok dalej, zacząłem się zastanawiać czy nie warto używać final do pól w klasie. Wszystkich pól. I myślę, że to także jest dobry pomysł, funkcjonujący pod nazwą <em>immutable objects</em>. Obiekt po utworzeniu nie może zmienić swojego stanu. Przykładami takich obiektów jest np. <em>String</em>, <em>BigDecimal</em>. Pojawia się pytanie - jak ustawiać pola w takich obiektach? Jeżeli jest dużo parametrów - będzie potrzebny wielki konstruktor, jeżeli część danych nie jest wymagana - mogą powstawać konstruktory teleskopowe. A co w przypadku, kiedy część danych nie jest dostępna od razu, ale trzeba je pobrać z innego miejsca systemu? Rozwiązaniem problemu jest wzorzec builder. Implementowanie tego wzorca dla każdego nowego obiektu DTO możemy być uciążliwe, dlatego warto skorzystać z automatycznego generowania buildera przez IDE. Jednak tutaj przy zmianie DTO, należy go ręcznie edytować lub jeszcze raz wygenerować. Alternatywą jest biblioteka <em>Lombok</em>, która w momencie kompilacji kodu na podstawie annotacji w kodzie generuje dodatkowy kod,<br>taki jak np. gettery, settery, toString czy też kod buildera. Korzystanie z <em>Lombok</em> sprawia, że w kodzie nie mamy zbędnego <em>boilerplate</em> tylko faktyczną logikę biznesową. Oto prosty przykład połączenia <em>Lombok</em> i niemutowalnego obiektu:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Builder</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Account</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AccountType type;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String number;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> BigDecimal amount;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Currency currency;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Account.builder()</span><br><span class="line">        .number(<span class="string">&quot;865423&quot;</span>)</span><br><span class="line">        .type(AccountType.RO2)</span><br><span class="line">        .amount(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        .currency(Currency.CHF)</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure>
+
+<p>Bez pisania kodu buildera możemy stopniowo wypełniać danymi obiekty, które później nie zmienią swojego stanu i będą bardziej przewidywalne. Dodatkowo takie obiekty ułatwią programowanie wielowątkowe. Warto wspomnieć o tym, że korzystając z <em>Lombok</em> można korzystać z <a target="_blank" rel="noopener" href="https://projectlombok.org/features/val">val</a>. Czy nie zaczyna to jednak za bardzo przypominać innego języka jvm-a…?</p>
+<h2 id="O-tym-jak-nie-pisac-testow-jednostkowych"><a href="#O-tym-jak-nie-pisac-testow-jednostkowych" class="headerlink" title="O tym, jak nie pisać testów jednostkowych"></a>O tym, jak nie pisać testów jednostkowych</h2><p>Na koniec chciałbym opowiedzieć o tym jak zemścił się na mnie brak niemutowalnych obiektów. Napisałem test jednostkowy do null pointera, o którym wspomniałem na początku. Test wyglądał mniej więcej tak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">shouldNotFailedWhenDateIsNull</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// given</span></span><br><span class="line">    <span class="keyword">final</span> List&lt;Item&gt; items = FluentIterable</span><br><span class="line">                                    .from(Mock.items)</span><br><span class="line">                                    .transform( item =&gt; &#123;</span><br><span class="line">                                        item.setDate(<span class="literal">null</span>);</span><br><span class="line">                                        <span class="keyword">return</span> item;</span><br><span class="line">                                    &#125;)</span><br><span class="line">                                    .toList();</span><br><span class="line">    <span class="comment">//when </span></span><br><span class="line">    someService.sortByDate(items);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//then</span></span><br><span class="line">    Assert.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Bardzo prosty test, w którym pobieram listę jakiś obiektów z mocka, ustawiam datę jako null, wywołuję metodę, gdzie był błąd <em>NullPointerException</em> i robię kilka dodatkowych asercji. Test po uruchomieniu przechodzi, projekt się buduje, osoba robiąca code review nie zgłosiła uwag. Problem pojawił się jednak kolejnego dnia, kiedy okazało się, że środowisko testowe nie działa, ponieważ CI nie może zbudować projektu. Dziwna sprawa, inne testy jednostkowe przestały działać. Pomyślałem najpierw, że to pewnie przez jakieś inne zmiany w kodzie. W końcu osób commitujących do projektu jest kilka. Jeden z developerów usiadł i zaczął analizować problem. No i się zaczęło. Szok i niedowierzanie. Identyczny kod jak na środowisku developerskim, a nie buduje się na Jenkins. Po całym dniu analizy okazało się, że to przez wspomniany test jednostkowy. Modyfikuje on dane mockowe, które są wykorzystywane w innych testach. Po ustawieniu null na obiekcie inne testy nie mają prawa działać. Dlaczego jednak ten problem nie występuje na środowisku developerskim? Przypadek :) JUnit nie gwarantuje kolejności wykonywania testów. Oczywiście jeżeli w kodzie obiekty byłyby niemutowalne, to test musiałbym zaimplementować inaczej i nie byłoby problemu. Czego się nauczyłem? Że niemutowalność jest bardzo dobrą praktyką i pozwala uniknąć wielu podstępnych błędów. Na koniec jeszcze <a target="_blank" rel="noopener" href="https://github.com/junit-team/junit4/wiki/Test-execution-order">kilka słów</a> o kolejności wykonywania testów w JUnit:</p>
+<blockquote>
+<p>By design, JUnit does not specify the execution order of test method invocations. Until now, the methods were simply invoked in the order returned by the reflection API. However, using the JVM order is unwise since the Java platform does not specify any particular order, and in fact JDK 7 returns a more or less random order. Of course, well-written test code would not assume any order, but some do, and a predictable failure is better than a random failure on certain platforms. From version 4.11, JUnit will by default use a deterministic, but not predictable, order (MethodSorters.DEFAULT). To change the test execution order simply annotate your test class using @FixMethodOrder and specify one of the available MethodSorters.</p>
+</blockquote>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/10/17/2017/2017-10-17-dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/">https://klolo.github.io/2017/10/17/2017/2017-10-17-dlaczego-obiekty-niezmienne-w-projekcie-to-blogoslawienstwo-i-o-tym-jak-nie-pisac-testow/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/10/28/2017/2017-10-28-dlugie-metody-w-kodzie-udany-przepis-na-bledy/">Długie metody w kodzie – udany przepis na błędy</a>
+            
+            
+            <a class="next" rel="next" href="/2017/10/14/2017/2017-10-14-pierwsze-spotkanie-z-react/">Pierwsze spotkanie z React</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

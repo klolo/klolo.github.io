@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Java stream reduce vs collect | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java stream reduce vs collect</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 9, 2017&nbsp;&nbsp;22:13:08</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Pracując z strumieniami Javy 8 pojawia się czasami konieczność złączenia wszystkich elementów strumienia w jakiś obiekt wynikowy. Taką operacje można wykonać zarówno za pomocą metody reduce, jak również za pomocą collect. Jaka jest różnica między tymi metodami i na jaki problem można się natknąć korzystając z tych metod?</p>
+<span id="more"></span>
+<p>Zarówno metoda reduce jak i collect są operacjami terminalnymi strumienia. Co oznacza tyle że ich wynikiem nie jest strumień na którym można dalej wykonywać operacje, ale jakiś wynikowy obiekt. Na początek spójrzmy na to jakie parametry przyjmują te metody.</p>
+<h2 id="Collect"><a href="#Collect" class="headerlink" title="Collect"></a>Collect</h2><p>Metoda Collect ma dwie przeciążone wersje:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;R&gt; R <span class="title function_">collect</span><span class="params">(Supplier&lt;R&gt; supplier,</span></span><br><span class="line"><span class="params">                  BiConsumer&lt;R, ? <span class="built_in">super</span> T&gt; accumulator,</span></span><br><span class="line"><span class="params">                  BiConsumer&lt;R, R&gt; combiner)</span>;</span><br><span class="line"></span><br><span class="line">&lt;R, A&gt; R <span class="title function_">collect</span><span class="params">(Collector&lt;? <span class="built_in">super</span> T, A, R&gt; collector)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Tak więc metoda wymaga podania od nas trzech parametrów, bądź też obiektu <em>Collector</em>…zaraz zaraz, ale co znajduje się w tym obiekcie? Znajdziemy tam takie metody jak:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;A&gt; <span class="title function_">supplier</span><span class="params">()</span>;</span><br><span class="line">BiConsumer&lt;A, T&gt; <span class="title function_">accumulator</span><span class="params">()</span>;</span><br><span class="line">BinaryOperator&lt;A&gt; <span class="title function_">combiner</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Wygląda na to że klasa <em>Collector</em> służy jako obiekt w którym możemy ukryć implementację 3 wymaganych przez metodę collect parametrów. Razem z JDK dostajemy kilka gotowych implementacji tej klasy. Za pomocą metod statycznych w klasie <em>Collectors</em> mamy możliwość dostać się do tych gotowych implementacji. Dodam jeszcze że te gotowce pokrywają 90%<br>przypadków z jakimi się spotkałem. Jakie metody statyczne w klasie <em>Collectors</em> są najczęściej używane?</p>
+<h2 id="Collectors"><a href="#Collectors" class="headerlink" title="Collectors"></a>Collectors</h2><p>Te najczęściej wykorzystywane to:</p>
+<ul>
+<li><p><code>toList</code> - pozwala zaagregować elementy strumienia w postaci listy.<br>Gdzie domyślna implementacja to <em>ArrayList</em>. Spójrzmy na przykład wykorzystania:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(<span class="keyword">final</span> String name, <span class="keyword">final</span> <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ... getters/setters...</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">final</span> List&lt;Person&gt; persons = Arrays.asList(</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Max&quot;</span>, <span class="number">18</span>),</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Peter&quot;</span>, <span class="number">23</span>),</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Pamela&quot;</span>, <span class="number">24</span>),</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;David&quot;</span>, <span class="number">12</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> List&lt;Person&gt; adultUsers = persons</span><br><span class="line">            .stream()</span><br><span class="line">            .filter(user -&gt; user.age &gt; <span class="number">18</span>)</span><br><span class="line">            .collect(toList());</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>W powyższym kodzie wszystkie przefiltrowane elementy strumienia, czyli osoby pełnoletnie zostaną umieszczone w liście która będzie wynikiem działania obiektu <em>Collector</em>, utworzonego metodą fabrykującą toList.</p>
+<ul>
+<li><p><code>toCollection</code> - pozwala zaagregować elementy strumienia w postaci kolekcji podanego typu.</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> List&lt;Person&gt; adultUsers = persons</span><br><span class="line">            .stream()</span><br><span class="line">            .filter(user -&gt; user.age &gt; <span class="number">18</span>)</span><br><span class="line">            .collect(toCollection(LinkedList::<span class="keyword">new</span>));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>toSet</code> - agreguje elementy strumienia w zbiór.</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Set&lt;Person&gt; adultUserSet = persons</span><br><span class="line">        .stream()</span><br><span class="line">        .filter(user -&gt; user.age &gt; <span class="number">18</span>)</span><br><span class="line">        .collect(toSet());</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>toMap</code> - łączy elementy strumienia w mapę. W najprostszej wersji wymaga podania funkcji tworzącej klucze do mapy i funkcji zwracającej elementy dla klucza. Dostępne sa również przeciążone wersje metody przyjmujące również funkcje do rozwiązywania kolizji wstawianych obiektów oraz <em>Supplier</em> za pomocą którego można utworzyć mapę. Utwórzmy więc mapę w której kluczem jest imię użytkownika, a wartością jego wiek:</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Map&lt;String, Integer&gt; adultMap = persons</span><br><span class="line">            .stream()</span><br><span class="line">            .filter(user -&gt; user.age &gt; <span class="number">18</span>)</span><br><span class="line">            .collect(toMap(Person::getName, Person::getAge));</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Parametry-metody-Collect"><a href="#Parametry-metody-Collect" class="headerlink" title="Parametry metody Collect"></a>Parametry metody Collect</h2><p>Znając już kilka głównych implementacji klasy Collector, przyjrzyjmy się do czego tak naprawdę metoda collect wykorzystuje dostarczone klasie Collect bądź jako osobne parametry implementacje metod supplier, accumulator, combiner. Pierwszy parametr trójargumentowej wersji metody collect to <em>Supplier</em>. Jest to funkcja bez argumentowa która zwraca jakiś obiekt. Ten właśnie obiekt jest naszym obiektem wynikowym, który będzie gromadził pozostałe elementy strumienia. Tutaj najczęściej wykorzystuje sie metody fabrykujące, bądź też referencję do konstruktora bez argumentowego. Kolejny parametr, to obiekt typu <em>BiConsumer</em>, czyli funkcja przyjmująca dwa parametry i nic nie zwracająca. Służy ona do łączenia poszczególnych elementów strumienia. Jako pierwszy parametr w <em>BiConsumer</em> dostaniemy obiekt który utworzyliśmy poprzez <em>Supplier</em>, a drugim elementem jest obiekt strumienia który należy zaagregować. Tak naprawdę te dwie metody w zupełności<br>wystarczą żeby metoda collect zadziałała. Spójrzmy na przykład:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> List&lt;Person&gt; persons = Arrays.asList(</span><br><span class="line">               <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Max&quot;</span>, <span class="number">18</span>),</span><br><span class="line">               <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Peter&quot;</span>, <span class="number">23</span>),</span><br><span class="line">               <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Pamela&quot;</span>, <span class="number">24</span>),</span><br><span class="line">               <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;David&quot;</span>, <span class="number">12</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> List&lt;Person&gt; adults = persons</span><br><span class="line">               .stream()</span><br><span class="line">               .collect(</span><br><span class="line">                       LinkedList::<span class="keyword">new</span>,</span><br><span class="line">                       (result, element) -&gt; &#123;</span><br><span class="line">                           System.out.println(</span><br><span class="line">                               <span class="string">&quot;accumulator: &quot;</span> + result + <span class="string">&quot; =&gt; &quot;</span> + element</span><br><span class="line">                           );</span><br><span class="line">                           result.add(element);</span><br><span class="line">                       &#125;,</span><br><span class="line">                       (p1, p2) -&gt; &#123;</span><br><span class="line">                           System.out.println(</span><br><span class="line">                               <span class="string">&quot;combiner: &quot;</span> + p1 + <span class="string">&quot;,&quot;</span> + p2</span><br><span class="line">                           );</span><br><span class="line">                       &#125;</span><br><span class="line">               );</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Wynikiem działania takiego kodu będzie:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">accumulator: [] =&gt; Max</span><br><span class="line">accumulator: [Max] =&gt; Peter</span><br><span class="line">accumulator: [Max, Peter] =&gt; Pamela</span><br><span class="line">accumulator: [Max, Peter, Pamela] =&gt; David</span><br></pre></td></tr></table></figure>
+
+<p>Jak widać trzecia przekazana, tajemnicza funkcja nie uruchomiła się. Czy więc jest potrzebna? Jest! Ale tylko w przetwarzaniu równoległym strumieni. Jak wiemy strumienie mogą być dzielone na podstrumienie dzięki <em>ForkJoinPool</em>. Są one wtedy przetwarzane w osobnych wątkach. Każdy z tych wątków po zakończeniu pracy musi swój wyniki złączyć z danymi obliczonymi w innych watkach. Za takie złączenie odpowiada ta ostatnia funkcja - <em>combiner</em>. Przekazywana jest ona jako obiekt typu <em>BinaryOperator</em>. Jaki będzie wynik działa strumienia uruchomionego równolegle w osobnym wątku? Będzie to oczywiście obiekt również utworzony za pomocą przekazanego obiektu <em>supplier</em>. A tak to wygląda w praktyce:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> List&lt;Person&gt; adults = persons</span><br><span class="line">        .parallelStream()</span><br><span class="line">        .collect(</span><br><span class="line">                () -&gt;&#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;create list&quot;</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">                &#125;,</span><br><span class="line">                (result, element) -&gt; &#123;</span><br><span class="line">                    <span class="keyword">final</span> <span class="type">String</span> <span class="variable">threadName</span> <span class="operator">=</span> Thread.currentThread().getName();</span><br><span class="line">                    System.out.println(</span><br><span class="line">                            <span class="string">&quot;[&quot;</span> + threadName + <span class="string">&quot;] accumulator: &quot;</span> + result + <span class="string">&quot; + &quot;</span> + element</span><br><span class="line">                    );</span><br><span class="line">                    result.add(element);</span><br><span class="line">                &#125;,</span><br><span class="line">                (subResult1, subResult2) -&gt; &#123;</span><br><span class="line">                    <span class="keyword">final</span> <span class="type">String</span> <span class="variable">threadName</span> <span class="operator">=</span> Thread.currentThread().getName();</span><br><span class="line">                    System.out.println(</span><br><span class="line">                            <span class="string">&quot;[&quot;</span> + threadName + <span class="string">&quot;] combine: &quot;</span> + subResult1 + <span class="string">&quot; + &quot;</span> + subResult2</span><br><span class="line">                    );</span><br><span class="line">                    subResult1.addAll(subResult2);</span><br><span class="line">                &#125;</span><br><span class="line">        );</span><br></pre></td></tr></table></figure>
+<p>Gdzie wynikiem działania kodu będzie:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">create list</span><br><span class="line">create list</span><br><span class="line">create list</span><br><span class="line">create list</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">2</span>] accumulator: [] + David</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">1</span>] accumulator: [] + Peter</span><br><span class="line">[main] accumulator: [] + Pamela</span><br><span class="line">create list</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">3</span>] accumulator: [] + Max</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">1</span>] accumulator: [] + Zosia</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">1</span>] combine: [Zosia] + [David]</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">1</span>] combine: [Pamela] + [Zosia, David]</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">3</span>] combine: [Max] + [Peter]</span><br><span class="line">[ForkJoinPool.commonPool-worker-<span class="number">3</span>] combine: [Max, Peter] + [Pamela, Zosia, David]</span><br></pre></td></tr></table></figure>
+
+<p>Należy zwrócić tutaj uwagę na kilka rzeczy:</p>
+<ul>
+<li>obiekt <em>LinkedList</em> został utworzony aż 5 razy i tylko jeden z tych obiektów jest tym który dostaniemy jako wynik operacji, pozostałe służą jako obiekty tymczasowe do których mogą być zapisywane dane w osobnych wątkach. </li>
+<li>accumulator w pierwszym parametrze dostał listę, która aktualnie jest procesowana w danym wątku, a jako drugi parametr obiekt który należy zaagregować. Zachowanie identyczne jak w przetwarzaniu jednowątkowym.</li>
+<li>wreszcie został uruchomiony combiner. Dostał on jako pierwszy parametry dwie listy. Pierwsza jest obiektem wynikowym, jaki zostanie zwrócony z metody <em>collect</em>, a drugi jest wynikiem działania strumienia w osobnym wątku.</li>
+</ul>
+<p>Oczywiście powyższy przykład można znacznie uprościć korzystając z referencji do metod:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> List&lt;Person&gt; adults = persons</span><br><span class="line">                .parallelStream()</span><br><span class="line">                .collect(</span><br><span class="line">                        LinkedList::<span class="keyword">new</span>,</span><br><span class="line">                        LinkedList::add,</span><br><span class="line">                        LinkedList::addAll</span><br><span class="line">                );</span><br></pre></td></tr></table></figure>
+
+<p>Podsumowując działanie metody <em>collect</em>. Przyjmuje ona 3 parametry. Pierwszy odpowiada za utworzenie obiektu który będzie przechowywał dane z strumienia, za pomocą drugiej możemy agregować elementy, natomiast trzecia łączy wyniki pracy strumienia w osobnym wątku z obiektem wyjściowym. Tak więc o parametrze <em>agregate</em> można powiedzieć że służy on do dopisywania danych do wynikowego obiektu, który tworzony jest raz i jest <em>mutowalny</em></p>
+<h2 id="Reduce"><a href="#Reduce" class="headerlink" title="Reduce:"></a>Reduce:</h2><p>Tak, tak te słowo jest tutaj kluczowe. Ponieważ metoda <em>reduce</em> różni się właśnie tym że została przystosowana o pracy z nie mutowalnymi obiektami. Metoda ta również jest przeciążona:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">T <span class="title function_">reduce</span><span class="params">(T identity, BinaryOperator&lt;T&gt; accumulator)</span>;</span><br><span class="line">Optional&lt;T&gt; <span class="title function_">reduce</span><span class="params">(BinaryOperator&lt;T&gt; accumulator)</span>;</span><br><span class="line">&lt;U&gt; U <span class="title function_">reduce</span><span class="params">(U identity,</span></span><br><span class="line"><span class="params">                 BiFunction&lt;U, ? <span class="built_in">super</span> T, U&gt; accumulator,</span></span><br><span class="line"><span class="params">                 BinaryOperator&lt;U&gt; combiner)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Na początek przyjrzyjmy się tej pierwszej wersji metody. Przyjmuje ona jako pierwszy parametr obiekt takiego samego typu jak ten wynikowy z metody <em>reduce</em>. Przykładowo jeżeli <em>reduce</em> miało by złączyć wszystkie elementy strumienia typu integer do jednej liczby, to właśnie jak pierwszy parametr należy podać liczbę do której będą dodawane kolejne. Drugi parametr to metoda za pomocą której będą łączone elementy strumienia. Zobaczmy jako to wygląda w praktyce:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="type">Integer</span> <span class="variable">adults</span> <span class="operator">=</span> persons</span><br><span class="line">        .stream()</span><br><span class="line">        .mapToInt(Person::getAge)</span><br><span class="line">        .reduce(</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                (sum, age) -&gt; sum + age</span><br><span class="line">        );</span><br></pre></td></tr></table></figure>
+
+<p>Po utworzeniu strumienia obiektów typu Person zamieniamy strumień obiektów na strumień intów w celu uniknięcia zbędnego boxingu. Następnie do liczby 0, która jst naszym parametrem identity zaczynamy dodawać kolejne obiekty strumienia, otrzymując w rezultacie zsumowany wiek ludzi z danej kolekcji. Tak na marginesie identycznie działanie ma metoda <em>sum</em> i z niej powinniśmy korzystać w prawdziwym kodzie :)</p>
+<p>Druga wersja metody <em>reduce</em> pozwala nam pominąć przekazywanie początkowej wartości, jednak zwraca wynik jako obiekt typu <em>Optional</em>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">persons</span><br><span class="line">        .stream()</span><br><span class="line">        .mapToInt(Person::getAge)</span><br><span class="line">        .reduce(Integer::sum)</span><br><span class="line">        .ifPresent(System.out::print);</span><br></pre></td></tr></table></figure>
+
+<p>Trzecia wersja metody wymaga od nas przekazania również obiektu <em>combiner</em>. Który podobnie jako to miało miejsce w funkcji collect łączy wyniki pracy osobnych strumieni.</p>
+<h2 id="Pulapka-metody-reduce"><a href="#Pulapka-metody-reduce" class="headerlink" title="Pułapka metody reduce"></a>Pułapka metody reduce</h2><p>W powyższych przykładach wykorzystania metody <em>reduce</em> posłużyłem się dodawaniem intów. Przyjrzyjmy się teraz troszkę innemu przykładowi:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">persons</span><br><span class="line">        .stream()</span><br><span class="line">        .map(Person::getName)</span><br><span class="line">        .reduce(<span class="string">&quot;&quot;</span>,</span><br><span class="line">                (s1, s2) -&gt; s1 + s2</span><br><span class="line">        );</span><br></pre></td></tr></table></figure>
+
+<p>Jaki jest problem z tym kodem? Jest nie optymalny. Przy każdym wywołaniu stringi łączone są za pomocą konkatenacji. Zobaczmy jak wygląda najbardziej trywialne porównanie szybkości działania metody reduce oraz collect:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> List&lt;Person&gt; persons = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt; <span class="number">1_0000</span>; i++) &#123;</span><br><span class="line">    persons.add(<span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;James&quot;</span>, <span class="number">18</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">persons</span><br><span class="line">        .stream()</span><br><span class="line">        .map(Person::getName)</span><br><span class="line">        .collect(StringBuilder::<span class="keyword">new</span>,</span><br><span class="line">                StringBuilder::append,</span><br><span class="line">                StringBuilder::append</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">System.out.println(System.currentTimeMillis() - start + <span class="string">&quot; ms&quot;</span>);</span><br><span class="line">start = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">persons</span><br><span class="line">        .stream()</span><br><span class="line">        .map(Person::getName)</span><br><span class="line">        .reduce(<span class="string">&quot;&quot;</span>,</span><br><span class="line">                (s1, s2) -&gt; s1 + s2</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">System.out.println(System.currentTimeMillis() - start + <span class="string">&quot; ms&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Co daje wynik:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">18</span> ms  <span class="comment">// collect + StringBuilder</span></span><br><span class="line"><span class="number">217</span> ms <span class="comment">// reduce + konkatenacja</span></span><br></pre></td></tr></table></figure>
+
+<p>Widać że mamy tutaj różnice jednego rzędu wielkości. Tak na marginesie, łączenie Stringów za pomocą <em>collect</em> jest już zaimplementowane. W klasie Collectors mamy do dyspozycji przeciążoną metodę <em>joining</em>, zwracającą <em>Collector</em> który robi to w optymalny sposób.</p>
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Artykuł przybliżył działanie funkcji <em>reduce</em> oraz <em>collect</em>. Na przykładach zobaczyliśmy jak działają te funkcje oraz za co odpowiadają ich parametry. Przedstawiłem również kilka gotowych implementacji klasy <em>Collector</em>, które rozwiązują najczęściej występujące problemy. Na koniec zobaczyliśmy na jaki problem można się natknąć przy używaniu reduce w błędny sposób.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/08/09/2017/2017-08-09-stream-reduce-vs-collect/">https://klolo.github.io/2017/08/09/2017/2017-08-09-stream-reduce-vs-collect/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/08/15/2017/2017-08-15-intellij-live-templates-szybsze-programowanie/">Intellij live templates - szybsze programowanie</a>
+            
+            
+            <a class="next" rel="next" href="/2017/08/08/2017/2017-08-08-mantra-architektoniczna/">Mantra architektoniczna</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

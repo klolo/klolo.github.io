@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Kamil Lolo">
+
+
+
+
+
+<title>Intellij live templates - szybsze programowanie | klolo blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Intellij live templates - szybsze programowanie</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Kamil Lolo</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 15, 2017&nbsp;&nbsp;17:01:03</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JAVA/">JAVA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Niezależnie od tego czy programujesz metodą Copiego i Pejsty, czy też wstukujesz kod niczym sekretarka pisząca notatkę ze spotkania szefa, czasem możesz odnieść wrażenie, że zaczynasz od identycznego fragmentu kodu. Ile razu w życiu na początku było <code>System.out.println</code> lub <code>public static void main(final String[] args)</code>? O ile nie jesteś programistą utrzymującym przy życiu produkcyjnego dinozaura, to pewnie zdarzyło Ci się kilka razy. Intellij może ułatwić Twoje życie.</p>
+<span id="more"></span>
+
+<p>Pisząc kod zgodnie z regułami TDD, zaczynamy każdą implementację od napisania testu. Po otwarciu klasy z testami tworzymy zatem pusty test jednostkowy, który za chwilę zapełni się kodem. Pusty test jednostkowy zazwyczaj wygląda podobnie jak setki innych w projekcie - u góry adnotacje “test”, jakaś metoda <code>public void</code> z odpowiednią nazwą, w środku metody podział<br>na sekcje give&#x2F;when&#x2F;then (o ile oczywiście taką mamy konwencję), no i jakaś assercja.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">shouldDoSomething</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// given</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// when</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// then</span></span><br><span class="line">    Assert.assertTrue(<span class="literal">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Za każdym razem wpisuję taką funkcję ręcznie. Czy to naprawdę konieczne? Czy trzeba kopiować istniejący test i dopiero czyścić go z tego, czego nie potrzebuje? Otóż nie! Intellij oferuje bardzo wygodne narzędzie o nazwie “Live template”, dzięki któremu można tworzyć szablony kodu, które będą dostępne po wpisaniu odpowiedniego aliasu.</p>
+<h2 id="Wbudowane-szablony"><a href="#Wbudowane-szablony" class="headerlink" title="Wbudowane szablony"></a>Wbudowane szablony</h2><p>Jakie wbudowane szablony są do dyspozycji oraz jak z nich korzystać? Każdy szablon ma swój alias, po wpisaniu którego<br>w menu automatycznego wypełniania pojawia się szablon o podanej nazwie. Po wybraniu szablonu, w miejscu, w którym znajduje się kursor pojawi się wybrany szablon. Jednym z wbudowanych szablonów jest <em>sout</em>, który wstawia instrukcję wypisania na konsoli: <em>System.out.println</em>.</p>
+<p><img src="/images/sout.png" alt="GitHub Logo"></p>
+<p>Innymi dostępnymi domyślnie szablonami dla Javy są:</p>
+<ul>
+<li><code>psvm</code> - wstawia pustą metodę main.</li>
+<li><code>geti</code>- tworzy metodę do pobierania instancji singletona getInstance</li>
+<li><code>ifn</code> - warunek sprawdzający czy zmienna nie nullem, przeciwieństwo <code>inn</code></li>
+<li><code>inst</code> - warunek sprawdzający czy zmienna jest instancją klasy za pomocą instanceof</li>
+<li><code>lazy</code> - sprawdza czy zmienna jest nullem i jeżeli jest to tworzy jej instancję.</li>
+<li><code>lst</code> - wyciąga ostatni element tablicy</li>
+<li><code>mn</code> - wywołuję funkcję <em>Math.min</em>, przeciwieństwo <code>mx</code></li>
+<li><code>toar</code> - zamienia kolekcję na tablicę</li>
+<li><code>prsf</code> - <em>private static final</em></li>
+<li><code>psf</code> - <em>public static final</em></li>
+<li><code>psfi</code> - <em>public static final int</em></li>
+<li><code>psfs</code> - <em>public static final String</em></li>
+<li><code>St</code> - <em>String</em></li>
+<li><code>thr</code> - <em>throw new</em></li>
+</ul>
+<p>Oczywiście każdy szablon związany jest również z miejscem, w którym może występować. Przykładowo dla Javy do wyboru możliwe jest kilka zakresów:</p>
+<ul>
+<li>Statement</li>
+<li>Expression</li>
+<li>Declaration</li>
+<li>Comment</li>
+<li>String</li>
+<li>Smart type completion</li>
+<li>Other</li>
+</ul>
+<p>  Intellij na podstawie fragmentu kodu, w którym aktualnie znajduje się kursom określi z jakiego zakresu zaproponować szablony. Zakresy różnią się w zależności od języka oraz od frameworka, w którym chcemy wykorzystać szablon.</p>
+<h2 id="Surround-templates"><a href="#Surround-templates" class="headerlink" title="Surround templates"></a>Surround templates</h2><p>Oprócz szablonów wstawianych w danym miejscu kodu, mamy do dyspozycji szablony otaczające kod. Szablony takie działają na zasadzie otaczania zaznaczonego kodu jakimś predefiniowanym szablonem, przykładowo blokiem synchronized. Z takiego szablonu można skorzystać po zaznaczeniu fragmentu kodu i wybraniu skrótu klawiszowego <em>Ctrl-Alt-J</em> oraz <em>Ctrl-Alt-T</em>, który wyświetli również kilka przydatnych szablonów wbudowanych w IDE, takie jak np. otoczenie kodu w blok try-catch.</p>
+<p><img src="/images/templatesMenu.png" alt="GitHub Logo"></p>
+<h2 id="Tworzenie-wlasnych-szablonow"><a href="#Tworzenie-wlasnych-szablonow" class="headerlink" title="Tworzenie własnych szablonów"></a>Tworzenie własnych szablonów</h2><p>Szablon można utworzyć wchodząc w ustawieniach IDE w zakładkę Live templates i wybierając przycisk plusika z prawej strony. Jest tam również opcja dodania grupy szablonów, w przypadku kiedy chcemy je w jakiś logiczny sposób zgrupować. Podczas tworzenia szablonu należy podać jego alias, poprzez który będziemy się do niego odwoływać, opis, kod szablonu oraz kontekst, w którym ma być dostępny. Proste, prawda? Nie do końca jeżeli spojrzy się na przykłady wbudowanych w Intellij szablonów. Występują tam różnego rodzaju zmienne, dzięki którym kod nie jest tylko wpisanym na sztywno tekstem, ale faktycznie szablonem na podstawie, którego utworzy się fragment przydatnego kodu. Oprócz zmiennych, mamy nawet dostęp do kilku predefiniowanych funkcji, które można wywoływać w szablonie. Lista zmiennych i metod dostępnych w Live templates różni się w zależności od zainstalowanych pluginów. Te najbardziej podstawowe to:</p>
+<ul>
+<li>$END$ - określa miejsce, w którym ma znaleźć się kursor po wstawieniu szablonu</li>
+<li>$SELECTION$ - w przypadku szablonu otaczającego kodu zmienna zawiera zaznaczony przez użytkownika tekst.</li>
+</ul>
+<p>Mamy również do dyspozycji funkcje, które pozwolą jeszcze bardziej rozbudować szablon. Kilka, według mnie, najbardziej przydatnych:</p>
+<ul>
+<li><code>camelCase(String)</code> - zwraca podany tekst jako camel case.</li>
+<li><code>methodName()</code> - nazwa metody, w której się znajdujemy</li>
+<li><code>date(sDate)</code> - zwraca datę w podanym formacie</li>
+<li><code>currentPackage()</code> - aktualny pakiet</li>
+</ul>
+<p>Funkcji nie możemy jednak wywoływać bezpośrednio w szablonie. W szablonie odwołujemy się do zmiennych, które przechowują wartość wywołań funkcji. Zmienne mogą mieć dowolną nazwę, jednak trzeba im później przypisać wywołanie funkcji w okienku dostępnym po wybraniu <em>Edit variables</em>. Przykład szablonu tworzącego zmienną przechowującą nazwę funkcji oraz logującego jakiś komunikat do logów. Komunikat ten można podać po wstawieniu loggera, z powodu zmiennej <em>$END$</em>.</p>
+<p><img src="/images/newLiveTemplate.png" alt="GitHub Logo"></p>
+<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Kod można pisać w bardzo szybki sposób, nie korzystając przy tym z kopiowania i wklejania. Myślę, że jest to podejście, które sprawi, że kod będzie miał mniej błędów. Ile razy zdarzyło Ci się przenieść jakiś fragment kodu z innego miejsca systemu i naciąć się na to, że nie działa? A wystarczyłoby napisać go ręcznie i wyłapać błędy. Dbajmy o to, aby nasza praca była wydajniejsza i lepsza. Tak na marginesie, Eclipse również udostępnia podobną opcję, nazywa się to Templates, jednak nie potrafię określić na ile różni się to z Live Templates dostępnymi w Intellij. Oprócz Live templates Intellij posiada również mechanizm szablonów kodu, który w menu znajdziecie jako File and code templates. Szablony te są dostępne w menu pojawiającym się po wciśnięciu alt+insert. Jest tam nawet pusty szablon metody testowej JUnit ;)</p>
+<p>Wszystkie informacje na temat Live templates znajdziecie <a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/idea/live-templates.html">tutaj</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Kamil Lolo</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://klolo.github.io/2017/08/15/2017/2017-08-15-intellij-live-templates-szybsze-programowanie/">https://klolo.github.io/2017/08/15/2017/2017-08-15-intellij-live-templates-szybsze-programowanie/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/08/28/2017/2017-08-28-typescript-wprowadzenie-czesc-1/">Typescript wprowadzenie - część 1</a>
+            
+            
+            <a class="next" rel="next" href="/2017/08/09/2017/2017-08-09-stream-reduce-vs-collect/">Java stream reduce vs collect</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Kamil Lolo | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
