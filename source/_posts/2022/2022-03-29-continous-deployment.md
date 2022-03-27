@@ -42,6 +42,20 @@ Przygotujmy teraz prostą aplikację springową, którą dostarczymy na Kubernet
 
 ## Konfiguracja deploymentu
 
+```
+TODO: deployment.yaml
+```
+
+```
+TODO: service.yaml
+```
+
 ## Podpięcie aplikacji pod ArgoCD
 
+```
+TODO: add application to Argo
+```
+
 ## Wnioski
+
+ArgoCD pozwala ciągłe dostawy naszej aplikacji na środowisko zgodnie z koncepcją GitOps. Przy tym oferuje praktyczny interfejs graficzny oraz CLI. Na pewno jest to aplikacja warta rozważenia w projektach które nie mają jeszcze dobrze skonfigurowanego obszaru CD. Warto wspomnieć też o możliwości rozszerzenia ArgoCD o możliwość wykonywania rollbacków aplikacji na podstawie metryk oraz wykonywania canary releses za pomocą Argo rollout. 

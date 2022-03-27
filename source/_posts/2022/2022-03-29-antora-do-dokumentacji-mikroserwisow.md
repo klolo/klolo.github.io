@@ -6,4 +6,5 @@ comments: true
 categories: OTHERS
 ---
 
+TODO: wstęp 
 
