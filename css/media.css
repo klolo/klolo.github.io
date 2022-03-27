@@ -1,5 +1,5 @@
 /* mobile phone and smart portable devices */
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 350px) {
   .too-small {
     position: fixed;
     top: 0;
@@ -13,7 +13,7 @@
     opacity: 0.9;
   }
 }
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 350px) {
   .too-small {
     display: none;
     width: 0;
