@@ -7,14 +7,22 @@
 .navbar {
   height: 4rem;
   line-height: 4rem;
+  display: block !important;
+  position: fixed;
+  opacity: 1;
+  z-index: 10;
   width: 100%;
+  background-color: $light-background-color;
+}
+.dark-theme .navbar {
+  background-color: $dark-background-color;
 }
 .navbar .container {
   width: auto;
-  max-width: 1200px;
+  max-width: 780px;
   text-align: center;
-  padding-left: 1em;
-  padding-right: 1em;
+  padding-left: 2px;
+  padding-right: 5px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

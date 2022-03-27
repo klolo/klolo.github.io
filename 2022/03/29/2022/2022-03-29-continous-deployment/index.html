@@ -13,7 +13,7 @@
 
 
 
-<title>Java stream API - darmowy kurs | klolo blog</title>
+<title>ArgoCD jako pomysłów na Continous deployment | klolo blog</title>
 
 
 
@@ -201,19 +201,19 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Java stream API - darmowy kurs</h1>
+            <h1 class="post-title">ArgoCD jako pomysłów na Continous deployment</h1>
 
             
                 <div class="post-meta">
                     <span class="post-time">
-                        [1 min. read]
+                        [3 min. read]
                     </span>
 
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">August 28, 2017</a>
+                        Date: <a href="#">March 29, 2022</a>
                         </span>
                     
 
@@ -221,7 +221,7 @@
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/JAVA/">JAVA</a>
+                                <a href="/categories/OTHERS/">OTHERS</a>
                             
                         </span>
                     
@@ -230,13 +230,20 @@
         </header>
 
         <div class="post-content">
-            <p>Jesteś programistą Javy i nie miałeś jeszcze okazji zapoznać się z nowościami Javy 8? Nie umiesz używać <em>stream api</em>? Mam dla Ciebie darmowe materiały, dzięki którym możesz poznać nowości w języku oraz nauczyć się biegle używać strumieni.</p>
-<span id="more"></span>
+            <p>Proces wgrywania nowej wersji aplikacji na środowisko często wygląda w ten sposób, że Jenkins lub jakieś inne narzędzie buduje aplikacje ze źródeł, wykonując testy i robiąc statyczną analizę kodu. Takie podejście działa, jednak ma tę wadę, że nie jest do końca <em>GitOps</em>. Nie mamy miejsca na git, gdzie przechowywana jest wersja aktualnie wgranej aplikacji. Git nie powie nam, jaki jest stan środowiska. Alternatywą do takiego podejścia jest skorzystanie z narzędzia, które będzie monitorować nasze repozytorium git i jeżeli pojawi się zmiana wersji lub konfiguracji aplikacji to automatycznie wykona upgrade na środowisku. Dzięki temu git zawsze powie nam jakie wersje aplikacji są na środowisku, jesteśmy bardziej zgodni z podejście <em>X as a code</em> a przy okazji możemy zwiększyć bezpieczeństwo. Brałem udział przy wdrażaniu takiego narzędzia w moim projekcie i dlatego chciałbym dzisiaj opowiedzieć w kilku słowach o nim. </p>
+<p>Mowa o ArgoCD, narzędziu pozwalającym na ciągłe dostarczanie naszej aplikacji na środowisko oparte o Kubernetes. Pokaże jak zainstalować to narzędzie i następnie wgramy na klaster demo aplikacji. Zapraszam.</p>
+<h2 id="Instalacja-ArgoCD"><a href="#Instalacja-ArgoCD" class="headerlink" title="Instalacja ArgoCD"></a>Instalacja ArgoCD</h2><p>Pora na szybki opis jak uruchomić lokalnie, na swojej maszynie ArgoCD. Oczywiście do tego celu będziesz potrzebować uruchomionego Kubernetes (Ja korzystam z minikube). Instalacja ArgoCD sprowadza się do utworzenia namespace i zainstalowanie zasobów z pliku yamkl jaki dostarcza ArgoCD (Na potrzeby demo założę że ArgoCD jest zainstalowane na lokalnym Kubernetes):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace argocd &amp;&amp; \</span><br><span class="line">kubectl apply \</span><br><span class="line">    -n argocd \</span><br><span class="line">    -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml</span><br></pre></td></tr></table></figure>
 
-<h2 id="Prezentacja"><a href="#Prezentacja" class="headerlink" title="Prezentacja"></a>Prezentacja</h2><p>Prezentacje znajdziesz <a target="_blank" rel="noopener" href="https://slides.com/kamillolo/java-7-8-9">tutaj</a>. Oprócz wprowadzenia w najważniejsze nowości Javy 8 zawiera ona również omówienie kilku ciekawych mechanizmów Javy 7, o których często się zapomina lub są mniej znane. Dodatkowo, prezentacja zawiera również informację o tym, czego można się spodziewać w nadchodzącej Javie 9. Materiały te zostały wykorzystane podczas całodniowego szkolenia, doczytanie o wszystkich poruszanych tematach może zająć równie dużo czasu.</p>
-<h2 id="Cwiczenia"><a href="#Cwiczenia" class="headerlink" title="Ćwiczenia"></a>Ćwiczenia</h2><p>Po zapoznaniu się z prezentacją możesz <a target="_blank" rel="noopener" href="https://github.com/klolo/java8-stream-free-exercises">sklonować</a> projekt z ćwiczeniami. Ćwiczenia polegają na implementacji metod w klasie WorkShop zgodnie z komentarzami, tak żeby testy w klasie testowej WorkShopTest wykonywały się prawidłowo. Wszystkie informacje znajdziesz w pliku README.md w projekcie.</p>
-<h2 id="Podsumowanie"><a href="#Podsumowanie" class="headerlink" title="Podsumowanie"></a>Podsumowanie</h2><p>Prawdziwa siła Javy 8 tkwi nie w wyrażeniach lambda, ale w strumieniach, które potrafią bardzo zmniejszyć ilość kodu jaki musi zostać napisany w celu zaimplementowania jakiejś nowej funkcjonalności. Możemy uniknąć pisania kodu <em>boilerplate</em> i skupić się na tym, co ma robić kod, a nie w jaki sposób.</p>
+<p>Tutaj warto zwrócić uwagę na to że pobierajy skrypt z sieci i nie mamy kontroliu nad tym co znajduje się w nim. DLatego dużo lepszym podejściem jest utworzenie dedykowanego projektu na git, w którym taki skrypt umieścimy oraz ewentualnie dodatkowe customizacje do niego. Daje nam to tą zalętę że taki projekt możemy używac do konfigurowania nowych środowisk i wszystko jest zgodne z podejściem GitOps. </p>
+<p>Po instalowaniu ArgoCD możemy wejść na konsole web-ową tej apliacji. Żeby to jednak zrobić bez wystawiania Ingress, należy wykonać forward portu z klastra Kubernetes:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TODO</span><br></pre></td></tr></table></figure>
 
+<p>Jeżeli naszym oczom pojawiła się strona logowania to bardzo dobrze. Nie pozostaje nam nic innego jak wyciągnąc generowane podczas instalacji hasło administratora z jednego z Secretów:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TODO</span><br></pre></td></tr></table></figure>
+
+<h2 id="Spring-boot-demo"><a href="#Spring-boot-demo" class="headerlink" title="Spring boot demo"></a>Spring boot demo</h2><p>Przygotujmy teraz prostą aplikację springową, którą dostarczymy na Kubernetess z wykorzystaniem ArgoCD. Żeby oszczędzić trochę czasu, wygenerowałem aplikację z wykorzystaniem <a target="_blank" rel="noopener" href="https://start.spring.io/">spring initializer</a></p>
+<h2 id="Konfiguracja-deploymentu"><a href="#Konfiguracja-deploymentu" class="headerlink" title="Konfiguracja deploymentu"></a>Konfiguracja deploymentu</h2><h2 id="Podpiecie-aplikacji-pod-ArgoCD"><a href="#Podpiecie-aplikacji-pod-ArgoCD" class="headerlink" title="Podpięcie aplikacji pod ArgoCD"></a>Podpięcie aplikacji pod ArgoCD</h2><h2 id="Wnioski"><a href="#Wnioski" class="headerlink" title="Wnioski"></a>Wnioski</h2>
         </div>
 
         
@@ -255,10 +262,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2017/09/03/2017/2017-09-03-zaimplementuj-dependency-injection-w-typescript/">Zaimplementuj dependency injection w Typescript</a>
+                <a class="prev" rel="prev" href="/2022/03/29/2022/2022-03-29-antora-do-dokumentacji-mikroserwisow/">Antora-narzędzie do dokumentacji mikroserwisów</a>
             
             
-            <a class="next" rel="next" href="/2017/08/28/2017/2017-08-28-typescript-wprowadzenie-czesc-1/">Typescript wprowadzenie - część 1</a>
+            <a class="next" rel="next" href="/2022/03/27/2022/2022-03-27-kotlin-2022-czy-nadal-warto/">Kotlin zamiast Javy w 2022... Czy nadal warto?</a>
             
         </section>
 

@@ -49,27 +49,45 @@
 <body>
     <script>
         // this function is used to check current theme before page loaded.
+        const initFun =  () => {
+                        const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+                        const isDark = currentTheme === 'dark';
+                        const pagebody = document.getElementsByTagName('body')[0]
+                        if (isDark) {
+                            pagebody.classList.add('dark-theme');
+                            // mobile
+                            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+                        } else {
+                            pagebody.classList.remove('dark-theme');
+                            // mobile
+                            document.getElementById("mobile-toggle-theme").innerText = "· Light"
+                        }
+                     };
         (() => {
-            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
-            const isDark = currentTheme === 'dark';
-            const pagebody = document.getElementsByTagName('body')[0]
-            if (isDark) {
-                pagebody.classList.add('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
-            } else {
-                pagebody.classList.remove('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Light"
-            }
-        })();
+            setTimeout(() => {
+                initFun();
+            } , 10)
+        })()
+    </script>
+    <script>
+           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+
+            ga('create', 'UA-104079933-1', 'auto');
+            ga('send', 'pageview');
     </script>
 
     <div class="wrapper">
-        <header>
+        <style>
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap');
+</style>
+<header>
     <nav class="navbar">
         <div class="container">
-            <div class="navbar-header header-logo"><a href="/">#lodzki_programista</a></div>
+            <div class="navbar-header header-logo"><a href="/">Łódzki programista</a></div>
             <div class="menu navbar-right">
                 
                     <a class="menu-item" href="/archives">Posts</a>
@@ -83,10 +101,11 @@
     
     <nav class="navbar-mobile" id="nav-mobile">
         <div class="container">
-            <div class="navbar-header">
-                <div>
-                    <a href="/">#lodzki_programista</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
-                </div>
+            <div class="navbar-header" style="width:100%; padding-left: 15px">
+                <span >
+                    <a href="/" style="margin-right: 3px">Łódzki programista</a>
+                    <a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </span>
                 <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
             </div>
             <div class="menu" id="mobile-menu">
@@ -110,6 +129,7 @@
             mobileMenu.classList.add("active")
         }
     }
+
 </script>
             <div class="main">
                 <div class="post-wrap archive">
@@ -117,12 +137,14 @@
     
         
 
-        
-            <h3 style="font-size: 2em;">2017</h3>
-        
+<!--          -->
+<!--             <h3 style="font-size: 2em;">2017</h3> -->
+<!--          -->
 
         <article class="" >
-          <p style="margin-bottom: 2px; margin-top: 20px; opacity: 0.7">December 17, 2017</p>
+            <p style="margin-bottom: 2px; margin-top: 20px; opacity: 0.9; color: #5F92B5">
+                 December 17, 2017
+            </p>
             <a
              style="font-size: 1.6em; max-width: 80vw"
              class="" href="/2017/12/17/2017/2017-12-17-w-oczekiwaniu-na-jave-10/">W oczekiwaniu na Java 10</a>
@@ -139,6 +161,13 @@
 </footer>
 
     </div>
+    <div class="too-small">
+    <div style="margin-top: 45vh; width: 100%; text-align: center">
+         Too small screen :(
+    </div>
+
+    </div>
+
 </body>
 
 </html>

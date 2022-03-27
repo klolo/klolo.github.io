@@ -274,3 +274,18 @@ body {
   padding-right: 10px;
   padding-left: 10px;
 }
+.navbar-header {
+  font-family: 'Teko', sans-serif;
+  opacity: 0.8;
+  font-size: 2em;
+}
+.gradient {
+  background-color: #f00;
+  background-image: linear-gradient(60deg, #5f92b5, #9754c6);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
