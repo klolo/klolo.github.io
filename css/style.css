@@ -154,9 +154,17 @@ body {
   opacity: 0.8;
   font-size: 2em;
 }
-.gradient {
-  background-color: #f00;
-  background-image: linear-gradient(60deg, #5f92b5, #9754c6);
+.dark-theme .gradient {
+  background-image: linear-gradient(45deg, #5f92b5, #9754c6);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+.gradient-always {
+  background-image: linear-gradient(45deg, #5f92b5, #9754c6);
   background-size: 100%;
   background-repeat: repeat;
   -webkit-background-clip: text;
@@ -188,7 +196,7 @@ html::-webkit-scrollbar-thumb:hover {
   background-color: #ddd;
 }
 body {
-  font-size: 12pt;
+  font-size: 13pt;
   font-weight: normal;
   line-height: 2em;
   overflow: overlay;
