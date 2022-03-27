@@ -1,34 +1,75 @@
 /* mobile phone and smart portable devices */
-@media screen and (max-width: 479px) 
-  .main
+
+@media screen and (max-width: 450px)
+    .too-small
+        position: fixed
+        top: 0
+        left: 0
+        z-index: 1000
+        width: 100vw
+        height: 100vh
+        background-color: $light-background-color
+        font-family: 'Teko', sans-serif;
+        font-size: 2.5em
+        opacity: 0.9
+
+@media screen and (min-width: 450px)
+   .too-small
+        display: none
+        width: 0
+        height: 0
+
+@media screen and (min-width: 834px)
+   .main
     padding-top 40pt
+    .container
+        padding-top: 40px
+   .navbar
+        left: 0
+
+
+@media screen and (max-width: 834px)
+  .main
+    padding-top 50pt
   .navbar
     display: none
 
-
-  .navbar-mobile 
+  .navbar-mobile
     display: block !important
     position: fixed
     width: 100%
     z-index: 100
+
     transition: all 0.6s ease 0s
-    .container 
+    .container
+      height: 100%
       padding: 0
       margin: 0
       //height: 5em
       line-height: 5.5em
       background: $light-background-color
 
-      .navbar-header 
+      .navbar-header
+        height: 1.8em
+
+        .dark-theme &
+            background-color: $dark-background-color
+
+        .light-theme &
+            background-color: $light-background-color
+
+        opacity: 1
         display: flex
         justify-content: space-between
         align-items: center
-        width: 100%
+        width: 90%
         padding-right: 1em
-        padding-left: 1em
+        padding-left: 0px
+        margin: 0 auto
         box-sizing: border-box
         position relative
 
+        font-family: 'Teko', sans-serif;
 
         .menu-toggle 
           cursor: pointer
@@ -49,15 +90,12 @@
 
             .dark-theme & 
               background: $dark-font-color
-            
-          
 
           span:nth-child(1) 
             margin-bottom: 8px
           
           span:nth-child(3) 
             margin-top: 8px
-          
 
           &.active 
             span 
@@ -71,20 +109,14 @@
               -webkit-transform: rotate(45deg) translate(4px, 6px)
               transform: rotate(45deg) translate(4px, 6px)
             
-
-            span:nth-child(2) 
+            span:nth-child(2)
               opacity: 0
-            
 
             span:nth-child(3) 
               -moz-transform: rotate(-45deg) translate(8px, -10px)
               -ms-transform: rotate(-45deg) translate(8px, -10px)
               -webkit-transform: rotate(-45deg) translate(8px, -10px)
               transform: rotate(-45deg) translate(8px, -10px)
-            
-          
-        
-      
 
       .menu 
         text-align: center
@@ -102,7 +134,6 @@
           margin 0 1em
 
           line-height: 2.5em
-        
 
         &.active 
           display: block
@@ -119,8 +150,6 @@
       .dark-theme & 
         background: $dark-background-color !important
       
-    
-  
 
   .archive
     width 90%
@@ -168,6 +197,6 @@
 
 
 /* post toc Style */
-@media screen and (max-width: 1279px) // 最大宽度1279px时应用这条规则。（最大宽度小于1279px返回false，屏蔽规则。）
+@media screen and (max-width: 1380px) // 最大宽度1279px时应用这条规则。（最大宽度小于1279px返回false，屏蔽规则。）
   .post-toc
     display none

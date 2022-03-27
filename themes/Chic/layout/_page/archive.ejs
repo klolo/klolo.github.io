@@ -3,12 +3,14 @@
     <% page.posts.each(function (post) { %>
         <% var cur_year = post.date.year(); %>
 
-        <% if(last_year !== cur_year){ %>
-            <h3 style="font-size: 2em;"><%- cur_year %></h3>
-        <% last_year = cur_year; } %>
+<!--         <% if(last_year !== cur_year){ %> -->
+<!--             <h3 style="font-size: 2em;"><%- cur_year %></h3> -->
+<!--         <% last_year = cur_year; } %> -->
 
         <article class="" >
-          <p style="margin-bottom: 2px; margin-top: 20px; opacity: 0.7"><%- date(post.date, theme.date_format) %></p>
+            <p style="margin-bottom: 2px; margin-top: 20px; opacity: 0.9; color: #5F92B5">
+                 <%- date(post.date, theme.date_format) %>
+            </p>
             <a
              style="font-size: 1.6em; max-width: 80vw"
              class="" href="<%- url_for(post.path) %>"><%= post.title %></a>

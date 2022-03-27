@@ -1,3 +1,6 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap');
+</style>
 <header>
     <nav class="navbar">
         <div class="container">
@@ -15,10 +18,11 @@
     <%# mobile %>
     <nav class="navbar-mobile" id="nav-mobile">
         <div class="container">
-            <div class="navbar-header">
-                <div>
-                    <a href="<%- config.root %>"><%= theme.navname %></a><a id="mobile-toggle-theme">·&nbsp;Light</a>
-                </div>
+            <div class="navbar-header" style="width:100%; padding-left: 15px">
+                <span >
+                    <a href="<%- config.root %>" style="margin-right: 3px"><%= theme.navname %></a>
+                    <a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </span>
                 <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
             </div>
             <div class="menu" id="mobile-menu">
@@ -42,4 +46,5 @@
             mobileMenu.classList.add("active")
         }
     }
+
 </script>
