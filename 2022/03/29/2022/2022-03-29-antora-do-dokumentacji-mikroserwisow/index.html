@@ -44,7 +44,13 @@
     
 
 
+
+    <script async
+         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4767240579729804"
+         crossorigin="anonymous">
+    </script>
 <meta name="generator" content="Hexo 6.1.0"></head>
+</head>
 
 <body>
     <script>
@@ -139,6 +145,68 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -148,7 +216,7 @@
             
                 <div class="post-meta">
                     <span class="post-time">
-                        [1 min. read]
+                        [2 min. read]
                     </span>
 
                     
@@ -172,7 +240,14 @@
         </header>
 
         <div class="post-content">
-            <p>TODO: wstęp </p>
+            <h1 id="Dokumentacja-techniczna-dla-mikroserwisow"><a href="#Dokumentacja-techniczna-dla-mikroserwisow" class="headerlink" title="Dokumentacja techniczna dla mikroserwisów"></a>Dokumentacja techniczna dla mikroserwisów</h1><h2 id="wstep"><a href="#wstep" class="headerlink" title="wstęp"></a>wstęp</h2><p>Jedną z zalet architektury opartej na mikro serwisach jest nie zależność zespołów w procesie wytwarzania i wdrażania zmian. Rzeczą, która jest z tym powiązana jest rozbicie systemu, który tworzymy na wiele projektów, czasami są to nawet setki projektów na git. Serwisy i biblioteki, które wytwarzamy składają się na system, w którym na porządku dziennym jest budowanie nowych funkcjonalności w opartciu o istniejące już kody. Skąd jednak wiadomo jak działa kod, który chcemy wykorzystać?  Skąd informację o projekcie ma czerpać programista który dopiero w projekt się wdraża? Samodokumentujący się kod jest zazwyczaj tylko jednorożcem, o którym każdy słyszał a nikt nie widział. Dodatkowo istnieją też informacje, które nie pasują do javadoc a są przydatne.</p>
+<p>Nie oceniona jest w takich przypadkach dokumentacja techniczna obrazująca jak dany projekt skonfigurować, uruchomić, za jest odpowiedzialny, jaka jest struktura kodu etc. Najbardziej pospolitym podejściem jest umieszczenie pliku README.md w katalogu głównym projektu. Jest to rozwiązanie proste, ale niekoniecznie sprawdza się w systemie złożym z dużej ilości projektów.  Bo co w przypadku gdy nie wiemy, w jakim dokładnie projekcie szukać jakiegoś mechanizmu?  Można pokusić się o przechowywanie dokumentacji w jakimś zewnętrznym narzędziu np. Wiki, Confluence, które pozwoli nam na wygodne przeszukiwanie. To podejście jednak ma tą wadę że developer w celu aktualizacji dokumentacji musi wyjść z swojego IDE i otworzyć dodatkowe narzędzie, jakim jest przeglądarka. W dzisiejszej modzie na X as a code jest to troche niechciane podejście.</p>
+<p>Chciałem się z wami podzielić narzędziem, dzięki któremu nadal możemy trzymać dokumentację techniczną tam gdzie powinna być, czyli blisko kodu a jednocześnie rozwiązuje problem wyszukiwania informacji na wielu repozytoriach. Tym narzędziem jest Antora. Jest to aggregator dokumentacji z projektów na git. Po zaagregowaniu dokumentacji tworzony jest wynikowy html, którego możemy wystawić na jakiś serwerze i nawet osoby niemające dostępu do kodów mogą zapoznać się z dokumentacją.</p>
+<h2 id="agregowanie-dokumetacji"><a href="#agregowanie-dokumetacji" class="headerlink" title="agregowanie dokumetacji"></a>agregowanie dokumetacji</h2><p>TODO</p>
+<h2 id="custom-UI"><a href="#custom-UI" class="headerlink" title="custom UI"></a>custom UI</h2><p>TODO</p>
+<h2 id="diagramy-as-a-code"><a href="#diagramy-as-a-code" class="headerlink" title="diagramy as a code"></a>diagramy as a code</h2><p>TODO</p>
+<h2 id="kolorowanie-skladni"><a href="#kolorowanie-skladni" class="headerlink" title="kolorowanie składni"></a>kolorowanie składni</h2><p>TODO</p>
+<h2 id="podsumowanie"><a href="#podsumowanie" class="headerlink" title="podsumowanie"></a>podsumowanie</h2><p>TODO</p>
 
         </div>
 
@@ -193,7 +268,7 @@
         <section class="post-nav">
             
             
-            <a class="next" rel="next" href="/2022/03/29/2022/2022-03-29-continous-deployment/">ArgoCD jako pomysłów na Continous deployment</a>
+            <a class="next" rel="next" href="/2022/03/29/2022/2022-03-29-continous-deployment/">ArgoCD jako pomysł na continuous deployment</a>
             
         </section>
 
@@ -217,5 +292,7 @@
     </div>
 
 </body>
+
+
 
 </html>
