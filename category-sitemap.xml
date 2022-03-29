@@ -10,7 +10,7 @@
 
     <url>
         <loc>https://klolo.github.io/categories/OTHERS/</loc>
-        <lastmod>2022-03-28T20:18:43.549Z</lastmod>
+        <lastmod>2022-03-29T19:50:04.669Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -30,13 +30,6 @@
     </url>
 
     <url>
-        <loc>https://klolo.github.io/categories/JAVA/</loc>
-        <lastmod>2022-03-24T20:56:10.575Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://klolo.github.io/categories/JAVA-SPRING/</loc>
         <lastmod>2022-03-24T20:56:10.575Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -45,6 +38,13 @@
 
     <url>
         <loc>https://klolo.github.io/categories/javascript/</loc>
+        <lastmod>2022-03-24T20:56:10.575Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://klolo.github.io/categories/JAVA/</loc>
         <lastmod>2022-03-24T20:56:10.575Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
