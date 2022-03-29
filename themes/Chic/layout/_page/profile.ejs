@@ -3,17 +3,22 @@
         <div class="avatar">
 <!--             <a href="<%- url_for(theme.nav.Posts) %>"><img src="<%- url_for(theme.avatar) %>"></a> -->
         </div>
-          <div class="nickname gradient-always"
-          style="font-size: 4em; font-family: 'Teko', sans-serif; line-height: 1.0em">
+
+        <div>
+                <div class="nickname gradient-always"
+                  style="text-align: right; font-size: 4em; font-family: 'Teko', sans-serif; line-height: 1.0em">
+                            <!-- <%- theme.nickname %> - blog -->
+                           Łódzki programista
+                        </div>
+                <div class="nickname"
+                 style="text-align: right; font-family: 'Teko', sans-serif; font-size:1.6em">
                     <!-- <%- theme.nickname %> - blog -->
-                   Łódzki programista
+                    by Kamil Lolo
                 </div>
-        <div class="nickname"
-         style="text-align: right; padding-right: 100px; font-family: 'Teko', sans-serif; font-size:1.6em">
-            <!-- <%- theme.nickname %> - blog -->
-            by Kamil Lolo
         </div>
-        <div class="description">
+
+
+        <div class="description" style="text-align: left">
             <%- markdown(theme.description) %>
         </div>
         <div class="links">
