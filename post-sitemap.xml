@@ -9,16 +9,16 @@
 
 
     <url>
-        <loc>https://klolo.github.io/2022/03/29/2022/2022-03-29-antora-do-dokumentacji-mikroserwisow/</loc>
-        <lastmod>2022-07-20T15:38:44.105Z</lastmod>
+        <loc>https://klolo.github.io/2022/03/30/2022/2022-03-30-argocd-application-set/</loc>
+        <lastmod>2022-07-21T15:35:17.523Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
     </url>
 
     <url>
-        <loc>https://klolo.github.io/2022/03/30/2022/2022-03-30-antora-application-set/</loc>
-        <lastmod>2022-03-29T19:50:04.669Z</lastmod>
+        <loc>https://klolo.github.io/2022/07/21/2022/2022-07-21-antora-do-dokumentacji-mikroserwisow/</loc>
+        <lastmod>2022-07-21T15:35:17.519Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -97,14 +97,6 @@
     </url>
 
     <url>
-        <loc>https://klolo.github.io/2017/08/28/2017/2017-08-28-java-stream-api-darmowy-kurs/</loc>
-        <lastmod>2022-03-24T20:56:10.574Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>https://klolo.github.io/2017/08/15/2017/2017-08-15-intellij-live-templates-szybsze-programowanie/</loc>
         <lastmod>2022-03-24T20:56:10.574Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -113,7 +105,7 @@
     </url>
 
     <url>
-        <loc>https://klolo.github.io/2017/09/03/2017/2017-09-03-zaimplementuj-dependency-injection-w-typescript/</loc>
+        <loc>https://klolo.github.io/2017/08/28/2017/2017-08-28-java-stream-api-darmowy-kurs/</loc>
         <lastmod>2022-03-24T20:56:10.574Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -122,6 +114,14 @@
 
     <url>
         <loc>https://klolo.github.io/2017/08/28/2017/2017-08-28-typescript-wprowadzenie-czesc-1/</loc>
+        <lastmod>2022-03-24T20:56:10.574Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://klolo.github.io/2017/09/03/2017/2017-09-03-zaimplementuj-dependency-injection-w-typescript/</loc>
         <lastmod>2022-03-24T20:56:10.574Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
