@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Antora-deploy wielu aplikacji"
+title: "ArgoCD - deploy wielu aplikacji"
 date: 2022-03-30 21:31:32 +0100
 comments: true
 categories: OTHERS
