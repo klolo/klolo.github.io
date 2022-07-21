@@ -8,7 +8,7 @@ categories: OTHERS
 
 # Dokumentacja techniczna dla mikroserwisów
 
-## dokumentacja? a po co to komu?
+## Dokumentacja? a po co to komu?
 
 Jedną z największych zalet architektury opartej na mikroserwisach jest duża autonomia zespołów, osiągana poprzez niezależny cykl życia serwisu.
 Jednym z kroków do osiągnięcia tej autonomii jest często rozbicie systemu na wiele osobnych projektów, czasami są ich nawet setki.
@@ -144,7 +144,7 @@ include::partial$some-diagram.puml[]
 
 Dzięki takiemu podejściu zachowamy większą czytelności plików i będzie je łatwiej edytować.
 
-## budowanie
+## Budowanie dokumentacji
 
 Mając skonfigurowaną Antore, można wykonać ostatni krok, jakim jest automatyzacja budowania i wdrażania dokumentacji na środowisko. W tym przypadku skorzystaliśmy z podejścia gdzie nasz pipeline uruchamia w obrazie dockera prosty skrypt, który uruchamia budowanie Antory:
 
@@ -182,7 +182,7 @@ npxProcess.on('error', err => console.log(err.toString()));
 
 Tutaj oczywiście można proces budowania rozwiązać na wiele różnych sposobów, ten jest dla nas optymalny i pozwala dodać z poziomu skryptu dodatkowe kroki konieczne w naszym procesie CI.
 
-## Teraz to nic, tylko pisać dokumentacje
+## Podsumowanie
 
 Antora jest bardzo dobrym rozwiązaniem dla projektów, które mają rozproszoną dokumentację, a muszą zapewnić jeden centralny punkt, gdzie ta dokumentacja jest dostępna.
 Pozwala w łatwy sposób agregować dokumenty oraz zmodyfikować wygląd docelowej strony z dokumentacją.
