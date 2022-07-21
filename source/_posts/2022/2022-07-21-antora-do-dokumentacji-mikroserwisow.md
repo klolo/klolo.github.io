@@ -16,8 +16,9 @@ Alternatywą jest trzymanie dokumentacji na jakiejś dedykowanej stronie wiki b�
 
 ## Akt 1, czyli jak zacząć
 
-Najbardziej pospolitym podejściem do dokumentowania projektów jest umieszczenie pliku _README.md_ w katalogu głównym projektu. Jest to rozwiązanie proste, ale niekoniecznie sprawdza się w systemie złożonym z dużej ilości projektów.  
-Bo co w przypadku gdy nie wiemy, w jakim dokładnie projekcie szukać jakiegoś mechanizmu? Tutaj z pomocą przychodzi _Antora_, która pozwala agregować dokumentacje z różnych projektów na git. Po zebraniu plików tekstowych z projektów git-a tworzony jest wynikowy html, którego możemy wystawić na jakiś serwerze i nawet osoby niemające dostępu do kodów mogą zapoznać się z dokumentacją oraz w łatwy sposób ją przeszukiwać. Żeby zacząć pracę z _Antora_ należy zainstalować Node.js i utworzyć plik package.json zgodnie z oficjalną [dokumentacją](https://docs.antora.org/antora/latest/install-and-run-quickstart). Kolejnym krokiem jest utworzenie pliku antora-playbook.yaml, w którym to możemy zacząć konfigurować narzędzie. Trochę bardziej rozbudowany niż w oficjalnej dokumentacji przykład takiego pliku:
+Najbardziej pospolitym podejściem do dokumentowania projektów jest umieszczenie pliku _README.md_ w katalogu głównym projektu. Jest to rozwiązanie proste, ale niekoniecznie sprawdza się w systemie złożonym z dużej ilości projektów. Co w przypadku gdy nie wiemy, w jakim dokładnie projekcie szukać jakiegoś mechanizmu?
+
+Tutaj z pomocą przychodzi _Antora_, która pozwala agregować dokumentacje z różnych projektów na git. Po zebraniu plików tekstowych z projektów git-a tworzony jest wynikowy html, którego możemy wystawić na jakiś serwerze i nawet osoby niemające dostępu do kodów mogą zapoznać się z dokumentacją oraz w łatwy sposób ją przeszukiwać. Żeby zacząć pracę z _Antora_ należy zainstalować Node.js i utworzyć plik package.json zgodnie z oficjalną [dokumentacją](https://docs.antora.org/antora/latest/install-and-run-quickstart). Kolejnym krokiem jest utworzenie pliku antora-playbook.yaml, w którym to możemy zacząć konfigurować narzędzie. Trochę bardziej rozbudowany niż w oficjalnej dokumentacji przykład takiego pliku:
 
 ```yaml
 sources: # 1
@@ -117,7 +118,7 @@ Dzięki takiemu podejściu zachowamy większą czytelności plików i będzie je
 
 Mając skonfigurowaną Antore, można wykonać ostatni krok, jakim jest automatyzacja budowania i wdrażania dokumentacji na środowisko. W tym przypadku skorzystaliśmy z podejścia gdzie nasz pipeline uruchamia w obrazie dockera prosty skrypt, który uruchamia budowanie Antory:
 
-```jshelllanguage
+```js
 const fs = require('fs');
 const fsExtra = require('fs-extra');
 const spawn = require('child_process').spawn;
@@ -142,7 +143,10 @@ antoraBuildEnv.FORCE_SHOW_EDIT_PAGE_LINK = 'true';
 antoraBuildEnv.CACHE_DIR = tempDir + '/antora-cache/';
 
 # uruchomienie budowania dokumentacji
-const npxProcess = spawn('npx', ['antora', '--fetch', '--stacktrace', 'target/antora-playbook.yml'], {env: antoraBuildEnv})
+const npxProcess = spawn('npx', 
+        ['antora', '--fetch', '--stacktrace', 'target/antora-playbook.yml'],
+        {env: antoraBuildEnv}
+);
 
 npxProcess.stdout.on('data', data => console.log(data.toString()));
 npxProcess.stderr.on('data', data => console.log(data.toString()));
@@ -153,5 +157,4 @@ Tutaj oczywiście można proces budowania rozwiązać na wiele różnych sposob�
 
 ## Podsumowanie
 
-Antora jest bardzo dobrym rozwiązaniem dla projektów, które mają rozproszoną dokumentację, a muszą zapewnić jeden centralny punkt, gdzie ta dokumentacja jest dostępna. Pozwala w łatwy sposób agregować dokumenty oraz zmodyfikować wygląd docelowej strony z dokumentacją.
-Jakby tego było mało, Antora pozwala na używanie rozszerzeń, które rozszerzają jej możliwości. Do dyspozycji mamy wiele stworzonych przez community, a jeżeli te się okażą niewystarczające, to w łatwy sposób możemy dopisać własne w javascript.
+Antora jest bardzo dobrym rozwiązaniem dla projektów, które mają rozproszoną dokumentację, a muszą zapewnić jeden centralny punkt, gdzie ta dokumentacja jest dostępna. Pozwala w łatwy sposób agregować dokumenty oraz zmodyfikować wygląd docelowej strony z dokumentacją. Jakby tego było mało, Antora pozwala na używanie rozszerzeń, które rozszerzają jej możliwości. Do dyspozycji mamy wiele stworzonych przez community, a jeżeli te się okażą niewystarczające, to w łatwy sposób możemy dopisać własne w javascript.
