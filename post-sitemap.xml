@@ -10,7 +10,7 @@
 
     <url>
         <loc>https://klolo.github.io/2022/07/21/2022/2022-07-21-antora-do-dokumentacji-mikroserwisow/</loc>
-        <lastmod>2022-07-21T15:47:08.456Z</lastmod>
+        <lastmod>2022-07-22T09:10:55.435Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -49,6 +49,14 @@
     </url>
 
     <url>
+        <loc>https://klolo.github.io/2017/10/28/2017/2017-10-28-dlugie-metody-w-kodzie-udany-przepis-na-bledy/</loc>
+        <lastmod>2022-03-24T20:56:10.575Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://klolo.github.io/2018/02/18/2018/2018-02-18-dependency-injection-w-js/</loc>
         <lastmod>2022-03-24T20:56:10.575Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -57,7 +65,7 @@
     </url>
 
     <url>
-        <loc>https://klolo.github.io/2021/03/07/2021/2021-03-07-spring-boot-wystawianie-endpointow-na-wielu-portach/</loc>
+        <loc>https://klolo.github.io/2017/12/17/2017/2017-12-17-w-oczekiwaniu-na-jave-10/</loc>
         <lastmod>2022-03-24T20:56:10.575Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -73,15 +81,7 @@
     </url>
 
     <url>
-        <loc>https://klolo.github.io/2017/10/28/2017/2017-10-28-dlugie-metody-w-kodzie-udany-przepis-na-bledy/</loc>
-        <lastmod>2022-03-24T20:56:10.575Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://klolo.github.io/2017/12/17/2017/2017-12-17-w-oczekiwaniu-na-jave-10/</loc>
+        <loc>https://klolo.github.io/2021/03/07/2021/2021-03-07-spring-boot-wystawianie-endpointow-na-wielu-portach/</loc>
         <lastmod>2022-03-24T20:56:10.575Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -153,14 +153,6 @@
     </url>
 
     <url>
-        <loc>https://klolo.github.io/2017/08/04/2017/2017-08-04-wstep-do-programowania-funkcyjnego/</loc>
-        <lastmod>2022-03-24T20:56:10.573Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>https://klolo.github.io/2017/08/04/2017/2017-08-04-programistycze-kata/</loc>
         <lastmod>2022-03-24T20:56:10.573Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -169,7 +161,7 @@
     </url>
 
     <url>
-        <loc>https://klolo.github.io/2017/08/05/2017/2017-08-05-jak-uzywac-optional/</loc>
+        <loc>https://klolo.github.io/2017/08/04/2017/2017-08-04-wstep-do-programowania-funkcyjnego/</loc>
         <lastmod>2022-03-24T20:56:10.573Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -178,6 +170,14 @@
 
     <url>
         <loc>https://klolo.github.io/2017/08/08/2017/2017-08-08-mantra-architektoniczna/</loc>
+        <lastmod>2022-03-24T20:56:10.573Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://klolo.github.io/2017/08/05/2017/2017-08-05-jak-uzywac-optional/</loc>
         <lastmod>2022-03-24T20:56:10.573Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
